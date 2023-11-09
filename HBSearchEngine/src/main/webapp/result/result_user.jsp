@@ -22,7 +22,6 @@
 				<div class="cont_title">
 				<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection,LanguageCode)%> <span class="sc_number">
 				(총 <%=numberFormat(thisTotalCount)%>건)
-				<% } %>
 				</span></h2>			
 			</div>
 

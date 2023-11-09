@@ -19,7 +19,7 @@
 			<div class="cont_title">
 				<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection,LanguageCode)%> <span class="sc_number">
 				(총 <%=numberFormat(thisTotalCount)%>건) 
-				<% } %>
+				
 				</span></h2>
 				<div class="search_radio_box">
 					<span class="search_radio"><input type="radio" name="search_radio02" id="apprType_appr" <%= apprType.equals("appr") ? "checked=\"checked\"" : "" %>> 완료문서</span>
@@ -27,17 +27,13 @@
 				</div>
 			</div>
 			
-<%			if(thisTotalCount < 1){ %>
+<%			if(thisTotalCount < 1) { %>
 				<div class="search_n_result_wrap" id="result_<%=thisCollection%>">
 		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
-		        	<% if (LanguageCode.equals("ko")) {%>
 					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
-					<% } %>
 		      	</div>
-			
-<%			}else{ %>
-
-			<ul class="dic" id="result_<%=thisCollection%>">
+<%			} else { %>
+			<ul class="dic" id="result_<%= thisCollection%>">
 <%
 			for(int idx = 0; idx < count; idx ++) {
 				String DOCID 				=	wnsearch.getField(thisCollection,"DOCID",				idx,false); 			
@@ -61,8 +57,6 @@
 				String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 		
 				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
 				String ATTACH_FILE_INFO 	=	wnsearch.getField(thisCollection,"ATTACH_FILE_INFO",				idx,false); 			
-				String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 			
-				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
 				String FILE_LOCATION 		=	wnsearch.getField(thisCollection,"FILE_LOCATION",				idx,false); 			
 				String FILE_EXTENTION 		=	wnsearch.getField(thisCollection,"FILE_EXTENTION",				idx,false); 			
 				String FILE_MESSAGE_ID 		=	wnsearch.getField(thisCollection,"FILE_MESSAGE_ID",				idx,false); 			
@@ -104,39 +98,34 @@
 							<a href="<%=DOC_URL%>"><%=SUBJECT%></a>
 							<div class="title_info">
 								<p class="title_area_name">
-								<span><%=CREATOR_NAME%></span><%if(CREATOR_DEPT.length() > 0){ %><span><%=CREATOR_DEPT%></span><%}%>
+								<span><%=CREATOR_NAME%></span><%if(CREATOR_DEPT.length() > 0) { %><span><%=CREATOR_DEPT%></span><%}%>
 								</p>
 							</div>
 						</dt>
-						<dd class="txt_inline">[기안일시<% } %>: <%=INITIATED_DATE%>] [완료일시<% } %>: <%=COMPLETED_DATE%>]</dd>
+						<dd class="txt_inline">[기안일시: <%=INITIATED_DATE%>] [완료일시: <%=COMPLETED_DATE%>]</dd>
 						<dd class="explain"><%=BODYCONTEXT%></dd>
 
 						<dd class="filein"><a>첨부파일 : </a>
 									
-						<%for(int i=0; i<fileCnt; i++) {
-							String fileExtention = fileExtentionArr[i].toLowerCase();%>
+						<% for(int i = 0; i < fileCnt; i++) {
+							String fileExtention = fileExtentionArr[i].toLowerCase();
+						%>
 
-							<a><%= fileName %></a>
+							<!-- <a><%= fileName %></a> -->
 
-						<% if(checkExtentionIcon(fileExtention)) { %>
+							<% if(checkExtentionIcon(fileExtention)) { %>
 							<img width="10" height="10" src="images/files/data_<%= fileExtention %>.gif" alt="">
-
-						<%}
-						}%>
+							<% }
+						} %>
 						</dd>
 					<% } %>
 					</dl>
 				</li>
 			<% } %>
 			</ul>
-		<%	}
-			if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
+		<% } %>
+		<% if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
 				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 더보기 </a></div>
-<%
-			}%>
+		<% } %>
 			</div>
-			<%}
-		}
-	%>
-	}
-%>
+	<% } %>

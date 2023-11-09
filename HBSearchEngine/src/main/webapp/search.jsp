@@ -32,23 +32,23 @@
 	String writer = 		getCheckReqXSS(request, "writer", "");						//작성자
 	String searchField = 	getCheckReqXSS(request, "searchField", "ALL");			    //검색필드
 	
+	String prefix 		= getCheckReqXSS2(request, "prefix", "");					//prefix 쿼리
+	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
+	String apprType 	= getCheckReqXSS(request, "apprType", "appr");			//전자결재 문서구분
+	
 	String UR_Code 		= getCheckReqXSS(request, "UR_Code", "");					//유저코드
 	String DN_ID 		= getCheckReqXSS(request, "DN_ID", "");						//도메인아이디
 	String DN_Code 		= getCheckReqXSS(request, "DN_Code", "");					//도메인코드
 	String GR_Code 		= getCheckReqXSS(request, "GR_Code", "");					//그룹코드
 	String DEPTID 		= getCheckReqXSS(request, "DEPTID", "");					//부서코드
-	String DEPT_NAME 		= getCheckReqXSS(request, "DEPT_NAME", "");					//부서코드
+	String DEPT_NAME 	= getCheckReqXSS(request, "DEPT_NAME", "");					//부서코드
+	String docType 		= getCheckReqXSS(request, "docType", "1");
  
     String token = 			getCheckReqXSS(request, "token", "");                       //유저코드 암호화 파라미터
     String tokenExcept = 	getCheckReqXSS(request, "tokenExcept", "");;
     
     String tokenCheck = 	getCheckReqXSS(request, "tokenCheck", "1");
     String jsonError = "";
-    
-	String strOperation  = "" ;												//operation 조건 필드
-    String exquery = "" ;													//exquery 조건 필드
-    String apprEx = "" ;													//appr exquery 조건 필드
-    String apprMigEx = "" ;													//apprMig exquery 조건 필드
 	
 	// 차후 %검색 오류걸릴 경우 referer참고해서 예외처리하는 부분
 	String referer = request.getHeader("referer");
@@ -63,21 +63,22 @@
 
    
     int totalCount = 0;
+    String userId = "";
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
-	Map<String, String> prefixMap = new HashMap<String,String>();
+    Map<String, String> prefixMap = new HashMap<String,String>();
 
     
     // jwt 토큰 복호화
 	// warr : 임시확인용 주석처리
  	if ( UR_Code.equals("") ) { 
 			//임시확인용 토큰
-			//token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODI0ODg5NTYwOTgsImV4cCI6MTY4MjQ4OTU1NjA5OCwiZW1wIjoic3VwZXJhZG1pbiJ9.m_HRrWUFHZxeKLdmgOCPjbGwDPjubitRW5L5zp-KrSg";
+		token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODI0ODg5NTYwOTgsImV4cCI6MTY4MjQ4OTU1NjA5OCwiZW1wIjoic3VwZXJhZG1pbiJ9.m_HRrWUFHZxeKLdmgOCPjbGwDPjubitRW5L5zp-KrSg";
 		Map<String,Object> retMap = new HashMap<>();
 		try  {	
-			retMap = Encrypts.getTokenFromJwtString("duddnjsandur01!@#$",token);
+			retMap = Encrypts.getTokenFromJwtString("duddnjsandur01!@#$", token);
+			
 		} catch ( Exception e ) {
-
-		}
+		} finally { }
 		if ( retMap == null  || retMap.size() == 0 || retMap.containsKey("result")) { 
 			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."); 
 			return ;
@@ -88,25 +89,19 @@
     
 		long nowTime = System.currentTimeMillis ();
 		
-		if ( nowTime > exp ) {
-			out.println("Timeout. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + exp + " :: " + nowTime); 
-			return ;
-		}
-		if ( userId == null || "".equals(userId)  ) {
-			out.println(userId);
-			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."+ retMap.get("emp")); 
-			return ;
-		} 
-		} else {
-			userId = UR_Code;
-		}
+		//if ( nowTime > exp ) {
+		//	out.println("Timeout. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + exp + " :: " + nowTime); 
+		//	return ;
+		//}
+		//if ( userId == null || "".equals(userId)  ) {
+		//	out.println(userId);
+		//	out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."+ retMap.get("emp")); 
+		//	return ;
+		//} else {
+		//	userId = UR_Code;
+		//}
     }
-    
-    // 유저 apprEx 설정
-    if(!uid.equals("") && uid != null){
-    	apprEx += "<ApprAuth:contains:" + uid + ">";
-    	apprMigEx += "<ApprAuth:contains:" + uid + ">";
-    }
+  
     
 	// 권한처리
     if (userId.length() > 0) {
@@ -124,74 +119,74 @@
  		prefixMap.put("appr",  prefixMap.get("appr") + " " + prefix);
  		prefixMap.put("apprMig",  prefixMap.get("apprMig") + " " + prefix);
  	}
-	
-   	String [] apprExArray = apprEx.split(" ");
-   	String [] apprMigExArray = apprMigEx.split(" ");
+ 	
+	// 문서 종류 prefix 설정
+ 	// 1(전체), ..., 17(기타)
+ 	String[] docTypeListIdx = docType.split(","); 
+ 	String[] docTypeList = {"전체","pdf","xls|xlsx","doc|docx","ppt|pptx","jpg|jpeg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
+ 	String etc = "<FILE_EXTENTION:contains:!pdf> <FILE_EXTENTION:contains:!xls> <FILE_EXTENTION:contains:!xlsx> <FILE_EXTENTION:contains:!doc> <FILE_EXTENTION:contains:!docx> <FILE_EXTENTION:contains:!ppt> <FILE_EXTENTION:contains:!pptx> <FILE_EXTENTION:contains:!jpg> <FILE_EXTENTION:contains:!jpeg> <FILE_EXTENTION:contains:!hwp> <FILE_EXTENTION:contains:!gif> <FILE_EXTENTION:contains:!zip> <FILE_EXTENTION:contains:!txt> <FILE_EXTENTION:contains:!msg> <FILE_EXTENTION:contains:!html> <FILE_EXTENTION:contains:!dwg> <FILE_EXTENTION:contains:!png> <FILE_EXTENTION:contains:!tif> <FILE_EXTENTION:contains:!bmp>";
+
+ 	String[] docImg = {"file_all","file_pdf","file_xls","file_doc","file_ppt","file_jpg","file_hwp","file_gif","file_zip","file_txt","file_msg","file_html","file_dwg","file_png","file_tif","file_bmp","file_etc"};
+ 	
+ 	String filePrefix = "";
+ 	
+ 	if (!docType.equals("") && !docType.equals("1")) {
+ 		for (int i=0; i < docTypeListIdx.length; i++) {
+ 			if (docTypeListIdx[i].equals("17")){
+ 				break;
+ 			}
+ 			
+ 			if (i != 0) {
+ 				filePrefix += "|";
+ 			}
+ 			
+ 			filePrefix += "<FILE_EXTENTION:contains:" + docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1] +">";
+ 		}
+ 		if (docType.contains("17")){ // 기타 문서 처리
+ 			String etc_tmp = etc;
+ 			
+ 			for (int i=0; i < docTypeListIdx.length - 1; i++) {
+ 				String[] docTypeTemp = docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1].split("\\|");
+ 				
+ 				for (int j = 0; j < docTypeTemp.length; j++) {
+ 					etc_tmp = etc_tmp.replaceAll("<FILE_EXTENTION:contains:!" + docTypeTemp[j] +">", "");
+ 				}
+ 			}
+ 			
+ 			filePrefix = "(" + etc_tmp + ")";
+ 			if (!filter.contains("<FILE_EXTENTION:gte: >")){
+ 				filter += "<FILE_EXTENTION:gte: >";
+ 			}
+ 		} 
+ 	} else if (docType.equals("1")) {
+ 		filter = filter.replaceAll("<FILE_EXTENTION:gte: >", "");
+ 	}
+ 	
+ 	if (filePrefix.length() > 0) {
+ 		prefixMap.put("appr",  prefixMap.get("appr") + " (" + filePrefix + ")");
+ 		prefixMap.put("apprMig",  prefixMap.get("apprMig") + " (" + filePrefix + ")");
+ 		prefixMap.put("board", prefixMap.get("board") + " (" + filePrefix + ")");
+ 	}
+
    
     String[] searchFields = null;
 
-	// 상세검색 검색 필드 설정이 되었을때
-    if (!searchField.equals("")) {
-		// 작성자
-		if (!writer.equals("")) {
-			exquery = "<WRITER:" + writer + ">";
-		}
-	} else {
-		searchField = "ALL";
-	}
-	
-	// 문서 종류 prefix 설정
-	// 1(전체), ..., 17(기타)
-	String[] docTypeListIdx = docType.split(","); 
-	String[] docTypeList = {"전체","pdf","xls","doc","ppt","jpg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
-	String etc = "<FileType:contains:!pdf> <FileType:contains:!xls> <FileType:contains:!doc> <FileType:contains:!ppt> <FileType:contains:!jpg> <FileType:contains:!hwp> <FileType:contains:!gif> <FileType:contains:!zip> <FileType:contains:!txt> <FileType:contains:!msg> <FileType:contains:!html> <FileType:contains:!dwg> <FileType:contains:!png> <FileType:contains:!tif> <FileType:contains:!bmp>";
-	
-	String[] docImg = {"file_all","file_pdf","file_xls","file_doc","file_ppt","file_jpg","file_hwp","file_gif","file_zip","file_txt","file_msg","file_html","file_dwg","file_png","file_tif","file_bmp","file_etc"};
-	String prefix = "";
-	if (!docType.equals("") && !docType.equals("1")) {
-		if (!exquery.equals("")) {
-    		exquery += " ";
-    	}
-		
-		for (int i=0; i < docTypeListIdx.length; i++) {
-			if (docTypeListIdx[i].equals("17")){
-				break;
-			}
-			
-			if (i != 0) {
-				exquery += "|";
-			}
-			
-			exquery += "<FileType:contains:" + docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1] +">";
-		}
-		if (docType.contains("17")){ // 기타 문서 처리
-			String etc_tmp = etc;
-			
-			for (int i=0; i < docTypeListIdx.length - 1; i++) {
-				etc_tmp = etc_tmp.replaceAll("!" + docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1], docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1]);
-			}
-			
-			exquery += "|(" + etc_tmp + ")";
-		} 
-	}
-	prefix = exquery;
-
     String[] collections = null;
-	String[] THIS_COLLECTIONS = null;
-
-	 if (apprType.equals("mig")){
+    String[] THIS_COLLECTIONS = null;
+    
+    if (apprType.equals("mig")){
     	THIS_COLLECTIONS = COLLECTIONS_MIG;
 	} else {
 		THIS_COLLECTIONS = COLLECTIONS;
 	}
-
-	
+          
+    
     if(collection.equals("ALL")) { //통합검색인 경우
-        collections = THIS_COLLECTIONS;
+    	collections = THIS_COLLECTIONS;
     } else {                        //개별검색인 경우
         collections = new String[] { collection };
     }
-
+    
 	if (reQuery.equals("1")) {
 		realQuery = query + " " + realQuery;
 	} else if (!reQuery.equals("2")) {
@@ -201,9 +196,12 @@
     WNSearch wnsearch = new WNSearch(isDebug, false, collections, searchFields, apprType);
 
     int viewResultCount = COLLECTIONVIEWCOUNT;
+    boolean isTotalSearch = false;
     if ( collection.equals("ALL") ||  collection.equals("") )
-        viewResultCount = TOTALVIEWCOUNT;
+        isTotalSearch = true;
 
+    String prefixForLog = "";
+    String filterForLog = "";
     for (int i = 0; i < collections.length; i++) {
     	try{
         //출력건수
@@ -211,7 +209,7 @@
 
         //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
         if (collections[i].equals("user")) {
-        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "JOB_POSITION_SORTKEY/ASC,USER_NAME_KO/ASC");
+        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "JOB_POSITION_SORTKEY/ASC,USER_NAME/ASC");
         } else if (!query.equals("") ) {
         	if("SUBJECT".equals(sort)){
         		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
@@ -223,56 +221,32 @@
               wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "DATE/DESC");
         }
 
-        //searchField 값이 있으면 설정, 없으면 기본검색필드
-        if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 && !collections[i].equals("user")) {
+        //searchField 값이 있으면 설정, 없으면 기본검색필드(언어코드가 en이면 각각의 en기본필드 설정)
+  		if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 && !collections[i].equals("user")) {
 			wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+		} else if (searchField.indexOf("ALL") != -1) {
+			if (collections[i].equals("appr")){
+				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+			} else if (collections[i].equals("apprMig")){
+				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+			} else if (collections[i].equals("board")){
+				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+			} else if (collections[i].equals("user")){
+				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+			}
 		}
 
-        //operation 설정
-        if (!strOperation.equals("")) {
-			wnsearch.setCollectionInfoValue(collections[i], FILTER_OPERATION, strOperation);
-		}
-        
-        if(collections[i].equals("appr")){
-        	if (exquery != ""){
-        		exquery += " ";
-        	}
-        	
-        	//exquery += apprEx;
-           	if(teamCheck.equals("permission")){
-           		exquery += apprExArray[0];
-        		exquery += " ";
-           		exquery += apprExArray[1];
-           	} else {
-           		exquery += apprExArray[1];
-           		exquery += " <Permissiontype:contains:Team_Permission>";
-           	}
-        	
-        } else if(collections[i].equals("apprMig")){
-        	exquery = "";
-        	exquery = prefix;
-        	
-        	exquery += apprMigExArray[0];
-    		//exquery += " ";
-       		//exquery += apprMigExArray[1];
-        	
-        } else {
-			exquery = "";
-			exquery = prefix;
-        }
-        
-        if(uid.equals("superadmin")){ // 관리자 계정 
-        	exquery = "";
-        }
-        
-        //System.out.println(collections[i] + " : " + exquery);
-		
-        /*
-        * exquery 설정
-        */
-        if (!exquery.equals("")) {
-			wnsearch.setCollectionInfoValue(collections[i], EXQUERY_FIELD, exquery);
-		}
+  		// prefix 처리
+   		if(prefixMap.get(collections[i]) != null && !prefixMap.get(collections[i]).isEmpty()){
+   			wnsearch.setCollectionInfoValue(collections[i], EXQUERY_FIELD, prefixMap.get(collections[i]));
+   			prefixForLog += collections[i] + ":" + prefixMap.get(collections[i]) + ",";
+   		}
+   		
+   		// filter 처리
+   		if (filter.length() > 0 && !collections[i].equals("user")) {
+   			wnsearch.setCollectionInfoValue(collections[i], FILTER_OPERATION, filter);
+   		}
+             
 
         //기간 설정 , 날짜가 모두 있을때
         if (!startDate.equals("")  && !endDate.equals("") ) {
@@ -282,14 +256,25 @@
     		//System.err.print(e);
     	}
     };
+    
+    // 쿼리로그에 prefix query, filter query 정보 남기기
+    if(prefixForLog.length() > 0) {
+    	prefixForLog = "[prefix] " + prefixForLog.substring(0, prefixForLog.length()-1);
+    }
+    if(filter.length() > 0) {
+    	filterForLog = "[filter] " + filter;
+    }
 
-    wnsearch.search(realQuery, isRealTimeKeyword, CONNECTION_CLOSE, useSuggestedQuery);
+    wnsearch.search(realQuery, isRealTimeKeyword, CONNECTION_CLOSE, useSuggestedQuery, new String[] {prefixForLog, filterForLog, ""}, apprType);
 
      // 디버그 메시지 출력
     String debugMsg = wnsearch.printDebug() != null ? wnsearch.printDebug().trim() : "";
     if ( !debugMsg.trim().equals("")) {
          out.println(debugMsg);
     }
+    
+    // 맨 위에 표출되는 컬렉션일 경우 적용되는 div class가 다름, 첫번째인지 확인용
+    String firstCollection = "";
 
      // 전체건수 구하기
     if ( collection.equals("ALL") ) {
@@ -332,18 +317,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>통합검색</title>
-<link rel="stylesheet" type="text/css" href="search.css" >
+<title>호반그룹 그룹웨어 통합검색</title>
+<link rel="stylesheet" type="text/css" href="css/search.css" >
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" >
 <link rel="stylesheet" type="text/css" href="css/datepicker.css" >
 <link rel="stylesheet" type="text/css" href="ark/css/ark.css" media="screen" >
-<script type="text/javascript" src="jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="ark/js/beta.fix.js"></script>
 <script type="text/javascript" src="ark/js/ark.js"></script>
 <script type="text/javascript" src="js/datepicker.js"></script>
-<script type="text/javascript" src="js/search.js"></script><!--  검색관련 js -->
+<script type="text/javascript" src="js/search.js"></script>
 <script type="text/javascript" src="js/hmac-sha256.js"></script>
 <script type="text/javascript" src="js/enc-base64-min.js"></script>
 <script type="text/javascript">
@@ -426,7 +412,7 @@ $(document).ready(function() {
 function checkTokenExcept() {
 	if(document.search.tokenExcept.value === "expired"){		
 		alert("토큰이 만료되었거나, 유효하지 않습니다.");
-		window.location.href='https://portal.doosanenc.com';
+		window.location.href='https://';
 	}
 }
 
@@ -459,7 +445,6 @@ function getPopkeyword() {
 
 }
 
-
 function helpSearch(){
 	document.getElementById("layer_popup").style.display = 'block';
 	document.getElementById("layer_popup_overlay").style.display = 'block';
@@ -483,12 +468,35 @@ function saveKeywordClose(){
 	//document.getElementById("saveKeywordBtn").setAttribute("src", "images/ico_add.png");
 }
 
-\home\appservice\sf1-v5\collection
 //-->
 </script>
 </head>
 <body>
-    <form>
+ <div class="wrap">
+  <div class="header_wrap">
+  	<form name="search" id="search" action="<%=request.getRequestURI()%>" method="post">
+		<input type="hidden" name="startCount" value="0">
+		<input type="hidden" name="sort" value="<%=sort%>">
+		<input type="hidden" name="collection" id="collection" value="<%=collection%>">
+		<input type="hidden" name="range" value="<%=range%>">
+		<input type="hidden" name="searchField" value="<%=searchField%>">
+		
+		<input type="hidden" name="prefix" value="<%=prefix%>">
+		<input type="hidden" name="filter" value="<%=filter%>">
+		
+		<input type="hidden" name="reQuery" />
+		<input type="hidden" name="realQuery" value="<%=realQuery%>" />
+		
+		<input type="hidden" name="UR_Code" value="<%=userId%>" />
+		<input type="hidden" name="DN_Code" value="<%=DN_Code%>" />
+		<input type="hidden" name="DEPTID" value="<%=DEPTID%>" />
+		
+		<input type="hidden" name="apprType" value="<%=apprType%>" />
+		
+		<input type="hidden" name="startDate" value="<%=startDate%>"/>
+		<input type="hidden" name="endDate" value="<%=endDate%>"/>
+		<input type="hidden" id="docType" name="docType" value="<%=docType%>"/>
+		
       <div class="fix_wrap">
         <div class="fix_conts">
           <!-- Header 시작 -->
@@ -498,20 +506,17 @@ function saveKeywordClose(){
                 <a href="#" class="logo_header_search"></a>
               </h1>
               <span class="white_window_box">
-                <select style="" class="white_window_select">
-                  <option>전체</option>
-                  <option>제목</option>
-                  <option>내용</option>
-                  <option>작성자</option>
+                <select style="" class="white_window_select" id="searchSelect">
+	                <option value="ALL" <%=searchField.indexOf("ALL") > -1 ? "selected" : ""%>>전체</option>
+					<option value="SUBJECT" <%=searchField.indexOf("SUBJECT") > -1 ? "selected" : ""%>>제목</option>
+					<option value="BODYCONTENTS" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "selected" : ""%>>내용</option>
+					<option value="CREATORNAME" <%=searchField.indexOf("CREATORNAME") > -1 ? "selected" : ""%>>작성자</option>
                 </select>
-                <input class="white_input_text" type="text">
-                <a href="#">
-                  <span class="search_button"></span>
-                </a>
+               <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event),this);" autocomplete="off"/>
+				<a href="#" onClick="javascript:doSearch();" title="검색"><span class="search_button"></span></a>                 
               </span>
             </div>
-            <div class="white_window_check">
-              <input type="checkbox" />결과내 재검색
+            <div class="white_window_check"><input type="checkbox" name="reChk" id="reChk" onClick="checkReSearch();"/>결과내 재검색
             </div>
 			<div class="nuttop">
 			  <div class="auto">
@@ -544,7 +549,7 @@ function saveKeywordClose(){
                     <div class="tree_search">
 											<div class="search_list01">
                         <a href="#" class="search_list_close">
-                          <span class="list_text_on">전체</span>
+                          <span class="list_text_<%=collection.equals("ALL") ? "on" : "off" %>">전체</span>
                         </a>
                       </div>
                       <div class="search_list01">
@@ -552,40 +557,68 @@ function saveKeywordClose(){
                           <span class="list_text_off">시스템구분</span>
                         </a>
                       </div>
-                      <div class="search_list02">
-                        <a href="#">
-                          <span><img src="Images/ico_bbar.gif" />전자결재 (33) </span>
-                        </a>
-                        <a href="#">
-                          <span><img src="Images/ico_bbar.gif" />게시판 (4) </span>
-                        </a>
-                        <a href="#">
-                          <span><img src="Images/ico_bbar.gif" />문서관리 (6) </span>
-                        </a>
-                        <a href="#">
-                          <span><img src="Images/ico_bbar.gif" />임직원정보 (0) </span>
-                        </a>
-                      </div>
-                      <div class="search_list01">
-                        <a href="#" class="search_list_close"><span class="list_text_off">작성자명</span></a>
-                      </div>
-                      <div class="search_list02">
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />김성민 (5) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />최시진 (1) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />오민정 (0) </span></a>
-                      </div>
-                      <div class="search_list01">
-                        <a href="#" class="search_list_close"><span class="list_text_off">부서명</span></a>
-                      </div>
-                      <div class="search_list02">
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />영업기획팀 (33) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />영업팀 (4) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />연구1팀 (7) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />연구2팀 (8) </span></a>
-                        <a href="#"><span><img src="Images/ico_bbar.gif" />기획관리팀 (11) </span></a>
-                      </div>
-                    </div>
-                  </div>
+					<div class="search_list02">
+					<% for (int i = 0; i < portalCollections.length; i++) { %>
+						<a href="#none" onClick="javascript:doCollection('<%=portalCollections[i]%>');">
+							<span class="<%=collection.equals(portalCollections[i]) ? "list_text_on" : "" %>">
+								<img src="images/ico_bbar.gif" />
+								<%=wnsearch.getCollectionKorName(portalCollections[i])%> (<%=numberFormat(wnsearch.getResultTotalCount(portalCollections[i]))%>)
+							</span>
+						</a>
+					<% } %>
+					</div>
+					
+<%									if(!writerMap.isEmpty()){ %>	
+					<div class="search_list03">
+						<a href="javascript:void(0);" class="search_list_close">
+							<span class="list_text_off">작성자명</span>
+						</a>
+						<div class="search_list04" style="display:none">
+<%										for( String key : writerMap.keySet() ){ %>
+							<a href="#" onClick="javascript:doCategoryQueryW('CREATORNAME|<%=key%>');">
+<%												if(categoryQueryW.length() > 0){	
+									String[] categoryQueryWs = categoryQueryW.split("\\|");
+									if(categoryQueryWs[1].equals(key)){ %>
+										<span class="list_text_on">
+<%													}else{ %>
+										<span>
+<%													}
+								}else{ %>
+									<span>
+<%												}%>
+								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(writerMap.get(key))%>)</span>
+							</a>
+<%										} %>												
+						</div>
+					</div>
+<%									} %>	
+				  
+<%									if(!depMap.isEmpty()){ %>	
+					<div class="search_list03">
+						<a href="javascript:void(0);" class="search_list_close">
+						<span class="list_text_off">부서명</span>
+						</a>
+						<div class="search_list04" style="display:none">
+<%										for( String key : depMap.keySet() ){ %>
+							<a href="#" onClick="javascript:doCategoryQueryD('CREATORDEPT|<%=key%>');">
+<%												if(categoryQueryD.length() > 0){	
+									String[] categoryQueryDs = categoryQueryD.split("\\|");
+									if(categoryQueryDs[1].equals(key)){ %>
+										<span class="list_text_on">
+<%													}else{ %>
+										<span>
+<%													}
+								}else{ %>
+									<span>
+<%												}%>
+								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(depMap.get(key))%>)</span>
+							</a>
+<%										} %>	
+						</div>
+					</div>
+<%									} %>
+				</div>
+			</div>
                   <!-- 트리 끝 -->
                   <p class="space"></p>
                   <!-- lnb 끝 -->
@@ -1124,12 +1157,31 @@ function saveKeywordClose(){
                             </div>
                           </div>
                           <div class="search_start">
-                            <a href="#">
-                              <span>검색</span>
-                            </a>
-                          </div>
+			                       <a href="#" onClick="javascript:doSearch();" title="상세검색">
+			                       	<span>검색</span>
+			                       </a>
+			              </div>
                         </div>
                       </div>
+                      
+                      <% if (totalCount >= 0) { %>
+                       
+				
+				
+				<!-- paginate -->
+				<% if (!collection.equals("ALL") && totalCount > TOTALVIEWCOUNT) { %>
+					<div class="paginate">
+							<%=wnsearch.getPageLinks(startCount , totalCount, 10, 10)%>
+					</div>
+				<% } %>
+				<!-- //paginate -->
+
+		<% } else { %>
+				<div class="search_n_result_wrap">
+		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
+					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
+		         </div>
+		<% } %>
                       <div class="section_search_box">
                         <div class="section_search01">
                           <div class="cont_title">

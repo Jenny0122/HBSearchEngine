@@ -21,7 +21,7 @@
 %>
 				<div class="cont_title">
 					<div class="cont_title_l"></div>
-					<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection,LanguageCode)%> <span class="sc_number"></span>
+					<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection)%> <span class="sc_number"></span>
 						(총 <%=numberFormat(thisTotalCount)%>건) 
 					</h2>
 				</div>
@@ -97,9 +97,9 @@
 						<dd class="filein"><a>첨부파일 : </a>
 									
 						<%for(int i=0; i<fileCnt; i++) {
-							String fileName = fileNameArr[i];
+							String fileName = fileNameArr[i];%>
 
-							<a><%= fileName %></a>
+						<a><%= fileName %></a>
 
 						<% if(checkExtentionIcon(fileExtention)) { %>
 							<img width="10" height="10" src="images/files/data_<%= fileExtention %>.gif" alt="">
@@ -115,9 +115,6 @@
 		<%	}
 			if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
 				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 더보기 </a></div>
-				<%-- <div class="paginate">
-							<%=wnsearch.getPageLinks(startCount , totalCountArr[boardIndex], 3, 10)%>
-				</div> --%>
 			<% } %>
 			</div>
 		<% }
