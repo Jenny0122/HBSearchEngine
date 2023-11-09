@@ -17,7 +17,7 @@
 %>
 			<div class="section_search01">
 			<div class="cont_title">
-				<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection,LanguageCode)%> <span class="sc_number">
+				<h2 class="sc_title02"><%=wnsearch.getCollectionKorName(thisCollection)%> <span class="sc_number">
 				(총 <%=numberFormat(thisTotalCount)%>건) 
 				
 				</span></h2>
@@ -125,7 +125,7 @@
 			</ul>
 		<% } %>
 		<% if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
-				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 더보기 </a></div>
+				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 검색 결과 더보기 </a></div>
 		<% } %>
 			</div>
 	<% } %>

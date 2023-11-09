@@ -1,7 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="./common/api/WNSearch.jsp" %>
 <%@ include file="./common/api/Encrypt.jsp" %>
-<% request.setCharacterEncoding("UTF-8");%><%
+
+<% request.setCharacterEncoding("UTF-8");%>
+<%
     
     //실시간 검색어 화면 출력 여부 체크
     boolean isRealTimeKeyword = false;
@@ -31,10 +33,12 @@
     String endDate = 		getCheckReqXSS(request, "endDate", getCurrentDate());		//끝날짜
 	String writer = 		getCheckReqXSS(request, "writer", "");						//작성자
 	String searchField = 	getCheckReqXSS(request, "searchField", "ALL");			    //검색필드
+	String categoryQueryW = getCheckReqXSS(request, "categoryQueryW", "");		//카테고리쿼리
+	String categoryQueryD = getCheckReqXSS(request, "categoryQueryD", "");		//카테고리쿼리
 	
 	String prefix 		= getCheckReqXSS2(request, "prefix", "");					//prefix 쿼리
 	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
-	String apprType 	= getCheckReqXSS(request, "apprType", "appr");			//전자결재 문서구분
+	String apprType 	= getCheckReqXSS(request, "apprType", "ARCHIVE");			//전자결재 문서구분
 	
 	String UR_Code 		= getCheckReqXSS(request, "UR_Code", "");					//유저코드
 	String DN_ID 		= getCheckReqXSS(request, "DN_ID", "");						//도메인아이디
@@ -75,8 +79,7 @@
 		token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODI0ODg5NTYwOTgsImV4cCI6MTY4MjQ4OTU1NjA5OCwiZW1wIjoic3VwZXJhZG1pbiJ9.m_HRrWUFHZxeKLdmgOCPjbGwDPjubitRW5L5zp-KrSg";
 		Map<String,Object> retMap = new HashMap<>();
 		try  {	
-			retMap = Encrypts.getTokenFromJwtString("duddnjsandur01!@#$", token);
-			
+			retMap = Encrypt.getTokenFromJwtString("ghqksrmfnq01!@#$", token);
 		} catch ( Exception e ) {
 		} finally { }
 		if ( retMap == null  || retMap.size() == 0 || retMap.containsKey("result")) { 
@@ -221,20 +224,10 @@
               wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "DATE/DESC");
         }
 
-        //searchField 값이 있으면 설정, 없으면 기본검색필드(언어코드가 en이면 각각의 en기본필드 설정)
-  		if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 && !collections[i].equals("user")) {
+        //searchField 값이 있으면 설정, 없으면 기본검색필드
+        if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 ) {
 			wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-		} else if (searchField.indexOf("ALL") != -1) {
-			if (collections[i].equals("appr")){
-				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-			} else if (collections[i].equals("apprMig")){
-				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-			} else if (collections[i].equals("board")){
-				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-			} else if (collections[i].equals("user")){
-				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-			}
-		}
+        }
 
   		// prefix 처리
    		if(prefixMap.get(collections[i]) != null && !prefixMap.get(collections[i]).isEmpty()){
@@ -251,12 +244,14 @@
         //기간 설정 , 날짜가 모두 있을때
         if (!startDate.equals("")  && !endDate.equals("") ) {
              wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, startDate.replaceAll("[.]","/") + "," + endDate.replaceAll("[.]","/") + ",-");
-        }
+       	}
     	}catch(Exception e){
     		//System.err.print(e);
-    	}
-    };
-    
+    	}    
+       	
+		if(collections[i].equals("user")){			
+        wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, "1970/01/01,2030/12/31,-");
+       	
     // 쿼리로그에 prefix query, filter query 정보 남기기
     if(prefixForLog.length() > 0) {
     	prefixForLog = "[prefix] " + prefixForLog.substring(0, prefixForLog.length()-1);
@@ -376,7 +371,7 @@ $(document).ready(function() {
 		    ,yearSuffix: "년 " //달력의 년도 부분 뒤 텍스트
 		    ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
 		    ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-		    ,dayNamesMin: ['SUN','MON','TUE','WED','THR','FRI','SAT'] //달력의 요일 텍스트
+		    ,dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'] //달력의 요일 텍스트
 		    ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
 		   	,closeText: '닫기' // 닫기 버튼 텍스트 변경
 		    ,currentText: '오늘' // 오늘 텍스트 변경
@@ -397,7 +392,7 @@ $(document).ready(function() {
 		    ,yearSuffix: "년 " //달력의 년도 부분 뒤 텍스트
 		    ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
 		    ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-		    ,dayNamesMin: ['SUN','MON','TUE','WED','THR','FRI','SAT'] //달력의 요일 텍스트
+		    ,dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'] //달력의 요일 텍스트
 		    ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip 
 		   	,closeText: '닫기' // 닫기 버튼 텍스트 변경
 		    ,currentText: '오늘' // 오늘 텍스트 변경
@@ -568,22 +563,22 @@ function saveKeywordClose(){
 					<% } %>
 					</div>
 					
-<%									if(!writerMap.isEmpty()){ %>	
+<%					if(!writerMap.isEmpty()) { %>	
 					<div class="search_list03">
 						<a href="javascript:void(0);" class="search_list_close">
 							<span class="list_text_off">작성자명</span>
 						</a>
 						<div class="search_list04" style="display:none">
-<%										for( String key : writerMap.keySet() ){ %>
+<%										for( String key : writerMap.keySet() ) { %>
 							<a href="#" onClick="javascript:doCategoryQueryW('CREATORNAME|<%=key%>');">
 <%												if(categoryQueryW.length() > 0){	
-									String[] categoryQueryWs = categoryQueryW.split("\\|");
-									if(categoryQueryWs[1].equals(key)){ %>
+													String[] categoryQueryWs = categoryQueryW.split("\\|");
+													if(categoryQueryWs[1].equals(key)){ %>
 										<span class="list_text_on">
-<%													}else{ %>
+<%													} else { %>
 										<span>
 <%													}
-								}else{ %>
+												}else{ %>
 									<span>
 <%												}%>
 								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(writerMap.get(key))%>)</span>
@@ -591,9 +586,9 @@ function saveKeywordClose(){
 <%										} %>												
 						</div>
 					</div>
-<%									} %>	
+<%					} %>	
 				  
-<%									if(!depMap.isEmpty()){ %>	
+<%					if(!depMap.isEmpty()) { %>	
 					<div class="search_list03">
 						<a href="javascript:void(0);" class="search_list_close">
 						<span class="list_text_off">부서명</span>
@@ -602,13 +597,13 @@ function saveKeywordClose(){
 <%										for( String key : depMap.keySet() ){ %>
 							<a href="#" onClick="javascript:doCategoryQueryD('CREATORDEPT|<%=key%>');">
 <%												if(categoryQueryD.length() > 0){	
-									String[] categoryQueryDs = categoryQueryD.split("\\|");
-									if(categoryQueryDs[1].equals(key)){ %>
+													String[] categoryQueryDs = categoryQueryD.split("\\|");
+													if(categoryQueryDs[1].equals(key)){ %>
 										<span class="list_text_on">
 <%													}else{ %>
 										<span>
 <%													}
-								}else{ %>
+												} else { %>
 									<span>
 <%												}%>
 								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(depMap.get(key))%>)</span>
@@ -616,12 +611,13 @@ function saveKeywordClose(){
 <%										} %>	
 						</div>
 					</div>
-<%									} %>
+<%					} %>
 				</div>
 			</div>
                   <!-- 트리 끝 -->
                   <p class="space"></p>
                   <!-- lnb 끝 -->
+                  
                   <div class="sub_c" id="cTag">
                     <div class="con_in">
                       <div class="sc_title01">검색어 <span class="search_text">'<%=query%>'</span>에 대하여 <strong>[총 <%=numberFormat(totalCount)%>건]</strong> 통합검색 결과입니다. 
@@ -639,6 +635,7 @@ function saveKeywordClose(){
 							<input type="radio" name="search_radio01" value="SUBJECT" onclick="doSorting(this.value);" <%=sort.equals("SUBJECT") ? "checked" : ""%>/> 제목순 
 						  </span>
                         </div>
+                        
                         <div class="search_detail_box" id="DivLayer100" style="display:none;">
                           <div class="search_date">
                             <div class="search_date_txt">
@@ -650,509 +647,28 @@ function saveKeywordClose(){
 							  <span class="date_radio"><input type="radio" <%=range.equals("W") ? "checked" : ""%> onClick="javascript:setDate('W');" name="date_radio01" />1주 </span>
 							  <span class="date_radio"><input type="radio" <%=range.equals("M") ? "checked" : ""%> onClick="javascript:setDate('M');" name="date_radio01" />1개월 </span>
                               <span class="date_radio"><input type="radio" name="date_radio01" />사용자 정의 <span class="calendar_box">
-                                <input type="text" class="search_date_input" onclick="javascript:fnShow('DivLayer110');" />
-                                <div class="LaryeCalenderPop" id="DivLayer110" style="display:none; z-index:30;">
-                                    <table border="0" cellpadding="0" cellspacing="1" bgcolor="#939393" align="" bordercolor="#6e7882">
-                                      <tbody>
-                                        <tr>
-                                          <td>
-                                            <table width="170px" cellpadding="0" cellspacing="1" border="0" bgcolor="#FFFFFF" style="padding:5px 7px 7px 7px;">
-                                              <tbody>
-                                                <tr>
-                                                  <td valign="top">
-                                                    <table width="100%" cellpadding="3" cellspacing="1" border="0">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td align="center">
-                                                            <a href="#">
-                                                              <img src="images/btn_prev_cal.gif" alt="이전년" title="이전년" class="img_align">
-                                                            </a>
-                                                            <span class="cal_month">2011년</span>
-                                                            <a href="#">
-                                                              <img src="images/btn_next_cal.gif" alt="다음년" title="다음년" class="img_align">
-                                                            </a>
-                                                          </td>
-                                                          <td align="center">
-                                                            <a href="#">
-                                                              <img src="images/btn_prev_cal.gif" alt="이전달" title="이전달" class="img_align">
-                                                            </a>
-                                                            <span class="cal_month">10월</span>
-                                                            <a href="#">
-                                                              <img src="images/btn_next_cal.gif" alt="다음달" title="다음달" class="img_align">
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                    <table class="cal_body" cellpadding="3" cellspacing="1" border="0" bgcolor="#d7d7d7">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td class="w_day">
-                                                            <img src="images/day1.gif" alt="일요일" title="일요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day2.gif" alt="월요일" title="월요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day3.gif" alt="화요일" title="화요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day4.gif" alt="수요일" title="수요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day5.gif" alt="목요일" title="목요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day6.gif" alt="금요일" title="금요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day7.gif" alt="토요일" title="토요일">
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">25</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">26</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">27</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">28</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">29</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">30</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">1</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">2</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">3</a>
-                                                          </td>
-                                                          <td class="s_day" onmouseover="this.className='srow_on_a'" onmouseout="this.className='srow_off'">
-                                                            <a class="ttday" href="javascript:return false;">
-                                                              <span class="txt_today">4</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">5</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">6</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">7</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">8</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">9</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">10</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">11</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">12</a>
-                                                          </td>
-                                                          <td class="t_day" onmouseover="this.className='trow_on_a'" onmouseout="this.className='trow_off'">
-                                                            <a class="stylecal" href="javascript:return false;">13</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">14</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">15</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">16</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">17</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">18</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">19</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">20</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">21</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">22</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">23</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">24</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">25</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">26</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">27</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">28</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">29</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">30</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">31</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">1</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">2</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">3</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">4</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">5</a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                    <table width="100%" cellpadding="2" cellspacing="1" border="0" bgcolor="#d7d7d7">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td align="center" bgcolor="#FFFFFF" colspan="7">
-                                                            <a class="gotoday" href="#">오늘로 이동 &gt;</a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </span> ~ <span class="calendar_box">
-                                  <input type="text" class="search_date_input" onclick="javascript:fnShow('DivLayer120');" />
-                                  <div class="LaryeCalenderPop" id="DivLayer120" style="display:none; z-index:30;">
-                                    <table border="0" cellpadding="0" cellspacing="1" bgcolor="#939393" align="" bordercolor="#6e7882">
-                                      <tbody>
-                                        <tr>
-                                          <td>
-                                            <table width="170px" cellpadding="0" cellspacing="1" border="0" bgcolor="#FFFFFF" style="padding:5px 7px 7px 7px;">
-                                              <tbody>
-                                                <tr>
-                                                  <td valign="top">
-                                                    <table width="100%" cellpadding="3" cellspacing="1" border="0">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td align="center">
-                                                            <a href="#">
-                                                              <img src="images/btn_prev_cal.gif" alt="이전년" title="이전년" class="img_align">
-                                                            </a>
-                                                            <span class="cal_month">2011년</span>
-                                                            <a href="#">
-                                                              <img src="images/btn_next_cal.gif" alt="다음년" title="다음년" class="img_align">
-                                                            </a>
-                                                          </td>
-                                                          <td align="center">
-                                                            <a href="#">
-                                                              <img src="images/btn_prev_cal.gif" alt="이전달" title="이전달" class="img_align">
-                                                            </a>
-                                                            <span class="cal_month">10월</span>
-                                                            <a href="#">
-                                                              <img src="images/btn_next_cal.gif" alt="다음달" title="다음달" class="img_align">
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                    <table class="cal_body" cellpadding="3" cellspacing="1" border="0" bgcolor="#d7d7d7">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td class="w_day">
-                                                            <img src="images/day1.gif" alt="일요일" title="일요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day2.gif" alt="월요일" title="월요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day3.gif" alt="화요일" title="화요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day4.gif" alt="수요일" title="수요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day5.gif" alt="목요일" title="목요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day6.gif" alt="금요일" title="금요일">
-                                                          </td>
-                                                          <td class="w_day">
-                                                            <img src="images/day7.gif" alt="토요일" title="토요일">
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">25</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">26</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">27</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">28</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">29</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">30</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">1</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">2</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">3</a>
-                                                          </td>
-                                                          <td class="s_day" onmouseover="this.className='srow_on_a'" onmouseout="this.className='srow_off'">
-                                                            <a class="ttday" href="javascript:return false;">
-                                                              <span class="txt_today">4</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">5</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">6</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">7</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">8</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">9</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">10</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">11</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">12</a>
-                                                          </td>
-                                                          <td class="t_day" onmouseover="this.className='trow_on_a'" onmouseout="this.className='trow_off'">
-                                                            <a class="stylecal" href="javascript:return false;">13</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">14</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">15</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">16</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">17</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">18</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">19</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">20</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">21</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">22</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">23</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">24</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">25</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">26</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">27</a>
-                                                          </td>
-                                                          <td class="row_off" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">28</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sat">29</span>
-                                                            </a>
-                                                          </td>
-                                                        </tr>
-                                                        <tr>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">
-                                                              <span class="txt_sun">30</span>
-                                                            </a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="stylecal" href="javascript:return false;">31</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">1</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">2</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">3</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">4</a>
-                                                          </td>
-                                                          <td class="c_day" onmouseover="this.className='row_on_a'" onmouseout="this.className='row_off'">
-                                                            <a class="notmonth" href="javascript:return false;">5</a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                    <table width="100%" cellpadding="2" cellspacing="1" border="0" bgcolor="#d7d7d7">
-                                                      <tbody>
-                                                        <tr>
-                                                          <td align="center" bgcolor="#FFFFFF" colspan="7">
-                                                            <a class="gotoday" href="#">오늘로 이동 &gt;</a>
-                                                          </td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </span>
-                              </span>
-                            </div>
-                          </div>
+								<input type="text" name="startDate" value="<%=startDate%>" readonly="true" id="startDate" class="search_date_input"/>
+										</span> ~ 
+										<span class="calendar_box">
+											<input type="text" name="endDate" id="endDate" value="<%=endDate%>" readonly="true" class="search_date_input" />
+										</span>
+									</span>
+								</div>
+							</div>    
+							                           
                           <div class="search_area">
                             <div class="search_area_txt">
                               <span>검색범위</span>
                             </div>
                             <div class="search_checkbox_box">
-                              <span class="search_checkbox">
-                                <input type="checkbox" />전체 </span>
-                              <span class="search_checkbox">
-                                <input type="checkbox" />제목 </span>
-                              <span class="search_checkbox">
-                                <input type="checkbox" />본문 </span>
-                              <span class="search_checkbox">
-                                <input type="checkbox" />첨부 </span>
-                              <div class="search_input_box">
-                                <span class="search_input">부서명 <input type="text" />
-                                </span>
-                                <span class="search_input">작성자 <input type="text" />
-                                </span>
-                                <span class="search_input">수신/참조/결재자 <input type="text" />
-                                </span>
+								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("ALL") > -1 ? "checked" : ""%> value="ALL" id="checkAll"/>전체 </span>
+								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("SUBJECT") > -1 ? "checked" : ""%> name="searchFields" value="SUBJECT"/>제목 </span>
+								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "checked" : ""%> name="searchFields" value="BODYCONTENTS"/>본문 </span>
+								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("CREATORNAME") > -1 ? "checked" : ""%> name="searchFields" value="CREATORNAME"/>작성자 </span>
+								<div class="search_input_box">
+									<span class="search_input">부서명 <input type="text" name="prefix_input" id="prefix_dep"/></span>
+									<span class="search_input">작성자 <input type="text" name="prefix_input" id="prefix_writer"/></span>
+									<span class="search_input">수신/참조/결재자 <input type="text" name="prefix_input" id="prefix_etc"/></span>
                               </div>
                             </div>
                           </div>
@@ -1164,24 +680,24 @@ function saveKeywordClose(){
                         </div>
                       </div>
                       
-                      <% if (totalCount >= 0) { %>
-                       
-				
+					<% if (totalCount >= 0) { %>
+						<%@ include file="./result/result_appr.jsp" %>
+						<%@ include file="./result/result_board.jsp" %>					
+						<%@ include file="./result/result_user.jsp" %>
 				
 				<!-- paginate -->
-				<% if (!collection.equals("ALL") && totalCount > TOTALVIEWCOUNT) { %>
-					<div class="paginate">
-							<%=wnsearch.getPageLinks(startCount , totalCount, 10, 10)%>
-					</div>
-				<% } %>
+						<% if (!collection.equals("ALL") && totalCount > TOTALVIEWCOUNT) { %>
+						<div class="paginate"> <%=wnsearch.getPageLinks(startCount , totalCount, 10, 10)%> </div>
+						<% } %>
 				<!-- //paginate -->
 
-		<% } else { %>
+					<% } else { %>
 				<div class="search_n_result_wrap">
 		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
 					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
 		         </div>
-		<% } %>
+		         	<% } %>
+					<!-- 
                       <div class="section_search_box">
                         <div class="section_search01">
                           <div class="cont_title">
@@ -1381,7 +897,6 @@ function saveKeywordClose(){
                             <a class="go_more" href="#">검색 결과 더보기 </a>
                           </div>
                         </div>
-                        <!--  
                         <div class="section_search_right">
                           <div class="search_text_box">
                             <p class="search_text_title">내가 찾은 검색어</p>
@@ -1409,8 +924,8 @@ function saveKeywordClose(){
                             </ul>
                           </div>
                         </div>
-                        --> 
-                      </div>`
+                      </div>
+                     -->
                     </div>
                   </div>
                 </div>
@@ -1420,6 +935,7 @@ function saveKeywordClose(){
         </div>
         <!-- 컨텐츠영역끝 -->
       	</div>
+      	
       </div>
 			<!-- TOP버튼 -->
 			<div id="MovTop" class="onlPsc">
