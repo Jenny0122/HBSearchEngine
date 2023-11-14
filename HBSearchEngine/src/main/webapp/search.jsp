@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="./common/api/WNSearch.jsp" %>
 <%@ include file="./common/api/Encrypt.jsp" %>
-
 <% request.setCharacterEncoding("UTF-8");%>
+<%@ page import ="java.net.InetAddress"%>
 <%
     
     //실시간 검색어 화면 출력 여부 체크
@@ -15,6 +15,11 @@
     boolean isDebug = false;
 
     int TOTALVIEWCOUNT = 3;    //통합검색시 출력건수
+    HashMap<String, Integer> TOTALVIEWCOUNT_MAP = new HashMap<String, Integer>() {
+        {
+        	put("appr", 10); put("apprMig", 10); put("board", 10); put("user", 3); 
+        }
+    };
     int COLLECTIONVIEWCOUNT = 10;    //더보기시 출력건수
 
 	String START_DATE = "2000.01.01";	// 기본 시작일
@@ -27,7 +32,7 @@
     String rt2 = 			getCheckReqXSS(request, "rt2", "");							//결과내 재검색 체크필드
 	String reQuery = 		getCheckReqXSS(request, "reQuery", "");					    //결과내 재검색 체크필드
     String realQuery = 		getCheckReqXSS(request, "realQuery", "");				    //결과내 검색어
-    String sort = 			getCheckReqXSS(request, "sort", "DATE");					//정렬필드
+    String sort = 			getCheckReqXSS(request, "sort", "DATE");					//정렬필드 
     String range = 			getCheckReqXSS(request, "range", "A");						//기간관련필드
     String startDate = 		getCheckReqXSS(request, "startDate", START_DATE);		    //시작날짜
     String endDate = 		getCheckReqXSS(request, "endDate", getCurrentDate());		//끝날짜
@@ -45,7 +50,6 @@
 	String DN_Code 		= getCheckReqXSS(request, "DN_Code", "");					//도메인코드
 	String GR_Code 		= getCheckReqXSS(request, "GR_Code", "");					//그룹코드
 	String DEPTID 		= getCheckReqXSS(request, "DEPTID", "");					//부서코드
-	String DEPT_NAME 	= getCheckReqXSS(request, "DEPT_NAME", "");					//부서코드
 	String docType 		= getCheckReqXSS(request, "docType", "1");
  
     String token = 			getCheckReqXSS(request, "token", "");                       //유저코드 암호화 파라미터
@@ -63,9 +67,23 @@
 	}
 		
 	// 도메인 
-	// String doMain = "https://gw2.youngone.com"; //영원무역 그룹웨어 prd
+	String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어 domain
+	
+	InetAddress local;
+	local = InetAddress.getLocalHost();
+	String ip = local.getHostAddress();
 
-   
+	//개발
+	if(ip.equals("172.17.208.26")){
+		doMain = "http://searchdev.e-hoban.co.kr";
+	// 로컬
+	}else if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1") || ip.equals("192.168.219.100")){
+		doMain = "http://searchdev.e-hoban.co.kr";
+	// 운영
+	}else {
+		doMain = "https://search.ihoban.co.kr";
+	}
+	   
     int totalCount = 0;
     String userId = "";
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
@@ -74,7 +92,7 @@
     
     // jwt 토큰 복호화
 	// warr : 임시확인용 주석처리
- 	if ( UR_Code.equals("") ) { 
+ /*	if ( UR_Code.equals("") ) { 
 			//임시확인용 토큰
 		token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODI0ODg5NTYwOTgsImV4cCI6MTY4MjQ4OTU1NjA5OCwiZW1wIjoic3VwZXJhZG1pbiJ9.m_HRrWUFHZxeKLdmgOCPjbGwDPjubitRW5L5zp-KrSg";
 		Map<String,Object> retMap = new HashMap<>();
@@ -92,19 +110,7 @@
     
 		long nowTime = System.currentTimeMillis ();
 		
-		//if ( nowTime > exp ) {
-		//	out.println("Timeout. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + exp + " :: " + nowTime); 
-		//	return ;
-		//}
-		//if ( userId == null || "".equals(userId)  ) {
-		//	out.println(userId);
-		//	out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."+ retMap.get("emp")); 
-		//	return ;
-		//} else {
-		//	userId = UR_Code;
-		//}
-    }
-  
+    }  */
     
 	// 권한처리
     if (userId.length() > 0) {
@@ -205,7 +211,7 @@
 
     String prefixForLog = "";
     String filterForLog = "";
-    for (int i = 0; i < collections.length; i++) {
+    for (int i = 0; i < collections.length; i++) { //공영빈
     	try{
         //출력건수
         wnsearch.setCollectionInfoValue(collections[i], PAGE_INFO, startCount+","+viewResultCount);
@@ -251,8 +257,9 @@
        	
 		if(collections[i].equals("user")){			
         wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, "1970/01/01,2030/12/31,-");
-       	
-    // 쿼리로그에 prefix query, filter query 정보 남기기
+		}
+    }
+      // 쿼리로그에 prefix query, filter query 정보 남기기
     if(prefixForLog.length() > 0) {
     	prefixForLog = "[prefix] " + prefixForLog.substring(0, prefixForLog.length()-1);
     }
@@ -307,6 +314,12 @@
 	System.out.println("[filter] : " + filter);
 	System.out.println("[searchField] : " + searchField);
 	System.out.println();  */
+	
+	Map<String, Integer> writerMap = getCategoryResult("CREATORNAME", collections, collection, wnsearch);
+	Map<String, Integer> depMap = getCategoryResult("CREATORDEPT", collections, collection, wnsearch);
+	
+	// String[] portalCollections = {"appr","apprMig", "board", "user"};
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -513,7 +526,7 @@ function saveKeywordClose(){
             </div>
             <div class="white_window_check"><input type="checkbox" name="reChk" id="reChk" onClick="checkReSearch();"/>결과내 재검색
             </div>
-			<div class="nuttop">
+			<!--  <div class="nuttop">
 			  <div class="auto">
 			  <ul class="recomm">
 					<li><a href="#"><strong class="tx_key">이</strong>력사항</a></li>
@@ -527,7 +540,7 @@ function saveKeywordClose(){
 				  <div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div>
 			  </div>
 			</div>
-          </div>
+          </div>-->
           <!-- Header 끝 -->
           <!-- 컨텐츠영역시작 -->
           <div class="layout">
@@ -553,14 +566,6 @@ function saveKeywordClose(){
                         </a>
                       </div>
 					<div class="search_list02">
-					<% for (int i = 0; i < portalCollections.length; i++) { %>
-						<a href="#none" onClick="javascript:doCollection('<%=portalCollections[i]%>');">
-							<span class="<%=collection.equals(portalCollections[i]) ? "list_text_on" : "" %>">
-								<img src="images/ico_bbar.gif" />
-								<%=wnsearch.getCollectionKorName(portalCollections[i])%> (<%=numberFormat(wnsearch.getResultTotalCount(portalCollections[i]))%>)
-							</span>
-						</a>
-					<% } %>
 					</div>
 					
 <%					if(!writerMap.isEmpty()) { %>	
@@ -646,15 +651,17 @@ function saveKeywordClose(){
                               <span class="date_radio"><input type="radio" <%=range.equals("D") ? "checked" : ""%> onClick="javascript:setDate('D');" name="date_radio01" />1일 </span>
 							  <span class="date_radio"><input type="radio" <%=range.equals("W") ? "checked" : ""%> onClick="javascript:setDate('W');" name="date_radio01" />1주 </span>
 							  <span class="date_radio"><input type="radio" <%=range.equals("M") ? "checked" : ""%> onClick="javascript:setDate('M');" name="date_radio01" />1개월 </span>
-                              <span class="date_radio"><input type="radio" name="date_radio01" />사용자 정의 <span class="calendar_box">
-								<input type="text" name="startDate" value="<%=startDate%>" readonly="true" id="startDate" class="search_date_input"/>
-										</span> ~ 
-										<span class="calendar_box">
-											<input type="text" name="endDate" id="endDate" value="<%=endDate%>" readonly="true" class="search_date_input" />
-										</span>
+				              <span class="date_radio">
+								<input type="radio" <%=range.equals("undefined") ? "checked" : ""%> name="date_radio01" /> 사용자정의 
+									<span class="calendar_box">
+										<input type="text" name="startDate" value="<%=startDate%>" readonly="true" id="startDate" class="search_date_input"/>
+									</span> ~ 
+									<span class="calendar_box">
+										<input type="text" name="endDate" id="endDate" value="<%=endDate%>" readonly="true" class="search_date_input" />
 									</span>
-								</div>
-							</div>    
+								</span>
+							</div>
+						</div>    
 							                           
                           <div class="search_area">
                             <div class="search_area_txt">
@@ -696,236 +703,7 @@ function saveKeywordClose(){
 		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
 					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
 		         </div>
-		         	<% } %>
-					<!-- 
-                      <div class="section_search_box">
-                        <div class="section_search01">
-                          <div class="cont_title">
-                            <div class="cont_title_l"></div>
-                            <h2 class="sc_title02">전자결재 <span class="sc_number">(총 33건) </span></h2>
-														<div class="search_radio_box">
-		                          <span class="search_radio">
-		                            <input type="radio" name="search_radio02" checked="checked">완료문서
-															</span>
-		                          <span class="search_radio">
-		                            <input type="radio" name="search_radio02">이관문서
-															</span>
-		                        </div>
-                            <div class="cont_title_r"></div>
-                          </div>
-                          <ul class="dic">
-                            <li class="dic_100 dic_aside">
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#"><strong class="hl"> 기안 </strong>테스트 문서</a>
-																	<div class="title_info">
-	                                  <p class="title_area_name"><span>김민서</span><span>인사팀</span><span>완료문서</span></p>
-																		<span class="title_accuracy">[ 정확도 : 0.22 ]</span>
-																	</div>
-                                </dt>
-                                <dd class="txt_inline">[기안일시: 2022-02-12] [완료일시: 2022-02-12]</dd>
-                                <dd class="explain">
-                                  <strong class="hl">기안</strong> 관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서관련 테스트 문서
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.doc <img src="images/ico_doc.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                            <li class="dic_100 dic_aside">
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#">
-                                    <strong class="hl">기안</strong>지 가이드</a>
-																		<div class="title_info">
-		                                  <p class="title_area_name"><span>최민정</span><span>협업팀</span><span>완료문서</span></p>
-																			<span class="title_accuracy">[ 정확도 : 0.22 ]</span>
-																		</div>
-                                </dt>
-                                <dd class="txt_inline">[기안일시:20111219][완료일시:20111219]</dd>
-                                <dd class="explain">
-                                  <strong class="hl">기안</strong>지 작성 가이드 안내
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.pdf <img src="images/ico_pdf.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-														<li class="dic_100 dic_aside">
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#">
-                                    <strong class="hl">기안</strong>상신여부 표시 기능 보완</a>
-																		<div class="title_info">
-		                                  <p class="title_area_name"><span>오민정</span><span>기획관리팀</span><span>완료문서</span></p>
-																			<span class="title_accuracy">[ 정확도 : 0.22 ]</span>
-																		</div>
-                                </dt>
-                                <dd class="txt_inline">[기안일시:20111219][완료일시:20111219]</dd>
-                                <dd class="explain">
-                                  상신여부 표시 기능 보완
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                          </ul>
-                          <div class="section_more">
-                            <a class="go_more" href="search_sub.html">검색 결과 더보기 </a>
-                          </div>
-                        </div>
-                        <div class="section_search02">
-                          <div class="cont_title">
-                            <div class="cont_title_l"></div>
-                            <h2 class="sc_title02">게시판 <span class="sc_number">(총 4건) </span>
-                            </h2>
-                            <div class="cont_title_r"></div>
-                          </div>
-													<ul class="dic dic_board">
-                            <li class="dic_100 dic_aside">
-															<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#"><strong class="hl"> 기안 </strong>지 테스트</a>
-																	<div class="title_info">
-	                                  <p class="title_area_name"><span>슈퍼관리자</span><span>영업팀</span></p>
-																		<span class="title_accuracy">[ 정확도 : 0.07 ]</span>
-																	</div>
-                                </dt>
-                                <dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...<strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                            <li class="dic_100 dic_aside">
-								<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#">신입사원 MS교육 지원 요청의 건</a>
-									<div class="title_info">
-		                                <p class="title_area_name"><span>최영</span><span>제안팀</span></p>
-											<span class="title_accuracy">[ 정확도 : 0.04 ]</span>
-									</div>
-                                </dt>
-								<dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...<strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-							<li class="dic_100 dic_aside">
-							<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                              <dl>
-                                <dt class="title_area">
-                                    <a href="#">프로젝트 수행 절차 - 소스반출 프로세스</a>
-									<div class="title_info">
-		                                <p class="title_area_name"><span>슈퍼관리자</span><span>시스템관리자</span></p>
-										<span class="title_accuracy">[ 정확도 : 0.03 ]</span>
-									</div>
-                                </dt>
-								<dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...각 프로젝트 담당 PL ② 방법 : 전자결재 "자료반출 신청서" 작성결재시 내용 : 결재선 -> 결재: 담당PM(합의), 팀장, 본부장 <strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                          </ul>
-                          <div class="section_more">
-                            <a class="go_more" href="#">검색 결과 더보기 </a>
-                          </div>
-                        </div>
-                        <div class="section_search02">
-                            <div class="cont_title">
-                            <div class="cont_title_l"></div>
-                            <h2 class="sc_title02">문서관리 <span class="sc_number">(총 6건) </span>
-                            </h2>
-                            <div class="cont_title_r"></div>
-                            </div>
-							<ul class="dic dic_board">
-                            <li class="dic_100 dic_aside">
-								<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                                <dl>
-                                <dt class="title_area">
-                                    <a href="#"><strong class="hl"> 기안 </strong>지 테스트</a>
-									<div class="title_info">
-	                                <p class="title_area_name"><span>슈퍼관리자</span><span>영업팀</span></p>
-									<span class="title_accuracy">[ 정확도 : 0.07 ]</span>
-									</div>
-                                </dt>
-                                <dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...<strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                            <li class="dic_100 dic_aside">
-															<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#">신입사원 MS교육 지원 요청의 건</a>
-																		<div class="title_info">
-		                                  <p class="title_area_name"><span>최영</span><span>제안팀</span></p>
-																			<span class="title_accuracy">[ 정확도 : 0.04 ]</span>
-																		</div>
-                                </dt>
-																<dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...<strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-														<li class="dic_100 dic_aside">
-															<a href="#" class="dic_img" style="background:url('images/sample.jpg') no-repeat center, url('images/noimg.gif') no-repeat center; background-size:80px auto, auto;"></a>
-                              <dl>
-                                <dt class="title_area">
-                                  <a href="#">프로젝트 수행 절차 - 소스반출 프로세스</a>
-																		<div class="title_info">
-		                                  <p class="title_area_name"><span>슈퍼관리자</span><span>시스템관리자</span></p>
-																			<span class="title_accuracy">[ 정확도 : 0.03 ]</span>
-																		</div>
-                                </dt>
-																<dd class="txt_inline">[등록일: 2022-02-12] [폴더명: 자유게시판]</dd>
-                                <dd class="explain">
-                                  ...각 프로젝트 담당 PL ② 방법 : 전자결재 "자료반출 신청서" 작성결재시 내용 : 결재선 -> 결재: 담당PM(합의), 팀장, 본부장 <strong class="hl">기안</strong>지 결재<strong class="hl">기안</strong>슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀슈퍼관리자 11/03 11:25 팀원 슈퍼관리자 작성문서 영업팀 문서번호 영업팀
-                                </dd>
-                                <dd class="filein"><a href="#">첨부파일 : 계약서 양식.xls <img src="images/ico_xls.gif" alt=""></a></dd>
-                              </dl>
-                            </li>
-                          </ul>
-                          <div class="section_more">
-                            <a class="go_more" href="#">검색 결과 더보기 </a>
-                          </div>
-                        </div>
-                        <div class="section_search_right">
-                          <div class="search_text_box">
-                            <p class="search_text_title">내가 찾은 검색어</p>
-                            <ul class="search_text_list">
-                              <li>
-                                <a href="#">
-                                  <img src="images/list01.gif" />정보 </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <img src="images/list02.gif" />IT정보관리 </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <img src="images/list03.gif" />문서관리 시스템 </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <img src="images/list04.gif" />정보관리 </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <img src="images/list05.gif" />경비결재 시스템 </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                     -->
+		         	<% }%>
                     </div>
                   </div>
                 </div>
@@ -934,8 +712,7 @@ function saveKeywordClose(){
           </div>
         </div>
         <!-- 컨텐츠영역끝 -->
-      	</div>
-      	
+      	</div>      	
       </div>
 			<!-- TOP버튼 -->
 			<div id="MovTop" class="onlPsc">
@@ -947,3 +724,60 @@ function saveKeywordClose(){
     </form>
   </body>
 </html>
+<%
+	if ( wnsearch != null ) {
+		wnsearch.closeServer();
+	}
+%>
+<%!
+public static Map<String, Integer> getCategoryResult(String groupfieldName, String[] collections, String collection, WNSearch wnsearch){
+	Map<String, Integer> categoryMap = new TreeMap<String, Integer>();
+	if(collection.equals("ALL")){
+		for (int i = 0; i < collections.length; i++) {
+			
+			int depth1 = wnsearch.getCategoryCount(collections[i], groupfieldName, 1);
+			for(int j=0; j<depth1; j++){
+				String categoryName = wnsearch.getCategoryName(collections[i], groupfieldName, 1, j);
+				int categoryCnt = wnsearch.getDocumentCountInCategory(collections[i], groupfieldName, 1, j);
+
+				if(("null").equalsIgnoreCase(categoryName) || categoryName.length() <= 0){
+					continue;
+				}
+				
+				if(categoryMap.containsKey(categoryName)){
+					categoryMap.put(categoryName, categoryMap.get(categoryName) + categoryCnt);
+				}else{
+					categoryMap.put(categoryName, categoryCnt);
+				}
+			}
+		}		
+	}else{
+		int depth1 = wnsearch.getCategoryCount(collection, groupfieldName, 1);
+		for(int j=0; j<depth1; j++){
+			String categoryName = wnsearch.getCategoryName(collection, groupfieldName, 1, j);
+			int categoryCnt = wnsearch.getDocumentCountInCategory(collection, groupfieldName, 1, j);
+
+			if(("null").equalsIgnoreCase(categoryName) || categoryName.length() <= 0){
+				continue;
+			}
+			
+			if(categoryMap.containsKey(categoryName)){
+				categoryMap.put(categoryName, categoryMap.get(categoryName) + categoryCnt);
+			}else{
+				categoryMap.put(categoryName, categoryCnt);
+			}
+		}
+	}
+	return categoryMap;
+}
+
+public static int getTotalPage(int totalCount, int bundleCount){
+	int lastPage = 0;
+	if(totalCount % bundleCount == 0){
+		lastPage = totalCount / bundleCount;
+	}else{
+		lastPage = (totalCount / bundleCount) + 1;
+	}
+	return lastPage;
+}
+%>

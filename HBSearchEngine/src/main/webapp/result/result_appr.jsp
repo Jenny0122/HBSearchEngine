@@ -57,16 +57,19 @@
 				String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 		
 				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
 				String ATTACH_FILE_INFO 	=	wnsearch.getField(thisCollection,"ATTACH_FILE_INFO",				idx,false); 			
-				String FILE_LOCATION 		=	wnsearch.getField(thisCollection,"FILE_LOCATION",				idx,false); 			
+				String FILE_LOCATION 		=	wnsearch.getField(thisCollection,"FILE_LOCATION",				idx,false); 
+				String FILE_NAME 			=	wnsearch.getField(thisCollection,"FILE_NAME",				idx,false); 			
 				String FILE_EXTENTION 		=	wnsearch.getField(thisCollection,"FILE_EXTENTION",				idx,false); 			
 				String FILE_MESSAGE_ID 		=	wnsearch.getField(thisCollection,"FILE_MESSAGE_ID",				idx,false); 			
-				String FILE_CONTENTS 		=	wnsearch.getField(thisCollection,"FILE_CONTENTS",				idx,false); 			
+				String FILE_CONTENTS 		=	wnsearch.getField(thisCollection,"FILE_CONTENTS",				idx,false); 
+				Double RANK						= Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));
 				String ALIAS                =   wnsearch.getField(thisCollection,"ALIAS",				idx,false);				
 				
 				
 				SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
 				BODYCONTEXT 				= 	wnsearch.getKeywordHl(BODYCONTEXT,"<strong class='hl'>","</strong>");
-				INITIATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
+				FILE_NAME 					= 	wnsearch.getKeywordHl(FILE_NAME,"<strong class='hl'>","</strong>");
+				INITIATOR_NAME				= 	wnsearch.getKeywordHl(INITIATOR_NAME,"<strong class='hl'>","</strong>");
 				
 				DOC_URL						= 	doMain + DOC_URL;
 				if (apprType.equals("mig")) {DOC_URL = DOC_URL + "&forminstanceID=" + PROCESS_ID + "&formPrefix=WF_MIGRATION";}
@@ -75,21 +78,15 @@
 				/* INITIATED_DATE		= calTimezoneCode(INITIATED_DATE, TimeZoneCode, "yyyy-MM-dd");
 				COMPLETED_DATE		= calTimezoneCode(COMPLETED_DATE, TimeZoneCode, "yyyy-MM-dd");  */
 				
-				/* String apprStr = "";
-				if (apprType.equals("appr")){
-					if (LanguageCode.equals("ko")){
+				/*String apprStr = "";
+				if (apprType.equals("appr")){					
 						apprStr = "완료문서";
-					} else if (LanguageCode.equals("en")){
-						apprStr = "완료문서en";
-					}
-				} else if (apprType.equals("mig")) {
-					if (LanguageCode.equals("ko")){
-						apprStr = "이관문서";
-					} else if (LanguageCode.equals("en")){
-						apprStr = "이관문서en";
-					}
-				} */
 				
+				} else (apprType.equals("mig")){
+						apprStr = "이관문서";					
+				}; */
+				
+				String[] fileNameArr = FILE_NAME.split("\\|\\|");
 				String[] fileExtentionArr = FILE_EXTENTION.split("\\|\\|");
 %>
 				<li class="dic_100 dic_aside">
@@ -98,25 +95,27 @@
 							<a href="<%=DOC_URL%>"><%=SUBJECT%></a>
 							<div class="title_info">
 								<p class="title_area_name">
-								<span><%=CREATOR_NAME%></span><%if(CREATOR_DEPT.length() > 0) { %><span><%=CREATOR_DEPT%></span><%}%>
+								<span><%=INITIATOR_NAME%></span><%if(INITIATOR_UNIT_NAME.length() > 0) { %><span><%=INITIATOR_UNIT_NAME%></span><%}%>
 								</p>
+								<span class="title_accuracy">[ 정확도 : <%=(RANK*1/100)%> ]</span>
+								
 							</div>
 						</dt>
 						<dd class="txt_inline">[기안일시: <%=INITIATED_DATE%>] [완료일시: <%=COMPLETED_DATE%>]</dd>
 						<dd class="explain"><%=BODYCONTEXT%></dd>
+						
+						<%if(!"".equals(fileNameArr[0])){ 
+						int fileCnt = fileNameArr.length;%>
 
-						<dd class="filein"><a>첨부파일 : </a>
+						<dd class="filein"><a>첨부파일 : <%= FILE_NAME %></a>
 									
-						<% for(int i = 0; i < fileCnt; i++) {
-							String fileExtention = fileExtentionArr[i].toLowerCase();
-						%>
+						<%for(int i=0; i<fileCnt; i++) {
+							String fileName = fileNameArr[i];
+							String fileExtention = fileExtentionArr[i].toLowerCase();%>
 
-							<!-- <a><%= fileName %></a> -->
+							<a><%= fileName %></a>
 
-							<% if(checkExtentionIcon(fileExtention)) { %>
-							<img width="10" height="10" src="images/files/data_<%= fileExtention %>.gif" alt="">
-							<% }
-						} %>
+						}%>
 						</dd>
 					<% } %>
 					</dl>
@@ -126,6 +125,5 @@
 		<% } %>
 		<% if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
 				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 검색 결과 더보기 </a></div>
-		<% } %>
+		<% }}}} %>
 			</div>
-	<% } %>

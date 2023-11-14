@@ -20,7 +20,7 @@
 			}				
 %>
 				<div class="cont_title">
-				<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection,LanguageCode)%> <span class="sc_number">
+				<h2 class="sc_title02"><%=wnsearch.getCollectionKorName(thisCollection)%> <span class="sc_number">
 				(총 <%=numberFormat(thisTotalCount)%>건)
 				</span></h2>			
 			</div>
@@ -54,51 +54,52 @@
 				String USE_YN				=	wnsearch.getField(thisCollection,"USE_YN",					idx,false);
 				String PHOTO_PATH			=	wnsearch.getField(thisCollection,"PHOTO_PATH",				idx,false);
 				String ALIAS				=	wnsearch.getField(thisCollection,"ALIAS",					idx,false);
+				Double RANK						= Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));
+
 												
 				USER_NAME 					= wnsearch.getKeywordHl(USER_NAME,"<strong class='hl'>","</strong>");
 				DEPT_NAME 					= wnsearch.getKeywordHl(DEPT_NAME,"<strong class='hl'>","</strong>");
+				JOB_POSITION_NAME			= wnsearch.getKeywordHl(JOB_POSITION_NAME,"<strong class='hl'>","</strong>");
+				CHARGE_BUSINESS				= wnsearch.getKeywordHl(CHARGE_BUSINESS,"<strong class='hl'>","</strong>");
 				
-				PHOTO_URL			= doMain + PHOTO_URL;
-				String USER_INFO_URL		= 	doMain + "/covicore/control/callMyInfo.do?userID=" + USER_CODE;
-				USER_INFO_URL				=	"javascript:openLink('" + USER_INFO_URL + "',810,410);";
+				
+				// String USER_INFO_URL		= 	doMain + "/covicore/control/callMyInfo.do?userID=" + USER_CODE;
+				// USER_INFO_URL				=	"javascript:openLink('" + USER_INFO_URL + "',810,410);";
+			
+				LINK_URL = doMain + LINK_URL;
+				LINK_URL = "javascript:openLink('" + LINK_URL + "',790,800);";
 %>
-			<div class="resultstyle_user">
-				<ul class="auto_user">
-					<li>
-						<a href="<%=USER_INFO_URL%>" class="auto_user_link">
-							<span class="auto_user_img">
-							<% if (PHOTO_PATH.equals("/prd/stor") || PHOTO_PATH.equals("/devp/stor")) { %>
-							<img src="images/no_profile.png" alt="">
-							<% } else { %>
-							<img src="<%=PHOTO_URL%>" onerror='this.src="images/no_profile.png";'alt="">
-							<% } %>
-							</span>
-							<span class="user_link_c">
-								<span class="tx_name"><%=USER_NAME%>(<%=JOB_POSITION_NAME%>)</span>
-								<span class="tx_team"><%=DEPT_NAME%></span>
-							</span>
-							<span class="user_link_c">
-								<span class="tx_tel"><%=PHONE_NUMBER_INTER%></span>
-								<span class="tx_phone"><%=MOBILE%></span>
-							</span>
-							<span class="user_link_c">
-								<span class="tx_mail"><%=MAIL_ADDRESS%></span>
-							</span>
-						</a>
-					</li>
-				</ul>
-			</div>
- <%
-			}
-%>
-			</div>
+						<li class="dic_100 dic_aside">
+							<dl>
+								<dt class="title_area">
+									<a href="<%=LINK_URL%>"><%=USER_NAME%></a>
+									<div class="title_info">
+										<p class="title_area_name">	
+<%										if(DEPT_NAME.length() > 0){ %>								
+											<span><%=COMPANY_NAME%> <%=DEPT_NAME%></span>
+<%}%>								
+										</p>
+										<span class="title_accuracy">[ 정확도 : <%=(RANK*1/100)%> ]</span>
+									</div>
+								</dt>
+								<dd class="txt_inline">[직급:<%=JOB_POSITION_NAME%>] [담당업무:<%=CHARGE_BUSINESS%>]</dd>
+							</dl>
+						</li>	
 <%
 			}
+%>
+				</ul>
+<%
+
 			if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) {
 %>
 				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');">더보기</a></div>
 <%
 			}
+%>
+			</div>
+<%
 		}
+	}
 	}
 %>

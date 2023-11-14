@@ -6,12 +6,12 @@
 	//static String SEARCH_IP="10.20.20.126";
 	//static String MANAGER_IP="10.20.20.126";
 	//개발
-	static String SEARCH_IP="172.17.208.26";
-	static String MANAGER_IP="172.17.208.26";
+	//static String SEARCH_IP="172.17.208.26";
+	//static String MANAGER_IP="172.17.208.26";
 	
 	//반영
-	//static public String SEARCH_IP="127.0.0.1";
-	//static public String MANAGER_IP="127.0.0.1"; 
+	static public String SEARCH_IP="127.0.0.1";
+	static public String MANAGER_IP="127.0.0.1"; 
 	static int SEARCH_PORT=7000;
 	static int MANAGER_PORT=7800;
 
@@ -36,8 +36,8 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -55,7 +55,7 @@
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-			 			"전자결재/e-Consultation" // collection display name
+			 			"전자결재" // collection display name
 		 			},
 					{
 						"board", // set index name
@@ -83,7 +83,7 @@
 						"", // set multigroupby field
 						"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 						"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-						"통합게시판/e-Board" // collection display name
+						"통합게시판" // collection display name
 						}
 			         ,
 					{
@@ -112,7 +112,7 @@
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-			 			"사원정보/Employee Information" // collection display name
+			 			"사원정보" // collection display name
 			 		}
 			 	};
 			} else if (apprType.equals("mig")) {
@@ -125,8 +125,8 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -144,7 +144,7 @@
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-			 			"전자결재/e-Consultation" // collection display name
+			 			"전자결재" // collection display name
 		 			},
 					{
 						"board", // set index name
@@ -172,7 +172,7 @@
 						"", // set multigroupby field
 						"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 						"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-						"통합게시판/e-Board" // collection display name
+						"통합게시판" // collection display name
 						}
 			         ,
 					{
@@ -182,7 +182,7 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"USER_ID,USER_NAME_KO,MULTI_DEPT_NAME_KO,EMP_NO",// set search field
+			 			"USER_NAME,DEPT_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,MOBILE,ALIAS",// set search field
 			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,DEPT_NAME,USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,JOB_POSITION_NAME_EN,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
@@ -201,7 +201,7 @@
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-			 			"사원정보/Employee Information" // collection display name
+			 			"사원정보" // collection display name
 			 		}
 			 	};
 			}
@@ -219,8 +219,8 @@
 		 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-		 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
-		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+		 			"FORM_PREFIX,FORM_NAME,SUBJECT,SUBJECT_DOC,DOC_NUMBER,INITIATOR_NAME,INITIATOR_UNIT_NAME,SRCH_NAME,FILE_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
+		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,INITIATOR_ID,INITIATOR_NAME,INITIATOR_UNIT_ID,INITIATOR_UNIT_ID,INITIATOR_UNIT_NAME,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTEXT,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -238,7 +238,7 @@
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 		 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-		 			"전자결재/e-Consultation" // collection display name
+		 			"전자결재" // collection display name
 	 			},
 				{
 					"board", // set index name
@@ -266,7 +266,7 @@
 					"", // set multigroupby field
 					"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 					"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-					"통합게시판/e-Board" // collection display name
+					"통합게시판" // collection display name
 					}
 		         ,
 				{
@@ -295,7 +295,7 @@
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 		 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
-		 			"사원정보/Employee Information" // collection display name
+		 			"사원정보" // collection display name
 		 		}
 
 		 	};

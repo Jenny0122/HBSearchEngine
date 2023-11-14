@@ -21,7 +21,7 @@
 %>
 				<div class="cont_title">
 					<div class="cont_title_l"></div>
-					<h2 class="sc_title02"><%=wnsearch.getCollectionNameLanguage(thisCollection)%> <span class="sc_number"></span>
+					<h2 class="sc_title02"><%=wnsearch.getCollectionKorName(thisCollection)%> <span class="sc_number"></span>
 						(총 <%=numberFormat(thisTotalCount)%>건) 
 					</h2>
 				</div>
@@ -65,7 +65,7 @@
 				String FILE_DOWNLOAD_URL	=	wnsearch.getField(thisCollection,"FILE_DOWNLOAD_URL",	idx,false);
 				String FILE_CONTENTS 		=	wnsearch.getField(thisCollection,"FILE_CONTENTS",		idx,false); 
 				String ALIAS				=	wnsearch.getField(thisCollection,"ALIAS",				idx,false);
-				
+				Double RANK						= Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));				
 							
 				SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
 				SUMMERYBODYCONTENTS 		= 	wnsearch.getKeywordHl(SUMMERYBODYCONTENTS,"<strong class='hl'>","</strong>");
@@ -86,7 +86,8 @@
 							<a href="<%=MSG_OPEN_URL%>"><%=SUBJECT%></a>
 							<div class="title_info">
 								<p class="title_area_name"><span><%=CREATOR_NAME%></span><%if(CREATOR_DEPT.length() > 0){ %><span><%=CREATOR_DEPT%></span><%}%></p>
-							</div>
+								<span class="title_accuracy">[ 정확도 : <%=(RANK*1/100)%> ]</span>
+
 						</dt>
 						<dd class="txt_inline">[등록일 : <%=REGIST_DATE%>] [게시판명: <%=FOLDER_NAME%>]</dd>
 						<dd class="explain"><%=SUMMERYBODYCONTENTS%></dd>
@@ -94,17 +95,13 @@
 						<%if(!"".equals(fileNameArr[0])){ 
 						int fileCnt = fileNameArr.length; %>
 						
-						<dd class="filein"><a>첨부파일 : </a>
+						<dd class="filein"><a>첨부파일 : <%= FILE_NAME %> </a>
 									
 						<%for(int i=0; i<fileCnt; i++) {
 							String fileName = fileNameArr[i];%>
 
 						<a><%= fileName %></a>
 
-						<% if(checkExtentionIcon(fileExtention)) { %>
-							<img width="10" height="10" src="images/files/data_<%= fileExtention %>.gif" alt="">
-
-						<%}
 						}%>
 						</dd>
 					<% } %>
@@ -118,5 +115,5 @@
 			<% } %>
 			</div>
 		<% }
-	}
+	}}
 %>

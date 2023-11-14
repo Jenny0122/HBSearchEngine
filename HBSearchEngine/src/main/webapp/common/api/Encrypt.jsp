@@ -1,7 +1,4 @@
-
-<%
-request.setCharacterEncoding("UTF-8");
-%>
+<%request.setCharacterEncoding("UTF-8");%>
 <%@ page
 	import="java.util.*
 	,io.jsonwebtoken.Jwts
@@ -25,7 +22,10 @@ request.setCharacterEncoding("UTF-8");
 				throws InterruptedException {
 			Map<String, Object> retMap = new HashMap<>();
 			try {
-				Claims claims = Jwts.parser().setSigningKey(encKey.getBytes()).parseClaimsJws(jwtTokenString).getBody();
+				Claims claims = Jwts.parser()
+									.setSigningKey(encKey.getBytes())
+									.parseClaimsJws(jwtTokenString)
+									.getBody();
 
 				retMap = claims;
 			} catch (SignatureException e) {
