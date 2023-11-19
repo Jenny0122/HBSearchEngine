@@ -22,7 +22,7 @@
     };
     int COLLECTIONVIEWCOUNT = 10;    //더보기시 출력건수
 
-	String START_DATE = "2000.01.01";	// 기본 시작일
+	String START_DATE = "2000-01-01";	// 기본 시작일
 
 	// 결과 시작 넘버
     int startCount = 		parseInt(getCheckReqXSS(request, "startCount", "0"), 0);	//시작 번호
@@ -43,7 +43,7 @@
 	
 	String prefix 		= getCheckReqXSS2(request, "prefix", "");					//prefix 쿼리
 	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
-	String apprType 	= getCheckReqXSS(request, "apprType", "ARCHIVE");			//전자결재 문서구분
+	String apprType 	= getCheckReqXSS(request, "apprType", "appr");			//전자결재 문서구분
 	
 	String UR_Code 		= getCheckReqXSS(request, "UR_Code", "");					//유저코드
 	String DN_ID 		= getCheckReqXSS(request, "DN_ID", "");						//도메인아이디
@@ -252,7 +252,7 @@
              wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, startDate.replaceAll("[.]","/") + "," + endDate.replaceAll("[.]","/") + ",-");
        	}
     	}catch(Exception e){
-    		//System.err.print(e);
+    		System.err.print(e);
     	}    
        	
 		if(collections[i].equals("user")){			
@@ -315,8 +315,8 @@
 	System.out.println("[searchField] : " + searchField);
 	System.out.println();  */
 	
-	Map<String, Integer> writerMap = getCategoryResult("CREATORNAME", collections, collection, wnsearch);
-	Map<String, Integer> depMap = getCategoryResult("CREATORDEPT", collections, collection, wnsearch);
+	Map<String, Integer> writerMap = getCategoryResult("CREATOR_NAME", collections, collection, wnsearch);
+	Map<String, Integer> depMap = getCategoryResult("CREATOR_DEPT", collections, collection, wnsearch);
 	
 	// String[] portalCollections = {"appr","apprMig", "board", "user"};
 
@@ -341,11 +341,10 @@
 <script type="text/javascript" src="js/hmac-sha256.js"></script>
 <script type="text/javascript" src="js/enc-base64-min.js"></script>
 <script type="text/javascript">
-<!--
 $(document).ready(function() {
 	
 	// 토큰 유효 체크
-	checkTokenExcept(); 
+	// checkTokenExcept(); 
 
 	// 인기 검색어
     getPopkeyword();
@@ -412,17 +411,21 @@ $(document).ready(function() {
 		    ,showButtonPanel: true
 		    ,todayHighlight : false
 
-	});	
+	});
+	
+	$("#query").keypress(function(event) {
+		return event.keyCode == 13 ? doSearch() : false ;
+	});
 	
 });
 
 // 토큰 유효 체크
-function checkTokenExcept() {
-	if(document.search.tokenExcept.value === "expired"){		
-		alert("토큰이 만료되었거나, 유효하지 않습니다.");
-		window.location.href='https://';
-	}
-}
+//function checkTokenExcept() {
+//	if(document.search.tokenExcept.value === "expired"){		
+//		alert("토큰이 만료되었거나, 유효하지 않습니다.");
+//		window.location.href='https://';
+//	}
+//}
 
 function getPopkeyword() {
 
@@ -476,7 +479,6 @@ function saveKeywordClose(){
 	//document.getElementById("saveKeywordBtn").setAttribute("src", "images/ico_add.png");
 }
 
-//-->
 </script>
 </head>
 <body>
@@ -485,6 +487,8 @@ function saveKeywordClose(){
   	<form name="search" id="search" action="<%=request.getRequestURI()%>" method="post">
 		<input type="hidden" name="startCount" value="0">
 		<input type="hidden" name="sort" value="<%=sort%>">
+		<input type="hidden" name="categoryQueryW" value="<%=categoryQueryW%>">
+		<input type="hidden" name="categoryQueryD" value="<%=categoryQueryD%>">
 		<input type="hidden" name="collection" id="collection" value="<%=collection%>">
 		<input type="hidden" name="range" value="<%=range%>">
 		<input type="hidden" name="searchField" value="<%=searchField%>">
@@ -520,7 +524,7 @@ function saveKeywordClose(){
 					<option value="BODYCONTENTS" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "selected" : ""%>>내용</option>
 					<option value="CREATORNAME" <%=searchField.indexOf("CREATORNAME") > -1 ? "selected" : ""%>>작성자</option>
                 </select>
-               <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event),this);" autocomplete="off"/>
+               <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event), this);" autocomplete="off"/>
 				<a href="#" onClick="javascript:doSearch();" title="검색"><span class="search_button"></span></a>                 
               </span>
             </div>
@@ -652,9 +656,9 @@ function saveKeywordClose(){
 							  <span class="date_radio"><input type="radio" <%=range.equals("W") ? "checked" : ""%> onClick="javascript:setDate('W');" name="date_radio01" />1주 </span>
 							  <span class="date_radio"><input type="radio" <%=range.equals("M") ? "checked" : ""%> onClick="javascript:setDate('M');" name="date_radio01" />1개월 </span>
 				              <span class="date_radio">
-								<input type="radio" <%=range.equals("undefined") ? "checked" : ""%> name="date_radio01" /> 사용자정의 
+								<input type="radio" <%=range.equals("undefined") ? "checked" : ""%> onClick="javascript:changeDatepickerValue('enable');" name="date_radio01" /> 사용자정의 
 									<span class="calendar_box">
-										<input type="text" name="startDate" value="<%=startDate%>" readonly="true" id="startDate" class="search_date_input"/>
+										<input type="text" name="startDate" id="startDate" value="<%=startDate%>" readonly="true" class="search_date_input"/>
 									</span> ~ 
 									<span class="calendar_box">
 										<input type="text" name="endDate" id="endDate" value="<%=endDate%>" readonly="true" class="search_date_input" />

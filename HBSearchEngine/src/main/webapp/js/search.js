@@ -110,20 +110,13 @@ function removeMyKeyword(keyword) {
 
 // 내가 찾은 검색어 
 function showMyKeyword(myKeywords) {
-	var searchForm = document.search;
-	var LanguageCode = searchForm.LanguageCode.value;
-	var str = "";
-	if (LanguageCode=="ko"){
-		str += "<li class=\"tit\"> <div class=\"ttxt\">내가 찾은 검색어</div></li>";
-	} else if (LanguageCode=="en") {
-		str += "<li class=\"tit\"> <div class=\"ttxt\">My Previous Keywords</div></li>";
+	var str = "<p class='search_text_title'>내가 찾은 검색어</p>";
+	str += "<ul class='search_text_list'>";
+	for( var i = 0; i < myKeywords.length; i++) {
+		if( myKeywords[i] == "") continue;
+		str += "<li><a href='#none' onClick=\"javascript:doKeyword('"+myKeywords[i]+"');\"><img src='images/list0" + (i+1) +".gif'/>"+myKeywords[i]+"</a></li>";
 	}
-	for (var i = 0; i < myKeywords.length; i++) {
-		if (myKeywords[i] == "") continue;
-
-		str += "<li class=\"searchkey\"><a href=\"#none\" onClick=\"javascript:doKeyword('" + myKeywords[i] + "');\">" + myKeywords[i] + "</a> <img src=\"images/ico_del.gif\" onClick=\"removeMyKeyword('" + myKeywords[i] + "');\"/></li>";
-	}
-
+	str += '</ul>';
 	$("#mykeyword").html(str);
 }
 
@@ -168,7 +161,6 @@ function showSavedKeyword(savedKeywords) {
 	var searchForm = document.search;
 	var str = "";
 	var str2 = "";
-	var LanguageCode = searchForm.LanguageCode.value;
 	
 	for (var i = 0; i < savedKeywords.length; i++) {
 		if (savedKeywords[i] == "") continue;
@@ -178,11 +170,7 @@ function showSavedKeyword(savedKeywords) {
 	}
 	
 	if (str==""){
-		if (LanguageCode=="ko"){
-			str += "<li class=\"searchkey\"><font color=\"#7d7d7d\">저장된 키워드가 없습니다.</font></li>";
-		} else if (LanguageCode=="en") {
-			str += "<li class=\"searchkey\"><font color=\"#7d7d7d\">No Saved Keyword</font></li>";
-		}
+		str += "<li class=\"searchkey\"><font color=\"#7d7d7d\">저장된 키워드가 없습니다.</font></li>";
 	}
 	str2 += "<li><input type=\"text\" class=\"kw_add_input\" name=\"savefields\"></li>"
 	
@@ -319,7 +307,7 @@ function getSpell(query) {
 
 // calendar 설정
 var dateNames = ['년', '월'];
-var dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+var dayNames = ['일', '월', '화','수', '목', '금','토'];
 var calutil = {
 	fncSearch: function(obj) {
 		alert("검색");
@@ -376,7 +364,7 @@ function setDate(range) {
 	var startDate = "";
 	var endDate = "";
 
-	var currentDate = new Date();
+	var currentDate = new Date()
 	var year = currentDate.getFullYear();
 	var month = currentDate.getMonth() + 1;
 	var day = currentDate.getDate();
@@ -432,7 +420,13 @@ function setDate(range) {
 	$("#range").val(range);
 	$("#startDate").val(startDate);
 	$("#endDate").val(endDate);
+	
+	//changeDatepickerValue('disable')
+}
 
+function changeDatepickerValue(value) {
+	$("#startDate").datepicker(value)
+	$("#endDate").datepicker(value)
 }
 
 function datePick() {
@@ -476,6 +470,22 @@ function apprTypeChange() {
 	});  
 }
 
+// 카테고리검색
+function doCategoryQueryW(categoryQueryW) {
+	var searchForm = document.search;
+	searchForm.categoryQueryW.value = categoryQueryW;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+// 카테고리검색
+function doCategoryQueryD(categoryQueryD) {
+	var searchForm = document.search;
+	searchForm.categoryQueryD.value = categoryQueryD;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
 // 정렬
 function doSorting(sort) {
 	var searchForm = document.search;
@@ -512,71 +522,26 @@ function filterFile() {
 
 // 검색
 function doSearch() {
-	var searchForm = document.search;
-	var LanguageCode = searchForm.LanguageCode.value;
+		var searchForm = document.search; 
+	console.log(searchForm)
+
 	if (searchForm.query.value == "") {
-		if (LanguageCode=="ko"){
-			alert("검색어를 입력하세요.");
-		} else if (LanguageCode=="en") {
-			alert("Enter keywords");
-		}
+		alert("검색어를 입력하세요.");
 		searchForm.query.focus();
 		return;
 	}
 	
-	if ($("#startDate").val() != "" || $("#endDate").val() != "") {
-		var currentDate = new Date();
-		var startDate = $("#startDate").val();
-		var endDate = $("#endDate").val();
-		
-		if (startDate == "") {
-			if (LanguageCode=="ko"){
-				alert("시작일을 입력하세요.");
-			} else if (LanguageCode=="en") {
-				alert("Input start date");
-			}
-			$("#startDate").focus();
-			return;
-		}
-
-		if (endDate == "") {
-			if (LanguageCode=="ko"){
-				alert("종료일을 입력하세요.");
-			} else if (LanguageCode=="en") {
-				alert("Input end date");
-			}
-			$("#endDate").focus();
-			return;
-		}
-
-		if (!compareStringNum(startDate, endDate, "-")) {
-			if (LanguageCode=="ko"){
-				alert("기간이 올바르지 않습니다. 시작일이 종료일보다 작거나 같도록 하세요.");
-			} else if (LanguageCode=="en") {
-				alert("Search period is set improperly. Start date should be set same or earlier than end date.");
-			}
-			$("#startDate").focus();
-			return;
-		}
-		
-		var checkDate = getAddDay(new Date(endDate), -366);
-
-		if (checkDate > new Date(startDate)) {
-			if (LanguageCode=="ko"){
-				alert("검색 기간은 1년을 초과할 수 없습니다.");
-			} else if (LanguageCode=="en") {
-				alert("Search period cannot exceed 1 year.");
-			}
-			$("#startDate").focus();
-			return;
-		}
+	searchForm.collection.value = "ALL";
+	//searchForm.startDate.value = "";
+	//searchForm.endDate.value = "";
+	searchForm.startCount.value = 0;
+	searchForm.categoryQueryW.value = "";
+	searchForm.categoryQueryD.value = "";
+	
+	if(document.getElementById("reChk").checked == false || searchForm.reQuery.value == "2"){ //재검색 아닌경우 apprType 초기화
+		searchForm.apprType.value = "appr";	
 	}
 	
-	/*if(document.getElementById("reChk").checked == false || searchForm.reQuery.value == "2"){ //재검색 아닌경우 apprType 초기화
-		searchForm.apprType.value = "appr";	
-	}*/
-	
-	// 검색영역 세팅
 	var str = "";
 	$("input:checkbox[name='searchFields']").each(function(index){
 		if($(this).is(":checked")){
@@ -592,25 +557,135 @@ function doSearch() {
 	/*상세검색 작성자, 부서명 필터쿼리 적용 확인*/
 	var filterArray = new Array();
 	var filter = "";
-	var LanguageCode = searchForm.LanguageCode.value;
 	$("input[name='filter_input']").each(function(){
 		var str = $(this).val().trim();
 		var id = $(this).attr("id");
 		if(str.trim().length > 0){
 			switch (id) {
 				case "filter_dep" : 
-					if (LanguageCode == "ko"){
-						filterArray.push("<CREATOR_DEPT_KO:substring:"+str+">");
-					} else if (LanguageCode == "en"){
-						filterArray.push("<CREATOR_DEPT_EN:substring:"+str+">");
-					}
+					filterArray.push("<CREATOR_DEPT:substring:"+str+">");					
 					break;
 				case "filter_writer" : 
+					filterArray.push("<CREATOR_NAME:substring:"+str+">");					
+					break;
+				/* TODO : ccinfo 필터쿼리로 진행시 확인 */
+				/*case "filter_ccinfo" : 
 					if (LanguageCode == "ko"){
-						filterArray.push("<CREATOR_NAME_KO:substring:"+str+">");
+						filterArray.push("<APPR_CCINFO_KO:substring:"+str+">");
 					} else if (LanguageCode == "en"){
-						filterArray.push("<CREATOR_NAME_EN:substring:"+str+">");
+						filterArray.push("<APPR_CCINFO_EN:substring:"+str+">");
 					}
+					break;*/
+			}
+			filter = replaceAll(filterArray.toString(),","," ");
+		}
+	});
+	
+	
+	var prefixArray = new Array();
+	var prefix = "";
+	$("input[name='prefix_input']").each(function(){
+		var str = $(this).val().trim();
+		var id = $(this).attr("id");
+		
+		if(str.trim().length > 0){
+			switch (id) {
+				case "prefix_dep" : 
+					prefixArray.push("<PREFIX_CREATOR_DEPT:contains:" + str + ">");
+					break;
+				case "prefix_writer" : 
+					prefixArray.push("<PREFIX_CREATOR_NAME:contains:" + str + ">");
+					break;
+				case "prefix_etc" : 
+					prefixArray.push("<PREFIX_APPR_CCINFO:contains:" + str + ">");
+					break;
+			}
+			//prefix = prefixArray.toString().replaceAll(","," ");
+			prefix = replaceAll(prefixArray.toString(),","," ");
+		}
+		
+	});
+		
+	searchForm.prefix.value = prefix;
+	searchForm.searchField.value = str;
+	searchForm.sort.value = "RANK";
+	searchForm.submit();
+}
+
+// 검색
+function doSearch_bak() {
+	var searchForm = document.search;
+	
+	if (searchForm.query.value == "") {
+		alert("검색어를 입력하세요.");
+		searchForm.query.focus();
+		return;
+	}
+	
+	if ($("#startDate").val() != "" || $("#endDate").val() != "") {
+		var currentDate = new Date();
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		
+		if (startDate == "") {
+			alert("시작일을 입력하세요.");			
+			$("#startDate").focus();
+			return;
+		}
+
+		if (endDate == "") {
+			alert("종료일을 입력하세요.");
+			$("#endDate").focus();
+			return;
+		}
+
+		if (!compareStringNum(startDate, endDate, "-")) {
+			alert("기간이 올바르지 않습니다. 시작일이 종료일보다 작거나 같도록 하세요.");
+			$("#startDate").focus();
+			return;
+		}
+		
+		var checkDate = getAddDay(new Date(endDate), -366);
+		console.log(endDate)
+		console.log(checkDate)
+		console.log(startDate)
+		console.log(checkDate > new Date(startDate))
+
+		if (checkDate > new Date(startDate)) {
+			$("#startDate").focus();
+			return;
+		}
+	}
+	
+	if(document.getElementById("reChk").checked == false || searchForm.reQuery.value == "2"){ //재검색 아닌경우 apprType 초기화
+		searchForm.apprType.value = "appr";	
+	
+	// 검색영역 세팅
+	var str = "";
+	$("input:checkbox[name='searchFields']").each(function(index){
+		if($(this).is(":checked")){
+			if(index == 0) str = $(this).val();
+			else str = str + "," + $(this).val()
+        }
+		
+		if($("#checkAll").is(":checked")){
+			str = "ALL";
+		}
+	});
+	
+	/*상세검색 작성자, 부서명 필터쿼리 적용 확인*/
+	var filterArray = new Array();
+	var filter = "";
+	$("input[name='filter_input']").each(function(){
+		var str = $(this).val().trim();
+		var id = $(this).attr("id");
+		if(str.trim().length > 0){
+			switch (id) {
+				case "filter_dep" : 
+					filterArray.push("<CREATOR_DEPT:substring:"+str+">");					
+					break;
+				case "filter_writer" : 
+					filterArray.push("<CREATOR_NAME:substring:"+str+">");					
 					break;
 				/* TODO : ccinfo 필터쿼리로 진행시 확인 */
 				/*case "filter_ccinfo" : 
@@ -650,16 +725,12 @@ function doSearch() {
 					}
 					break;*/
 				case "prefix_ccinfo" : 
-					if (LanguageCode == "ko"){
-						prefixArray.push("<PREFIX_APPR_CCINFO_KO:contains:"+str+">");
-					} else if (LanguageCode == "en"){
-						prefixArray.push("<PREFIX_APPR_CCINFO_EN:contains:"+str+">");
-					}
+					prefixArray.push("<PREFIX_APPR_CCINFO:contains:"+str+">");					
 					break;
 			}
 			prefix = replaceAll(prefixArray.toString(),","," ");
 		}
-	}); 
+	});
 	
 	// 첨부파일 검색용
 	var gSize = new Array();
@@ -678,14 +749,12 @@ function doSearch() {
 	}
 	
 	/* 타임존 코드에 따라 선택 시간과 실제 검색조건이 될 시간을 다르게 처리함 
-	  기존 타임존 표출용 코드를 reverse로 적용*/
+	  기존 타임존 표출용 코드를 reverse로 적용
 	var startDate = $('#startDate').val();
 	var endDate = $('#endDate').val();
-	var timeformat = "yyyy-MM-dd";
-	var TimeZoneCode = searchForm.TimeZoneCode.value;
-	
+	var timeformat = "yyyy-MM-dd";	
 	startDate = timezoneReverse(startDate, TimeZoneCode, timeformat);
-	endDate = timezoneReverse(endDate, TimeZoneCode, timeformat);
+	endDate = timezoneReverse(endDate, TimeZoneCode, timeformat);*/
 	
 	/*필터쿼리 적용 확인*/
 	searchForm.filter.value = filter;
@@ -700,6 +769,7 @@ function doSearch() {
 	searchForm.sort.value = "DATE";
 	searchForm.docType.value = gSize;
 	searchForm.submit();
+	console.log(12)
 }
 
 // 컬렉션별 검색
@@ -707,7 +777,7 @@ function doCollection(coll) {
 	var searchForm = document.search;
 	
 	// 문서종류 값 넘겨주기
-	var gSize = new Array();
+	/*var gSize = new Array();
 	
 	$("input[name=input_check]:checked").each(function() {
 		var checked = $('#check1').is(':checked');
@@ -718,18 +788,21 @@ function doCollection(coll) {
 			gSize.push($(this).val());
 		}
 	});
+	*/
 	
 	searchForm.collection.value = coll;
+	searchForm.apprType.value = "ARCHIVE";
 	searchForm.reQuery.value = "2";
 	searchForm.startDate.value = $('#startDate').val();
 	searchForm.endDate.value = $('#endDate').val();
 	searchForm.range.value = $('#range').val();
-	searchForm.docType.value = gSize;
+	//searchForm.docType.value = gSize;
 	
 	searchForm.submit();
 }
 
-// 엔터 체크	
+// 엔터 체크
+/*	
 function pressCheck() {
 	if (event.keyCode == 13) {
 		return doSearch();
@@ -737,6 +810,7 @@ function pressCheck() {
 		return false;
 	}
 }
+*/
 
 var temp_query = "";
 
@@ -762,6 +836,15 @@ function checkReSearch() {
 function doPaging(count) {
 	var searchForm = document.search;
 	searchForm.startCount.value = count;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+// 페이징
+function goPaging() {
+	var searchForm = document.search;
+	var inputPageNo = searchForm.input_gopage.value;
+	searchForm.startCount.value = (inputPageNo-1) * 10;
 	searchForm.reQuery.value = "2";
 	searchForm.submit();
 }
@@ -891,10 +974,11 @@ function hideSection(coll) {
 
 
 
-
+/*
 //영원무역: 타임존 적용 js -> search.jsp 하단에 java로 재작성함
 
 /* timezonecode 적용 거꾸로 하는 함수 (기간검색 시 적용하는 용도) */
+/*
 var timezonelist = {
 	"TIMEZO0001": "09:00:00","TIMEZO0002": "09:00:00","TIMEZO0003": "09:00:00","TIMEZO0004": "09:00:00","TIMEZO0005": "08:00:00",
 	"TIMEZO0006": "08:00:00","TIMEZO0007": "08:00:00","TIMEZO0008": "08:00:00","TIMEZO0009": "08:00:00","TIMEZO0010": "07:00:00",
@@ -1038,6 +1122,7 @@ function CFN_PadRight(pString, pCount, pPadChar) {
 	return pString + l_PadString;
 }
 
+*/
 //타임존 스크립트 함수 실행 (원본)
 //예) item.RegistDate = 2023.04.18 15:19:17 (등록일)
 //타임존 코드 파라미터 TIMEZO0048
@@ -1238,5 +1323,5 @@ function CFN_TransLocalTime(pServerTime, pTimeZoneCode, pLocalFormat) {
 	}
 	console.log(l_ReturnString)
 	return l_ReturnString;
-}
 */
+}

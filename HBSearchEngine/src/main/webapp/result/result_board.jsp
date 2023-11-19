@@ -21,9 +21,9 @@
 %>
 				<div class="cont_title">
 					<div class="cont_title_l"></div>
-					<h2 class="sc_title02"><%=wnsearch.getCollectionKorName(thisCollection)%> <span class="sc_number"></span>
-						(총 <%=numberFormat(thisTotalCount)%>건) 
-					</h2>
+					<h2 class="sc_title02"><%=wnsearch.getCollectionKorName(thisCollection)%> <span class="sc_number">
+					(총 <%=numberFormat(thisTotalCount)%>건)
+					</span></h2>
 				</div>
 
 <%			if(thisTotalCount < 1){ %>

@@ -450,6 +450,7 @@ public class WNSearch {
 	 * @return 성공이면 0을 반환한다. 실패면 0이 아닌 값을 반환한다.
 	 */
 	public int setCollectionBasicInfo(int idx, String apprType) {
+
 		int ret = 0;
 		String[] THIS_COLLECTIONS = null;
 		if (apprType.equals("mig")) {
@@ -677,6 +678,7 @@ public class WNSearch {
 	 */
 	public int setDateRange(int idx, String apprType) {
 		int ret = 0;
+
 		String[] THIS_COLLECTIONS = null;
 		if (apprType.equals("mig")) {
 			THIS_COLLECTIONS = COLLECTIONS_MIG;
