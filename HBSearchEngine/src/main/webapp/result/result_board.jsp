@@ -65,7 +65,7 @@
 				String FILE_DOWNLOAD_URL	=	wnsearch.getField(thisCollection,"FILE_DOWNLOAD_URL",	idx,false);
 				String FILE_CONTENTS 		=	wnsearch.getField(thisCollection,"FILE_CONTENTS",		idx,false); 
 				String ALIAS				=	wnsearch.getField(thisCollection,"ALIAS",				idx,false);
-				Double RANK						= Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));				
+				Double RANK					=	Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));				
 							
 				SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
 				SUMMERYBODYCONTENTS 		= 	wnsearch.getKeywordHl(SUMMERYBODYCONTENTS,"<strong class='hl'>","</strong>");

@@ -77,7 +77,7 @@
 	if(ip.equals("172.17.208.26")){
 		doMain = "http://searchdev.e-hoban.co.kr";
 	// 로컬
-	}else if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1") || ip.equals("192.168.219.100")){
+	}else if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1")){
 		doMain = "http://searchdev.e-hoban.co.kr";
 	// 운영
 	}else {
@@ -218,7 +218,7 @@
 
         //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
         if (collections[i].equals("user")) {
-        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "JOB_POSITION_SORTKEY/ASC,USER_NAME/ASC");
+        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "USER_NAME/ASC");
         } else if (!query.equals("") ) {
         	if("SUBJECT".equals(sort)){
         		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
@@ -440,7 +440,7 @@ function getPopkeyword() {
 	  dataType: datatype,
 	  data: { "target" : target, "range" : range, "collection" : collection , "datatype" : datatype },
 	  success: function(text) {
-     text = trim(tex33333333333333t);
+     text = trim(text);
      var xml = $.parseXML(text);
 		var str = "<p class='search_word_title'>인기검색어</p>";
 		str += "<div class='search_word'>";
@@ -521,8 +521,8 @@ function saveKeywordClose(){
                 <select style="" class="white_window_select" id="searchSelect">
 	                <option value="ALL" <%=searchField.indexOf("ALL") > -1 ? "selected" : ""%>>전체</option>
 					<option value="SUBJECT" <%=searchField.indexOf("SUBJECT") > -1 ? "selected" : ""%>>제목</option>
-					<option value="BODYCONTENTS" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "selected" : ""%>>내용</option>
-					<option value="CREATORNAME" <%=searchField.indexOf("CREATORNAME") > -1 ? "selected" : ""%>>작성자</option>
+					<option value="BODYCONTEXTS" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "selected" : ""%>>내용</option>
+					<option value="CREATOR_NAME" <%=searchField.indexOf("CREATOR_NAME") > -1 ? "selected" : ""%>>작성자</option>
                 </select>
                <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event), this);" autocomplete="off"/>
 				<a href="#" onClick="javascript:doSearch();" title="검색"><span class="search_button"></span></a>                 
@@ -579,7 +579,7 @@ function saveKeywordClose(){
 						</a>
 						<div class="search_list04" style="display:none">
 <%										for( String key : writerMap.keySet() ) { %>
-							<a href="#" onClick="javascript:doCategoryQueryW('CREATORNAME|<%=key%>');">
+							<a href="#" onClick="javascript:doCategoryQueryW('CREATOR_NAME|<%=key%>');">
 <%												if(categoryQueryW.length() > 0){	
 													String[] categoryQueryWs = categoryQueryW.split("\\|");
 													if(categoryQueryWs[1].equals(key)){ %>
@@ -604,7 +604,7 @@ function saveKeywordClose(){
 						</a>
 						<div class="search_list04" style="display:none">
 <%										for( String key : depMap.keySet() ){ %>
-							<a href="#" onClick="javascript:doCategoryQueryD('CREATORDEPT|<%=key%>');">
+							<a href="#" onClick="javascript:doCategoryQueryD('CREATOR_DEPT|<%=key%>');">
 <%												if(categoryQueryD.length() > 0){	
 													String[] categoryQueryDs = categoryQueryD.split("\\|");
 													if(categoryQueryDs[1].equals(key)){ %>
@@ -675,11 +675,11 @@ function saveKeywordClose(){
 								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("ALL") > -1 ? "checked" : ""%> value="ALL" id="checkAll"/>전체 </span>
 								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("SUBJECT") > -1 ? "checked" : ""%> name="searchFields" value="SUBJECT"/>제목 </span>
 								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "checked" : ""%> name="searchFields" value="BODYCONTENTS"/>본문 </span>
-								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("CREATORNAME") > -1 ? "checked" : ""%> name="searchFields" value="CREATORNAME"/>작성자 </span>
+								<span class="search_checkbox"><input type="checkbox" <%=searchField.indexOf("CREATOR_NAME") > -1 ? "checked" : ""%> name="searchFields" value="CREATOR_NAME"/>작성자 </span>
 								<div class="search_input_box">
 									<span class="search_input">부서명 <input type="text" name="prefix_input" id="prefix_dep"/></span>
 									<span class="search_input">작성자 <input type="text" name="prefix_input" id="prefix_writer"/></span>
-									<span class="search_input">수신/참조/결재자 <input type="text" name="prefix_input" id="prefix_etc"/></span>
+									<!--  <span class="search_input">수신/참조/결재자 <input type="text" name="prefix_input" id="prefix_etc"/></span>-->
                               </div>
                             </div>
                           </div>

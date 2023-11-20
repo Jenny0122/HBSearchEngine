@@ -54,7 +54,7 @@
 				String USE_YN				=	wnsearch.getField(thisCollection,"USE_YN",					idx,false);
 				String PHOTO_PATH			=	wnsearch.getField(thisCollection,"PHOTO_PATH",				idx,false);
 				String ALIAS				=	wnsearch.getField(thisCollection,"ALIAS",					idx,false);
-				Double RANK						= Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));
+				Double RANK					= 	Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));
 
 												
 				USER_NAME 					= wnsearch.getKeywordHl(USER_NAME,"<strong class='hl'>","</strong>");
