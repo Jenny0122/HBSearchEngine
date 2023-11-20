@@ -63,7 +63,7 @@
 						String SRCH_ID 				=	wnsearch.getField(thisCollection,"SRCH_ID",				idx,false); 			
 						String INITIATED_DATE 		=	wnsearch.getField(thisCollection,"INITIATED_DATE",				idx,false); 	
 						String COMPLETED_DATE 		=	wnsearch.getField(thisCollection,"COMPLETED_DATE",				idx,false); 	
-						String BODYCONTEXT 			=	wnsearch.getField(thisCollection,"SUMMERYBODYCONTENTS",				idx,false); 		
+						String BODYCONTENTS 		=	wnsearch.getField(thisCollection,"BODYCONTENTS",				idx,false); 		
 						String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 		
 						String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
 						String ATTACH_FILE_INFO 	=	wnsearch.getField(thisCollection,"ATTACH_FILE_INFO",				idx,false); 			
@@ -77,7 +77,7 @@
 						
 						
 						SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
-						BODYCONTEXT 				= 	wnsearch.getKeywordHl(BODYCONTEXT,"<strong class='hl'>","</strong>");
+						BODYCONTENTS 				= 	wnsearch.getKeywordHl(BODYCONTENTS,"<strong class='hl'>","</strong>");
 						FILE_NAME 					= 	wnsearch.getKeywordHl(FILE_NAME,"<strong class='hl'>","</strong>");
 						CREATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
 						
@@ -104,7 +104,7 @@
 									</div>
 								</dt>
 								<dd class="txt_inline">[기안일시: <%=INITIATED_DATE%>] [완료일시: <%=COMPLETED_DATE%>]</dd>
-								<dd class="explain"><%=BODYCONTEXT%></dd>
+								<dd class="explain"><%=BODYCONTENTS%></dd>
 								<%if(!"".equals(fileNameArr[0])){ 
 									int fileCnt = fileNameArr.length;%>
 								<dd class="filein"><a >첨부파일 : <%= FILE_NAME %> </a>
