@@ -777,7 +777,7 @@ function doCollection(coll) {
 	var searchForm = document.search;
 	
 	// 문서종류 값 넘겨주기
-	/*var gSize = new Array();
+	var gSize = new Array();
 	
 	$("input[name=input_check]:checked").each(function() {
 		var checked = $('#check1').is(':checked');
@@ -788,15 +788,13 @@ function doCollection(coll) {
 			gSize.push($(this).val());
 		}
 	});
-	*/
 	
 	searchForm.collection.value = coll;
-	searchForm.apprType.value = "ARCHIVE";
 	searchForm.reQuery.value = "2";
 	searchForm.startDate.value = $('#startDate').val();
 	searchForm.endDate.value = $('#endDate').val();
 	searchForm.range.value = $('#range').val();
-	//searchForm.docType.value = gSize;
+	searchForm.docType.value = gSize;
 	
 	searchForm.submit();
 }

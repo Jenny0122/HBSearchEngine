@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%><%
 /*
-* subject: sample_terms 페이지
+* subject: user 페이지
 * @original author: SearchTool
 */
 	thisCollection = "user";
@@ -26,13 +26,15 @@
 			</div>
 
 <%			if(thisTotalCount < 1){ %>
+
 				<div class="search_n_result_wrap" id="result_<%=thisCollection%>">
 		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
 					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>					
 		      	</div>
 			
 <%			}else{ %>
-				<div id="result_<%=thisCollection%>">
+				<ul class="dic" id="result_<%=thisCollection%>">
+				
 <%
 			for(int idx = 0; idx < count; idx ++) {
 				String DOCID				=	wnsearch.getField(thisCollection,"DOCID",					idx,false);
@@ -93,7 +95,7 @@
 
 			if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) {
 %>
-				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');">더보기</a></div>
+				<div class="moreresult" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 검색 결과 더보기 </a></div>
 <%
 			}
 %>
