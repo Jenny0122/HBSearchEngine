@@ -480,6 +480,7 @@ function doCategoryQueryW(categoryQueryW) {
 
 // 카테고리검색
 function doCategoryQueryD(categoryQueryD) {
+	
 	var searchForm = document.search;
 	searchForm.categoryQueryD.value = categoryQueryD;
 	searchForm.reQuery.value = "2";
@@ -523,11 +524,11 @@ function filterFile() {
 // 검색
 function doSearch() {
 		var searchForm = document.search; 
-	console.log(searchForm)
 
 	if (searchForm.query.value == "") {
 		alert("검색어를 입력하세요.");
 		searchForm.query.focus();
+	console.log(searchForm)
 		return;
 	}
 	

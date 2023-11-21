@@ -48,7 +48,7 @@
 			 			"", // set groupby field(field, count)
 			 			"", // set sort field group(field/order,field/order,...)
 			 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-			 			"", // set categoryGroupBy (fieldname:value)
+			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
 			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
@@ -76,7 +76,7 @@
 						"", // set groupby field(field, count)
 						"", // set sort field group(field/order,field/order,...)
 						"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-						"", // set categoryGroupBy (fieldname:value)
+						"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 						"", // set categoryQuery (fieldname:value)
 						"", // set property group (fieldname,min,max, groupcount)
 						"ALIAS", // use check prefix query filed
@@ -137,7 +137,7 @@
 			 			"", // set groupby field(field, count)
 			 			"", // set sort field group(field/order,field/order,...)
 			 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-			 			"", // set categoryGroupBy (fieldname:value)
+			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
 			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
@@ -165,7 +165,7 @@
 						"", // set groupby field(field, count)
 						"", // set sort field group(field/order,field/order,...)
 						"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-						"", // set categoryGroupBy (fieldname:value)
+						"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 						"", // set categoryQuery (fieldname:value)
 						"", // set property group (fieldname,min,max, groupcount)
 						"ALIAS", // use check prefix query filed
@@ -231,7 +231,7 @@
 		 			"", // set groupby field(field, count)
 		 			"", // set sort field group(field/order,field/order,...)
 		 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-		 			"", // set categoryGroupBy (fieldname:value)
+		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
 		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
@@ -259,7 +259,7 @@
 		 			"", // set groupby field(field, count)
 		 			"", // set sort field group(field/order,field/order,...)
 		 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-		 			"", // set categoryGroupBy (fieldname:value)
+		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
 		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
@@ -287,7 +287,7 @@
 					"", // set groupby field(field, count)
 					"", // set sort field group(field/order,field/order,...)
 					"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-					"", // set categoryGroupBy (fieldname:value)
+					"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 					"", // set categoryQuery (fieldname:value)
 					"", // set property group (fieldname,min,max, groupcount)
 					"CREATOR_DEPT,CREATOR_NAME,COMPANY_CODE,FILE_EXTENTION,AUTH_USER_CODE,ALIAS", // use check prefix query filed

@@ -482,9 +482,9 @@ function saveKeywordClose(){
 </script>
 </head>
 <body>
+ <form name="search" id="search" action="<%=request.getRequestURI()%>" method="post">
  <div class="wrap">
   <div class="header_wrap">
-  	<form name="search" id="search" action="<%=request.getRequestURI()%>" method="post">
 		<input type="hidden" name="startCount" value="0">
 		<input type="hidden" name="sort" value="<%=sort%>">
 		<input type="hidden" name="categoryQueryW" value="<%=categoryQueryW%>">
@@ -508,7 +508,6 @@ function saveKeywordClose(){
 		<input type="hidden" name="startDate" value="<%=startDate%>"/>
 		<input type="hidden" name="endDate" value="<%=endDate%>"/>
 		<input type="hidden" id="docType" name="docType" value="<%=docType%>"/>
-		
       <div class="fix_wrap">
         <div class="fix_conts">
           <!-- Header 시작 -->
@@ -544,7 +543,8 @@ function saveKeywordClose(){
 				  <div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div>
 			  </div>
 			</div>
-          </div>-->
+			-->
+          </div>
           <!-- Header 끝 -->
           <!-- 컨텐츠영역시작 -->
           <div class="layout">
@@ -570,41 +570,52 @@ function saveKeywordClose(){
                         </a>
                       </div>
 					<div class="search_list02">
+                          <%
+                          for(int i = 0; i < COLLECTIONS_NAME.length; i++) {
+								String systemName = wnsearch.getCollectionKorName(COLLECTIONS_NAME[i]);
+								int thisTotalCount = wnsearch.getResultTotalCount(COLLECTIONS_NAME[i]);
+		                  %>
+								<a href="#"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
+                          <%
+                          }
+                          %>
 					</div>
-					
+				
 <%					if(!writerMap.isEmpty()) { %>	
-					<div class="search_list03">
+					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
 							<span class="list_text_off">작성자명</span>
 						</a>
-						<div class="search_list04" style="display:none">
-<%										for( String key : writerMap.keySet() ) { %>
-							<a href="#" onClick="javascript:doCategoryQueryW('CREATOR_NAME|<%=key%>');">
+					</div>
+					<div class="search_list02">
+<%									for( String key : writerMap.keySet() ) { %>
+						<a href="#" onClick="javascript:doCategoryQueryW('USER_NAME|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryW.length() > 0){	
 													String[] categoryQueryWs = categoryQueryW.split("\\|");
 													if(categoryQueryWs[1].equals(key)){ %>
-										<span class="list_text_on">
+									<span class="list_text_on">
 <%													} else { %>
-										<span>
+									<span>
 <%													}
 												}else{ %>
 									<span>
 <%												}%>
-								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(writerMap.get(key))%>)</span>
+								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(writerMap.get(key))%>)</span>
 							</a>
 <%										} %>												
-						</div>
 					</div>
-<%					} %>	
-				  
+<%					} %>
+
+
 <%					if(!depMap.isEmpty()) { %>	
-					<div class="search_list03">
+					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
 						<span class="list_text_off">부서명</span>
 						</a>
-						<div class="search_list04" style="display:none">
+					</div>
+						<div class="search_list02">
 <%										for( String key : depMap.keySet() ){ %>
-							<a href="#" onClick="javascript:doCategoryQueryD('CREATOR_DEPT|<%=key%>');">
+							<a href="#" onClick="javascript:doCategoryQueryD('DEPT_NAME|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryD.length() > 0){	
 													String[] categoryQueryDs = categoryQueryD.split("\\|");
 													if(categoryQueryDs[1].equals(key)){ %>
@@ -615,11 +626,10 @@ function saveKeywordClose(){
 												} else { %>
 									<span>
 <%												}%>
-								<img src="images/ico_bbar.gif" /><%=key%> (<%=numberFormat(depMap.get(key))%>)</span>
+								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(depMap.get(key))%>)</span>
 							</a>
 <%										} %>	
 						</div>
-					</div>
 <%					} %>
 				</div>
 			</div>
@@ -703,10 +713,10 @@ function saveKeywordClose(){
 				<!-- //paginate -->
 
 					<% } else { %>
-				<div class="search_n_result_wrap">
-		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
-					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
-		         </div>
+						<div class="search_n_result_wrap">
+				        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
+							<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
+				         </div>
 		         	<% }%>
                     </div>
                   </div>
@@ -724,7 +734,7 @@ function saveKeywordClose(){
 					<s></s>
 					<span>TOP</span>
 				</a>
-			</div>
+			</div>		
     </form>
   </body>
 </html>
