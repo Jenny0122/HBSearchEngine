@@ -38,7 +38,7 @@
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 			 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,END_DATE,DOC_URL,ATTACH_FILE_INFO,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -127,7 +127,7 @@
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 			 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,END_DATE,DOC_URL,ATTACH_FILE_INFO,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -221,7 +221,7 @@
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 		 			"FORM_NAME,SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,END_DATE,DOC_URL,ATTACH_FILE_INFO,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -249,7 +249,7 @@
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 		 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_EXTENTION,FILE_CONTENTS",// set search field
-		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,END_DATE,DOC_URL,ATTACH_FILE_INFO,FILE_LOCATION,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -303,7 +303,7 @@
 		 			"user", // set collection name
 		 			"0,3",  // set pageinfo (start,count)
 		 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
-		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
+		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) ./multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 		 			"USER_NAME,DEPT_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,MOBILE",// set search field
 		 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,DEPT_NAME,USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field

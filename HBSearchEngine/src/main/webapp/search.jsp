@@ -527,8 +527,12 @@ function saveKeywordClose(){
 				<a href="#" onClick="javascript:doSearch();" title="검색"><span class="search_button"></span></a>                 
               </span>
             </div>
-            <div class="white_window_check"><input type="checkbox" name="reChk" id="reChk" onClick="checkReSearch();"/>결과내 재검색
-            </div>
+            <div class="white_window_check"><input type="checkbox" name="reChk" id="reChk" onClick="checkReSearch();"/>결과내 재검색 </div>
+            <div id="ark"> 
+            	<div class="auto_text"><strong>자동 추천 기능</strong>을 사용해 보세요.<br>검색어 입력시 자동으로 관련어를 추천합니다.</div>
+				  <div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div> 
+			</div>
+            
 			<!--  <div class="nuttop">
 			  <div class="auto">
 			  <ul class="recomm">

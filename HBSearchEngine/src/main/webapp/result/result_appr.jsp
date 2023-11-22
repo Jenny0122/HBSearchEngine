@@ -74,7 +74,6 @@
 				String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 		
 				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
 				String ATTACH_FILE_INFO 	=	wnsearch.getField(thisCollection,"ATTACH_FILE_INFO",				idx,false); 			
-				String FILE_LOCATION 		=	wnsearch.getField(thisCollection,"FILE_LOCATION",				idx,false); 
 				String FILE_NAME 			=	wnsearch.getField(thisCollection,"FILE_NAME",				idx,false); 			
 				String FILE_EXTENTION 		=	wnsearch.getField(thisCollection,"FILE_EXTENTION",				idx,false); 			
 				String FILE_MESSAGE_ID 		=	wnsearch.getField(thisCollection,"FILE_MESSAGE_ID",				idx,false); 			
@@ -130,14 +129,14 @@
 						<!--  <dd class="explain"><%=BODYCONTENTS%></dd>-->
 						<%if(!"".equals(fileNameArr[0])){ 
 							int fileCnt = fileNameArr.length;%>
-						<dd class="filein"><a >첨부파일 : <%= FILE_NAME %> </a>
-						<%for(int i=0; i<fileCnt; i++) {
-							String fileName = fileNameArr[i];
-							String fileExtention = fileExtentionArr[i].toLowerCase();%>
-
-							<a><%= fileName %></a>
-
-						<%}%>
+						<dd class="filein">
+							<%for(int i=0; i<fileCnt; i++) {
+								String fileName = fileNameArr[i];
+								String fileExtention = fileExtentionArr[i].toLowerCase();%>
+	
+								<a>첨부파일 : <%= fileName %></a>
+	
+							<%}%>
 						</dd>
 						<%}%>
 					</dl>

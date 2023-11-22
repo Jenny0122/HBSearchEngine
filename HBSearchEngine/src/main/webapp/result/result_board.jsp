@@ -95,25 +95,23 @@
 						<%if(!"".equals(fileNameArr[0])){ 
 						int fileCnt = fileNameArr.length; %>
 						
-						<dd class="filein"><a>첨부파일 : <%= FILE_NAME %> </a>
-									
-						<%for(int i=0; i<fileCnt; i++) {
-							String fileName = fileNameArr[i];%>
-
-						<a><%= fileName %></a>
-
-						}%>
+						<dd class="filein">
+							<%for(int i=0; i<fileCnt; i++) {
+								String fileName = fileNameArr[i];%>
+	
+								<a><%= fileName %></a>
+	
+							<%}%>
 						</dd>
 					<% } %>
 					</dl>
 				</li>
 			<% } %>
 			</ul>
-		<%	}
-			if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
+		<%	} %>
+	<% if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
 				<div class="section_more" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 검색 결과 더보기 </a></div>
-			<% } %>
+		<% }}} %>
 			</div>
-		<% }
-	}}
-%>
+		
+		
