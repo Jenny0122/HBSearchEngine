@@ -480,7 +480,6 @@ function doCategoryQueryW(categoryQueryW) {
 
 // 카테고리검색
 function doCategoryQueryD(categoryQueryD) {
-	
 	var searchForm = document.search;
 	searchForm.categoryQueryD.value = categoryQueryD;
 	searchForm.reQuery.value = "2";
@@ -528,7 +527,6 @@ function doSearch() {
 	if (searchForm.query.value == "") {
 		alert("검색어를 입력하세요.");
 		searchForm.query.focus();
-	console.log(searchForm)
 		return;
 	}
 	
@@ -776,27 +774,11 @@ function doSearch_bak() {
 // 컬렉션별 검색
 function doCollection(coll) {
 	var searchForm = document.search;
-	
-	// 문서종류 값 넘겨주기
-	var gSize = new Array();
-	
-	$("input[name=input_check]:checked").each(function() {
-		var checked = $('#check1').is(':checked');
-		
-		if(gSize == ""){
-			gSize.push($(this).val());
-		} else {
-			gSize.push($(this).val());
-		}
-	});
-	
+	searchForm.apprType.value = "appr";
 	searchForm.collection.value = coll;
 	searchForm.reQuery.value = "2";
-	searchForm.startDate.value = $('#startDate').val();
-	searchForm.endDate.value = $('#endDate').val();
-	searchForm.range.value = $('#range').val();
-	searchForm.docType.value = gSize;
-	
+	searchForm.categoryQueryW.value = "";
+	searchForm.categoryQueryD.value = "";
 	searchForm.submit();
 }
 

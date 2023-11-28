@@ -60,11 +60,8 @@
 	
 	// 차후 %검색 오류걸릴 경우 referer참고해서 예외처리하는 부분
 	String referer = request.getHeader("referer");
-	if (referer != null){
-		if (referer.indexOf("search") == -1) {
-			query = java.net.URLDecoder.decode(query, "UTF-8"); 
-		}
-	}
+	if (referer != null && referer.indexOf("search") == -1)
+		query = java.net.URLDecoder.decode(query, "UTF-8"); 
 		
 	// 도메인 
 	String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어 domain
@@ -183,18 +180,20 @@
     String[] collections = null;
     String[] THIS_COLLECTIONS = null;
     
-    if (apprType.equals("mig")){
-    	THIS_COLLECTIONS = COLLECTIONS_MIG;
-	} else {
-		THIS_COLLECTIONS = COLLECTIONS;
-	}
-          
+    //if (apprType.equals("mig")){
+    //	THIS_COLLECTIONS = COLLECTIONS_MIG;
+	//} else {
+	//	THIS_COLLECTIONS = COLLECTIONS;
+	//}
     
-    if(collection.equals("ALL")) { //통합검색인 경우
-    	collections = THIS_COLLECTIONS;
-    } else {                        //개별검색인 경우
-        collections = new String[] { collection };
-    }
+    //if(collection.equals("ALL")) { //통합검색인 경우
+    //	collections = THIS_COLLECTIONS;
+    //} else {                        //개별검색인 경우
+    //    collections = new String[] { collection };
+    //}
+    
+    THIS_COLLECTIONS = apprType.equals("mig") ? COLLECTIONS_MIG : COLLECTIONS;      
+    collections = collection.equals("ALL") ? THIS_COLLECTIONS : new String[] { collection };
     
 	if (reQuery.equals("1")) {
 		realQuery = query + " " + realQuery;
@@ -213,50 +212,55 @@
     String filterForLog = "";
     for (int i = 0; i < collections.length; i++) { //공영빈
     	try{
-        //출력건수
-        wnsearch.setCollectionInfoValue(collections[i], PAGE_INFO, startCount+","+viewResultCount);
-
-        //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
-        if (collections[i].equals("user")) {
-        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "USER_NAME/ASC");
-        } else if (!query.equals("") ) {
-        	if("SUBJECT".equals(sort)){
-        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
-        	} else {
-        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/DESC");
-        	}
-        } else {
-              wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, START_DATE.replaceAll("[.]","/") + ",2030/12/31,-");
-              wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "DATE/DESC");
-        }
-
-        //searchField 값이 있으면 설정, 없으면 기본검색필드
-        if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 ) {
-			wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
-        }
-
-  		// prefix 처리
-   		if(prefixMap.get(collections[i]) != null && !prefixMap.get(collections[i]).isEmpty()){
-   			wnsearch.setCollectionInfoValue(collections[i], EXQUERY_FIELD, prefixMap.get(collections[i]));
-   			prefixForLog += collections[i] + ":" + prefixMap.get(collections[i]) + ",";
-   		}
-   		
-   		// filter 처리
-   		if (filter.length() > 0 && !collections[i].equals("user")) {
-   			wnsearch.setCollectionInfoValue(collections[i], FILTER_OPERATION, filter);
-   		}
-             
-
-        //기간 설정 , 날짜가 모두 있을때
-        if (!startDate.equals("")  && !endDate.equals("") ) {
-             wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, startDate.replaceAll("[.]","/") + "," + endDate.replaceAll("[.]","/") + ",-");
-       	}
+    		
+	        //출력건수
+	        wnsearch.setCollectionInfoValue(collections[i], PAGE_INFO, startCount+","+viewResultCount);
+	
+	        //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
+	        if (collections[i].equals("user")) {
+	        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "USER_NAME/ASC");
+	        } else if (!query.equals("") ) {
+	        	if("SUBJECT".equals(sort)){
+	        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
+	        	} else {
+	        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/DESC");
+	        	}
+	        } else {
+	              wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, START_DATE.replaceAll("[.]","/") + ",2030/12/31,-");
+	              wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "DATE/DESC");
+	        }
+	
+	        //searchField 값이 있으면 설정, 없으면 기본검색필드
+	        if (searchField.length() > 0 && searchField.indexOf("ALL") == -1 ) {
+				wnsearch.setCollectionInfoValue(collections[i], SEARCH_FIELD, searchField);
+	        }
+	
+	  		// prefix 처리
+	   		if(prefixMap.get(collections[i]) != null && !prefixMap.get(collections[i]).isEmpty()){
+	   			wnsearch.setCollectionInfoValue(collections[i], EXQUERY_FIELD, prefixMap.get(collections[i]));
+	   			prefixForLog += collections[i] + ":" + prefixMap.get(collections[i]) + ",";
+	   		}
+	   		
+	   		// filter 처리
+	   		if (filter.length() > 0 && !collections[i].equals("user")) {
+	   			wnsearch.setCollectionInfoValue(collections[i], FILTER_OPERATION, filter);
+	   		}
+	             
+	
+	        //기간 설정 , 날짜가 모두 있을때
+	        if (!startDate.equals("")  && !endDate.equals("") ) {
+	             wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, startDate.replaceAll("[.]","/") + "," + endDate.replaceAll("[.]","/") + ",-");
+	       	}
     	}catch(Exception e){
     		System.err.print(e);
     	}    
        	
 		if(collections[i].equals("user")){			
         wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, "1970/01/01,2030/12/31,-");
+		}
+		
+		if(categoryQueryW.length() > 0 || categoryQueryD.length() > 0){
+			wnsearch.setCollectionInfoValue(collections[i], CATEGORY_QUERY, categoryQueryW + "," + categoryQueryD);
 		}
     }
       // 쿼리로그에 prefix query, filter query 정보 남기기
@@ -416,7 +420,7 @@ $(document).ready(function() {
 	$("#query").keypress(function(event) {
 		return event.keyCode == 13 ? doSearch() : false ;
 	});
-	
+	console.log(document.search);
 });
 
 // 토큰 유효 체크
@@ -479,6 +483,47 @@ function saveKeywordClose(){
 	//document.getElementById("saveKeywordBtn").setAttribute("src", "images/ico_add.png");
 }
 
+function doCollection(coll) {
+	
+	var searchForm = document.search;
+	
+	searchForm.apprType.value = "appr";
+	searchForm.collection.value = coll;
+	searchForm.reQuery.value = "2";
+	searchForm.categoryQueryW.value = "";
+	searchForm.categoryQueryD.value = "";
+	searchForm.submit();
+}
+
+//페이징
+function doPaging(count) {
+	var searchForm = document.search;
+	searchForm.startCount.value = count;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+//페이징
+function goPaging() {
+	var searchForm = document.search;
+	var inputPageNo = searchForm.input_gopage.value;
+	searchForm.startCount.value = (inputPageNo-1) * 10;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+//Replace All
+function replaceAll(str, orgStr, repStr) {
+	return str.split(orgStr).join(repStr);
+}
+
+function pressCheck() {
+	if (event.keyCode == 13)
+		return doSearch();
+	//else
+		//return false;
+	// return event.keyCode == 13 ? doSearch() : true;
+}
 </script>
 </head>
 <body>
@@ -523,25 +568,28 @@ function saveKeywordClose(){
 					<option value="BODYCONTEXTS" <%=searchField.indexOf("BODYCONTENTS") > -1 ? "selected" : ""%>>내용</option>
 					<option value="CREATOR_NAME" <%=searchField.indexOf("CREATOR_NAME") > -1 ? "selected" : ""%>>작성자</option>
                 </select>
-               <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event), this);" autocomplete="off"/>
+               <input class="white_input_text" type="text" name="query" id="query" value="<%=query%>" onKeypress="javascript:pressCheck((event), this);" autocomplete="off" style="ime-mode:auto" />
 				<a href="#" onClick="javascript:doSearch();" title="검색"><span class="search_button"></span></a>                 
               </span>
             </div>
             <div class="white_window_check"><input type="checkbox" name="reChk" id="reChk" onClick="checkReSearch();"/>결과내 재검색 </div>
             <div id="ark"> 
-            	<div class="auto_text"><strong>자동 추천 기능</strong>을 사용해 보세요.<br>검색어 입력시 자동으로 관련어를 추천합니다.</div>
-				  <div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div> 
-			</div>
+            <!-- 
+           	<div class="auto_text"><strong>자동 추천 기능</strong>을 사용해 보세요.<br>검색어 입력시 자동으로 관련어를 추천합니다.</div>
+			<div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div> 
+             -->
+            </div>
             
-			<!--  <div class="nuttop">
+			<!--  
+			<div class="nuttop">
 			  <div class="auto">
-			  <ul class="recomm">
-					<li><a href="#"><strong class="tx_key">이</strong>력사항</a></li>
-					<li><a href="#"><strong class="tx_key">이</strong>용</a></li>
-					<li><a href="#"><strong class="tx_key">이</strong>내</a></li>
-					<li><a href="#"><strong class="tx_key">이</strong>상</a></li>
-					<li><a href="#">상<strong class="tx_key">이</strong></a></li>
-					<li><a href="#">높<strong class="tx_key">이</strong></a></li>
+				  <ul class="recomm">
+						<li><a href="#"><strong class="tx_key">이</strong>력사항</a></li>
+						<li><a href="#"><strong class="tx_key">이</strong>용</a></li>
+						<li><a href="#"><strong class="tx_key">이</strong>내</a></li>
+						<li><a href="#"><strong class="tx_key">이</strong>상</a></li>
+						<li><a href="#">상<strong class="tx_key">이</strong></a></li>
+						<li><a href="#">높<strong class="tx_key">이</strong></a></li>
 				  </ul>
 				  <div class="auto_text"><strong>자동 추천 기능</strong>을 사용해 보세요.<br>검색어 입력시 자동으로 관련어를 추천합니다.</div>
 				  <div class="auto_btn_wrap"><a href="#" class="auto_btn">기능끄기</a></div>
@@ -577,9 +625,11 @@ function saveKeywordClose(){
                           <%
                           for(int i = 0; i < COLLECTIONS_NAME.length; i++) {
 								String systemName = wnsearch.getCollectionKorName(COLLECTIONS_NAME[i]);
+								System.out.println(COLLECTIONS_NAME[i] + " -> " + systemName);
 								int thisTotalCount = wnsearch.getResultTotalCount(COLLECTIONS_NAME[i]);
+								if(thisTotalCount < 0) thisTotalCount = 0; 
 		                  %>
-								<a href="#"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
+								<a href="#" onclick="javascript:doCollection('<%=COLLECTIONS_NAME[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
                           <%
                           }
                           %>
@@ -593,7 +643,7 @@ function saveKeywordClose(){
 					</div>
 					<div class="search_list02">
 <%									for( String key : writerMap.keySet() ) { %>
-						<a href="#" onClick="javascript:doCategoryQueryW('USER_NAME|<%=key.toString().split(";")[0]%>');">
+						<a href="#" onClick="javascript:doCategoryQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryW.length() > 0){	
 													String[] categoryQueryWs = categoryQueryW.split("\\|");
 													if(categoryQueryWs[1].equals(key)){ %>
@@ -619,7 +669,7 @@ function saveKeywordClose(){
 					</div>
 						<div class="search_list02">
 <%										for( String key : depMap.keySet() ){ %>
-							<a href="#" onClick="javascript:doCategoryQueryD('DEPT_NAME|<%=key.toString().split(";")[0]%>');">
+							<a href="#" onClick="javascript:doCategoryQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryD.length() > 0){	
 													String[] categoryQueryDs = categoryQueryD.split("\\|");
 													if(categoryQueryDs[1].equals(key)){ %>

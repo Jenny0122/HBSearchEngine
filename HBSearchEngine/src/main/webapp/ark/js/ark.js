@@ -604,9 +604,9 @@ function setArkFooter() {
 		str += "<div class=\"right\" style=\"padding:8px 0 0 0; color:#888888;\"><label OnClick=\"showArk();\" style=\"cursor:pointer;\">닫기</label></div>";
 	}*/
 	if (isArk) {
-		//str += "<div class='auto_btn_wrap'>";
-		//str += "	<a id=\"arkOff\" href='#' class='auto_btn' onClick=\"setArkOff();\">기능끄기</a>";
-		//str += "</div>";
+		str += "<div class='auto_btn_wrap'>";
+		str += "	<a id=\"arkOff\" href='#' class='auto_btn' onClick=\"setArkOff();\">기능끄기</a>";
+		str += "</div>";
 		$("#ark_content_list").show();
 	} else {
 		str += "<div class='auto_text'>";

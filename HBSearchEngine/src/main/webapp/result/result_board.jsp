@@ -59,6 +59,7 @@
 				String COMPANY_NAME			=	wnsearch.getField(thisCollection,"COMPANY_NAME",		idx,false);
 				String COMPANY_CODE			=	wnsearch.getField(thisCollection,"COMPANY_CODE",		idx,false);
 				String FILE_ID				=	wnsearch.getField(thisCollection,"FILE_ID",				idx,false);
+				String SAVE_TYPE			=	wnsearch.getField(thisCollection,"SAVE_TYPE",				idx,false);
 				String FILE_NAME			=	wnsearch.getField(thisCollection,"FILE_NAME",			idx,false);
 				String FILE_WEB_PATH		=	wnsearch.getField(thisCollection,"FILE_WEB_PATH",		idx,false);
 				String FILE_PHYSICAL_PATH	=	wnsearch.getField(thisCollection,"FILE_PHYSICAL_PATH",	idx,false);
@@ -111,7 +112,8 @@
 		<%	} %>
 	<% if ( collection.equals("ALL") && thisTotalCount > TOTALVIEWCOUNT_MAP.get(thisCollection) ) { %>
 				<div class="section_more" id="moreresult_<%=thisCollection%>"><a href="#none" onClick="javascript:doCollection('<%=thisCollection%>');"> 검색 결과 더보기 </a></div>
-		<% }}} %>
+		<% } %>
 			</div>
+		<%}} %>
 		
 		
