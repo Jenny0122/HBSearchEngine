@@ -2529,7 +2529,6 @@ public class WNSearch {
 		String value = "";
 		for (int idx = 0; idx < COLLECTIONS.length; idx++) {
 			String coll = wncol.COLLECTION_INFO[idx][COLLECTION_NAME].trim();
-			System.out.println(col + "\t" + coll);
 			if (coll.equals(col))
 				return wncol.COLLECTION_INFO[idx][COLLECTION_KOR];
 

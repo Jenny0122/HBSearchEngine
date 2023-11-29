@@ -579,7 +579,7 @@ function pressCheck() {
           <div class="header_search">
             <div class="white_window">
               <h1 class="h_search">
-                <a href="#" class="logo_header_search"></a>
+                <a href="/" class="logo_header_search"></a>
               </h1>
               <span class="white_window_box">
                 <select style="" class="white_window_select" id="searchSelect">
@@ -642,17 +642,14 @@ function pressCheck() {
                         </a>
                       </div>
 					<div class="search_list02">
-                          <%
-                          for(int i = 0; i < COLLECTIONS_NAME.length; i++) {
-								String systemName = wnsearch.getCollectionKorName(COLLECTIONS_NAME[i]);
-								System.out.println(COLLECTIONS_NAME[i] + " -> " + systemName);
-								int thisTotalCount = wnsearch.getResultTotalCount(COLLECTIONS_NAME[i]);
-								if(thisTotalCount < 0) thisTotalCount = 0; 
-		                  %>
-								<a href="#" onclick="javascript:doCollection('<%=COLLECTIONS_NAME[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
-                          <%
-                          }
-                          %>
+					<%
+						for(int i = 0; i < COLLECTIONS_NAME.length; i++) {
+							String systemName = wnsearch.getCollectionKorName(COLLECTIONS_NAME[i]);
+							int thisTotalCount = wnsearch.getResultTotalCount(COLLECTIONS_NAME[i]);
+							if(thisTotalCount < 0) thisTotalCount = 0; 
+					%>
+						<a href="#" onclick="javascript:doCollection('<%=COLLECTIONS_NAME[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
+					<%	} %>
 					</div>
 					
 <%					if(!writerMap.isEmpty()) { %>
@@ -662,7 +659,37 @@ function pressCheck() {
 						</a>
 					</div>
 					<div class="search_list02">
-<%					for( String key : writerMap.keySet() ) { %>
+<%
+						final int MAX_CATEGORY_VIEW = 5;
+
+						if(writerMap.size() > MAX_CATEGORY_VIEW) {
+							PriorityQueue<Object[]> list = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
+							for( String key : writerMap.keySet() )
+								list.add(new Object[] {key, writerMap.get(key)});
+							
+							for(int i = 0 ; i < MAX_CATEGORY_VIEW; i++){
+								Object[] o = list.poll();
+								String key = o[0].toString();
+								%>
+						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
+								<%				if(categoryQueryW.length() > 0){	
+													String[] categoryQueryWs = categoryQueryW.split("\\|");
+													if(categoryQueryWs[1].equals(key)){ %>
+									<span class="list_text_on">
+								<%					} else { %>
+									<span>
+								<%					}
+												} else { %>
+									<span>
+								<%				}%>
+									<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(writerMap.get(key))%>)</span>
+						</a>
+								<%
+							}
+						}
+						else {
+							for( String key : writerMap.keySet() ) {
+%>
 						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryW.length() > 0){	
 													String[] categoryQueryWs = categoryQueryW.split("\\|");
@@ -675,20 +702,53 @@ function pressCheck() {
 									<span>
 <%												}%>
 								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(writerMap.get(key))%>)</span>
-							</a>
-<%										} %>												
+						</a>
+<%							}
+						}
+						%>												
 					</div>
 <%					} %>
 
 
-<%					if(!depMap.isEmpty()) { %>	
+<%
+
+if(!depMap.isEmpty()) { %>	
 					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
 						<span class="list_text_off">부서명</span>
 						</a>
 					</div>
 						<div class="search_list02">
-<%										for( String key : depMap.keySet() ){ %>
+<%								
+						final int MAX_CATEGORY_VIEW = 5;
+
+						if(writerMap.size() > MAX_CATEGORY_VIEW) {
+							PriorityQueue<Object[]> list = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
+							for( String key : depMap.keySet() )
+								list.add(new Object[] {key, depMap.get(key)});
+							
+							for(int i = 0 ; i < MAX_CATEGORY_VIEW; i++){
+								Object[] o = list.poll();
+								String key = o[0].toString();
+								%>
+						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
+								<%				if(categoryQueryW.length() > 0){	
+													String[] categoryQueryWs = categoryQueryW.split("\\|");
+													if(categoryQueryWs[1].equals(key)){ %>
+									<span class="list_text_on">
+								<%					} else { %>
+									<span>
+								<%					}
+												} else { %>
+									<span>
+								<%				}%>
+									<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(depMap.get(key))%>)</span>
+						</a>
+								<%
+							}
+						}
+						else {
+								for( String key : depMap.keySet() ){ %>
 							<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryD.length() > 0){	
 													String[] categoryQueryDs = categoryQueryD.split("\\|");
@@ -702,7 +762,8 @@ function pressCheck() {
 <%												}%>
 								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(depMap.get(key))%>)</span>
 							</a>
-<%										} %>	
+<%										}
+						}%>	
 						</div>
 <%					} %>
 				</div>
