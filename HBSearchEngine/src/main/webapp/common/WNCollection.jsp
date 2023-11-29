@@ -66,7 +66,7 @@
 						"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 						"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 						"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-						"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME,COMPANY_CODE",// set search field
+						"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME",// set search field
 			 			"DOCID,DATE,MESSAGE_ID,MSG_OPEN_URL,FOLDER_ID,FOLDER_NAME,FOLDER_PATH_NAME,FOLDER_FULLPATH_NAME,SUBJECT,SUMMERYBODYCONTENTS/120,BODYCONTENTS,FILE_INFO,REGIST_DATE,EXPIRED_DATE,CREATOR_CODE,CREATOR_NAME,CREATOR_LEVEL,CREATOR_POSITION,CREATOR_DEPT,COMPANY_NAME,COMPANY_CODE,FILE_ID,SAVE_TYPE,FILE_NAME,FILE_WEB_PATH,FILE_PHYSICAL_PATH,FILE_DOWNLOAD_URL,AUTH_USER_ID,AUTH_USER_CODE,AUTH_EMP_NO,ALIAS", // set document field
 			 			"", // set date range
 						"", // set rank range
@@ -80,7 +80,7 @@
 						"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 						"", // set categoryQuery (fieldname:value)
 						"", // set property group (fieldname,min,max, groupcount)
-						"ALIAS", // use check prefix query filed
+						"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,COMPANY_CODE,AUTH_USER_CODE,ALIAS", // use check prefix query filed
 						"DATE,SUBJECT,REGIST_DATE,EXPIRED_DATE,CREATOR_NAME,CREATOR_DEPT,ALIAS", // set use check fast access field
 						"", // set multigroupby field
 						"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -95,7 +95,7 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"CREATOR_NAME,CREATOR_DEPT,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,MOBILE",// set search field
+			 			"CREATOR_DEPT,CREATOR_NAME",// set search field
 			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
@@ -109,8 +109,8 @@
 			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"PREFIX_CREATOR_DEPT,ALIAS", // use check prefix query filed
-			 			"ALIAS", // set use check fast access field
+			 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+			 			"CREATOR_NAME,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
@@ -118,7 +118,6 @@
 			 		}
 			 	};
 			} else if (apprType.equals("mig")) {
-				System.out.println("?????");
 				COLLECTION_INFO = null;
 				COLLECTION_INFO = new String[][]
 				{
@@ -157,7 +156,7 @@
 						"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 						"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 						"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-						"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME,COMPANY_CODE,FILE_EXTENTION",// set search field
+						"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME",// set search field
 			 			"DOCID,DATE,MESSAGE_ID,MSG_OPEN_URL,FOLDER_ID,FOLDER_NAME,FOLDER_PATH_NAME,FOLDER_FULLPATH_NAME,SUBJECT,SUMMERYBODYCONTENTS/120,BODYCONTENTS,FILE_INFO,REGIST_DATE,EXPIRED_DATE,CREATOR_CODE,CREATOR_NAME,CREATOR_LEVEL,CREATOR_POSITION,CREATOR_DEPT,COMPANY_NAME,COMPANY_CODE,FILE_ID,SAVE_TYPE,FILE_NAME,FILE_WEB_PATH,FILE_PHYSICAL_PATH,FILE_DOWNLOAD_URL,AUTH_USER_ID,AUTH_USER_CODE,AUTH_EMP_NO,ALIAS", // set document field
 			 			"", // set date range
 						"", // set rank range
@@ -171,7 +170,7 @@
 						"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 						"", // set categoryQuery (fieldname:value)
 						"", // set property group (fieldname,min,max, groupcount)
-						"ALIAS", // use check prefix query filed
+						"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,COMPANY_CODE,AUTH_USER_CODE,ALIAS", // use check prefix query filed
 						"DATE,SUBJECT,REGIST_DATE,EXPIRED_DATE,CREATOR_NAME,CREATOR_DEPT,ALIAS", // set use check fast access field
 						"", // set multigroupby field
 						"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -186,7 +185,7 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"CREATOR_NAME,CREATOR_DEPT,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,MOBILE",// set search field
+			 			"CREATOR_DEPT,CREATOR_NAME",// set search field
 			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
@@ -200,8 +199,8 @@
 			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"PREFIX_CREATOR_DEPT,ALIAS", // use check prefix query filed
-			 			"ALIAS", // set use check fast access field
+			 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+			 			"CREATOR_NAME,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
@@ -279,7 +278,7 @@
 					"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 					"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 					"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-					"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME,COMPANY_CODE,FILE_EXTENTION",// set search field
+					"SUBJECT,SUBJECT_DOC,SUMMERYBODYCONTENTS,CREATOR_DEPT,CREATOR_NAME",// set search field
 		 			"DOCID,DATE,MESSAGE_ID,MSG_OPEN_URL,FOLDER_ID,FOLDER_NAME,FOLDER_PATH_NAME,FOLDER_FULLPATH_NAME,SUBJECT,SUMMERYBODYCONTENTS/120,BODYCONTENTS,FILE_INFO,REGIST_DATE,EXPIRED_DATE,CREATOR_CODE,CREATOR_NAME,CREATOR_LEVEL,CREATOR_POSITION,CREATOR_DEPT,COMPANY_NAME,COMPANY_CODE,FILE_ID,SAVE_TYPE,FILE_NAME,FILE_WEB_PATH,FILE_PHYSICAL_PATH,FILE_DOWNLOAD_URL,AUTH_USER_ID,AUTH_USER_CODE,AUTH_EMP_NO,ALIAS", // set document field
 		 			"", // set date range
 					"", // set rank range
@@ -293,7 +292,7 @@
 					"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 					"", // set categoryQuery (fieldname:value)
 					"", // set property group (fieldname,min,max, groupcount)
-					"CREATOR_DEPT,CREATOR_NAME,COMPANY_CODE,FILE_EXTENTION,AUTH_USER_CODE,ALIAS", // use check prefix query filed
+					"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,COMPANY_CODE,AUTH_USER_CODE,ALIAS", // use check prefix query filed
 					"DATE,SUBJECT,REGIST_DATE,EXPIRED_DATE,CREATOR_NAME,CREATOR_DEPT,ALIAS", // set use check fast access field
 					"", // set multigroupby field
 					"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -308,7 +307,7 @@
 		 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) ./multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-		 			"CREATOR_NAME,CREATOR_DEPT,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,MOBILE",// set search field
+		 			"CREATOR_DEPT,CREATOR_NAME",// set search field
 		 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
@@ -322,8 +321,8 @@
 		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
-		 			"PREFIX_DEPT_NAME,ALIAS", // use check prefix query filed
-		 			"USER_NAME,ALIAS", // set use check fast access field
+		 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+		 			"CREATOR_NAME,ALIAS", // set use check fast access field
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 		 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC

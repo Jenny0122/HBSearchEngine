@@ -469,19 +469,36 @@ function apprTypeChange() {
 		}
 	});  
 }
-
 // 카테고리검색
 function doCategoryQueryW(categoryQueryW) {
 	var searchForm = document.search;
 	searchForm.categoryQueryW.value = categoryQueryW;
 	searchForm.reQuery.value = "2";
 	searchForm.submit();
+	
+	
 }
 
 // 카테고리검색
 function doCategoryQueryD(categoryQueryD) {
 	var searchForm = document.search;
 	searchForm.categoryQueryD.value = categoryQueryD;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+// 컬렉션검색
+function doCollectionQueryW(collectionQueryW) {
+	var searchForm = document.search;
+	searchForm.collectionQueryW.value = collectionQueryW;
+	searchForm.reQuery.value = "2";
+	searchForm.submit();
+}
+
+// 컬렉션검색
+function doCollectionQueryD(collectionQueryD) {
+	var searchForm = document.search;
+	searchForm.collectionQueryD.value = collectionQueryD;
 	searchForm.reQuery.value = "2";
 	searchForm.submit();
 }
@@ -536,6 +553,8 @@ function doSearch() {
 	searchForm.startCount.value = 0;
 	searchForm.categoryQueryW.value = "";
 	searchForm.categoryQueryD.value = "";
+	searchForm.collectionQueryW.value = "";
+	searchForm.collectionQueryD.value = "";
 	
 	if(document.getElementById("reChk").checked == false || searchForm.reQuery.value == "2"){ //재검색 아닌경우 apprType 초기화
 		searchForm.apprType.value = "appr";	

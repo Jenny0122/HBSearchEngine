@@ -40,6 +40,9 @@
 	String searchField = 	getCheckReqXSS(request, "searchField", "ALL");			    //검색필드
 	String categoryQueryW = getCheckReqXSS(request, "categoryQueryW", "");		//카테고리쿼리
 	String categoryQueryD = getCheckReqXSS(request, "categoryQueryD", "");		//카테고리쿼리
+	String collectionQueryW = getCheckReqXSS(request, "collectionQueryW", "");		//컬렉션쿼리
+	String collectionQueryD = getCheckReqXSS(request, "collectionQueryD", "");		//컬렉션쿼리
+
 	
 	String prefix 		= getCheckReqXSS2(request, "prefix", "");					//prefix 쿼리
 	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
@@ -64,9 +67,10 @@
 		query = java.net.URLDecoder.decode(query, "UTF-8"); 
 		
 	// 도메인 
-	String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어 domain
-	
-	InetAddress local;
+	String doMain = "https://searchdev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어 domain
+	//String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어 domain
+
+	/*InetAddress local;
 	local = InetAddress.getLocalHost();
 	String ip = local.getHostAddress();
 
@@ -79,7 +83,7 @@
 	// 운영
 	}else {
 		doMain = "https://search.ihoban.co.kr";
-	}
+	}*/
 	   
     int totalCount = 0;
     String userId = "";
@@ -218,7 +222,7 @@
 	
 	        //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
 	        if (collections[i].equals("user")) {
-	        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "USER_NAME/ASC");
+	        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "CREATOR_NAME/ASC");
 	        } else if (!query.equals("") ) {
 	        	if("SUBJECT".equals(sort)){
 	        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
@@ -259,9 +263,23 @@
         wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, "1970/01/01,2030/12/31,-");
 		}
 		
-		if(categoryQueryW.length() > 0 || categoryQueryD.length() > 0){
-			wnsearch.setCollectionInfoValue(collections[i], CATEGORY_QUERY, categoryQueryW + "," + categoryQueryD);
+		if(collectionQueryW.length() > 0 || collectionQueryD.length() > 0){
+			String[] collectionQueryWList = collectionQueryW.split("\\|");
+			String[] collectionQueryDList = collectionQueryD.split("\\|");
+			
+			String collectionQuery = "";
+			
+			if (collectionQueryWList.length > 1) collectionQuery = "<" + collectionQueryWList[0] + ":contains:" + collectionQueryWList[1] + "> ";
+			if (collectionQueryDList.length > 1) collectionQuery = "<" + collectionQueryDList[0] + ":contains:" + collectionQueryDList[1] + ">";
+			collectionQuery = collectionQuery.trim();
+			
+			//wnsearch.setCollectionInfoValue(collections[i], COLLECTION_QUERY, "<" + collectionQueryW.split("|")[0] + ":contains:" + collectionQueryW.split("|")[1] + "> <" + collectionQueryD.split("|")[0] + ":contains:" + collectionQueryD.split("|")[1] + ">");
+			wnsearch.setCollectionInfoValue(collections[i], COLLECTION_QUERY, collectionQuery);
 		}
+		
+		/* if(categoryQueryW.length() > 0 || categoryQueryD.length() > 0){
+			wnsearch.setCollectionInfoValue(collections[i], CATEGORY_QUERY, categoryQueryW + "," + categoryQueryD);
+		}*/
     }
       // 쿼리로그에 prefix query, filter query 정보 남기기
     if(prefixForLog.length() > 0) {
@@ -533,7 +551,9 @@ function pressCheck() {
 		<input type="hidden" name="startCount" value="0">
 		<input type="hidden" name="sort" value="<%=sort%>">
 		<input type="hidden" name="categoryQueryW" value="<%=categoryQueryW%>">
-		<input type="hidden" name="categoryQueryD" value="<%=categoryQueryD%>">
+		<input type="hidden" name="categoryQueryD" value="<%=categoryQueryD%>">		
+		<input type="hidden" name="collectionQueryW" value="<%=collectionQueryW%>">
+		<input type="hidden" name="collectionQueryD" value="<%=collectionQueryD%>">		
 		<input type="hidden" name="collection" id="collection" value="<%=collection%>">
 		<input type="hidden" name="range" value="<%=range%>">
 		<input type="hidden" name="searchField" value="<%=searchField%>">
@@ -634,16 +654,16 @@ function pressCheck() {
                           }
                           %>
 					</div>
-				
-<%					if(!writerMap.isEmpty()) { %>	
+					
+<%					if(!writerMap.isEmpty()) { %>
 					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
 							<span class="list_text_off">작성자명</span>
 						</a>
 					</div>
 					<div class="search_list02">
-<%									for( String key : writerMap.keySet() ) { %>
-						<a href="#" onClick="javascript:doCategoryQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
+<%					for( String key : writerMap.keySet() ) { %>
+						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryW.length() > 0){	
 													String[] categoryQueryWs = categoryQueryW.split("\\|");
 													if(categoryQueryWs[1].equals(key)){ %>
@@ -669,7 +689,7 @@ function pressCheck() {
 					</div>
 						<div class="search_list02">
 <%										for( String key : depMap.keySet() ){ %>
-							<a href="#" onClick="javascript:doCategoryQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
+							<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
 <%												if(categoryQueryD.length() > 0){	
 													String[] categoryQueryDs = categoryQueryD.split("\\|");
 													if(categoryQueryDs[1].equals(key)){ %>
