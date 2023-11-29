@@ -643,12 +643,14 @@ function pressCheck() {
                       </div>
 					<div class="search_list02">
 					<%
-						for(int i = 0; i < COLLECTIONS_NAME.length; i++) {
-							String systemName = wnsearch.getCollectionKorName(COLLECTIONS_NAME[i]);
-							int thisTotalCount = wnsearch.getResultTotalCount(COLLECTIONS_NAME[i]);
+						System.out.println(apprType);
+						for(int i = 0; i < THIS_COLLECTIONS.length; i++) {
+							String systemName = wnsearch.getCollectionKorName(THIS_COLLECTIONS[i]);
+							int thisTotalCount = wnsearch.getResultTotalCount(THIS_COLLECTIONS[i]);
+							System.out.println(THIS_COLLECTIONS[i] + "\t\t" + systemName);
 							if(thisTotalCount < 0) thisTotalCount = 0; 
 					%>
-						<a href="#" onclick="javascript:doCollection('<%=COLLECTIONS_NAME[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
+						<a href="#" onclick="javascript:doCollection('<%=THIS_COLLECTIONS[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
 					<%	} %>
 					</div>
 					
@@ -710,9 +712,7 @@ function pressCheck() {
 <%					} %>
 
 
-<%
-
-if(!depMap.isEmpty()) { %>	
+					<%if(!depMap.isEmpty()) { %>	
 					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
 						<span class="list_text_off">부서명</span>
