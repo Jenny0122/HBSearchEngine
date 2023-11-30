@@ -67,8 +67,8 @@
 		query = java.net.URLDecoder.decode(query, "UTF-8"); 
 		
 	// 도메인 
-	String doMain = "https://searchdev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어 domain
-	//String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어 domain
+	String doMain = "https://searchdev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
+	//String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
 
 	/*InetAddress local;
 	local = InetAddress.getLocalHost();
@@ -222,7 +222,7 @@
 	
 	        //검색어가 없으면 DATE_RANGE 로 전체 데이터 출력
 	        if (collections[i].equals("user")) {
-	        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "CREATOR_NAME/ASC");
+	        	wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, "USER_NAME/ASC");
 	        } else if (!query.equals("") ) {
 	        	if("SUBJECT".equals(sort)){
 	        		wnsearch.setCollectionInfoValue(collections[i], SORT_FIELD, sort + "/ASC");
@@ -654,6 +654,7 @@ function pressCheck() {
 					<%	} %>
 					</div>
 					
+					<!-- 작성자명 -->					
 <%					if(!writerMap.isEmpty()) { %>
 					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
@@ -661,7 +662,8 @@ function pressCheck() {
 						</a>
 					</div>
 					<div class="search_list02">
-<%
+<%						
+                         // 좌측 메뉴(작성자명) 최대 값 5개씩만 보여주기
 						final int MAX_CATEGORY_VIEW = 5;
 
 						if(writerMap.size() > MAX_CATEGORY_VIEW) {
@@ -711,7 +713,7 @@ function pressCheck() {
 					</div>
 <%					} %>
 
-
+					<!-- 부서명 -->	
 					<%if(!depMap.isEmpty()) { %>	
 					<div class="search_list01">
 						<a href="javascript:void(0);" class="search_list_close">
@@ -719,10 +721,11 @@ function pressCheck() {
 						</a>
 					</div>
 						<div class="search_list02">
-<%								
+						
+<%						// 좌측 메뉴(부서명) 최대 값 5개씩만 보여주기		
 						final int MAX_CATEGORY_VIEW = 5;
 
-						if(writerMap.size() > MAX_CATEGORY_VIEW) {
+						if(depMap.size() > MAX_CATEGORY_VIEW) {
 							PriorityQueue<Object[]> list = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
 							for( String key : depMap.keySet() )
 								list.add(new Object[] {key, depMap.get(key)});
@@ -731,10 +734,10 @@ function pressCheck() {
 								Object[] o = list.poll();
 								String key = o[0].toString();
 								%>
-						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
-								<%				if(categoryQueryW.length() > 0){	
-													String[] categoryQueryWs = categoryQueryW.split("\\|");
-													if(categoryQueryWs[1].equals(key)){ %>
+						<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
+								<%				if(categoryQueryD.length() > 0){	
+													String[] categoryQueryDs = categoryQueryD.split("\\|");
+													if(categoryQueryDs[1].equals(key)){ %>
 									<span class="list_text_on">
 								<%					} else { %>
 									<span>

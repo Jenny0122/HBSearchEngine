@@ -43,8 +43,8 @@
 				String COMPANY_CODE			=	wnsearch.getField(thisCollection,"COMPANY_CODE",			idx,false);
 				String DEPT_CODE			=	wnsearch.getField(thisCollection,"DEPT_CODE",				idx,false);
 				String COMPANY_NAME			=	wnsearch.getField(thisCollection,"COMPANY_NAME",			idx,false);
-				String CREATOR_DEPT			=	wnsearch.getField(thisCollection,"CREATOR_DEPT",			idx,false);
-				String CREATOR_NAME			=	wnsearch.getField(thisCollection,"CREATOR_NAME",			idx,false);
+				String DEPT_NAME			=	wnsearch.getField(thisCollection,"DEPT_NAME",				idx,false);
+				String USER_NAME			=	wnsearch.getField(thisCollection,"USER_NAME",				idx,false);
 				String JOB_POSITION_NAME	=	wnsearch.getField(thisCollection,"JOB_POSITION_NAME",		idx,false);
 				String JOB_TITLE_NAME		=	wnsearch.getField(thisCollection,"JOB_TITLE_NAME",			idx,false);
 				String JOB_LEVEL_NAME		=	wnsearch.getField(thisCollection,"JOB_LEVEL_NAME",			idx,false);
@@ -58,8 +58,8 @@
 				String ALIAS				=	wnsearch.getField(thisCollection,"ALIAS",					idx,false);
 				Double RANK					= 	Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));
 												
-				CREATOR_NAME 					= wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
-				CREATOR_DEPT 					= wnsearch.getKeywordHl(CREATOR_DEPT,"<strong class='hl'>","</strong>");
+				USER_NAME 					= wnsearch.getKeywordHl(USER_NAME,"<strong class='hl'>","</strong>");
+				DEPT_NAME 					= wnsearch.getKeywordHl(DEPT_NAME,"<strong class='hl'>","</strong>");
 				JOB_POSITION_NAME			= wnsearch.getKeywordHl(JOB_POSITION_NAME,"<strong class='hl'>","</strong>");
 				CHARGE_BUSINESS				= wnsearch.getKeywordHl(CHARGE_BUSINESS,"<strong class='hl'>","</strong>");
 				
@@ -73,12 +73,12 @@
 						<li class="dic_100 dic_aside">
 							<dl>
 								<dt class="title_area">
-									<a href="<%=LINK_URL%>"><%=CREATOR_NAME%></a>
+									<a href="<%=LINK_URL%>"><%=USER_NAME%></a>
 									<div class="title_info">
 										<p class="title_area_name">
 										<span><%=COMPANY_NAME%></span>
-<%										if(CREATOR_DEPT.length() > 0){ %>								
-											<span><%=CREATOR_DEPT%></span><%}%>								
+<%										if(DEPT_NAME.length() > 0){ %>								
+											<span><%=DEPT_NAME%></span><%}%>								
 										</p>
 										<span class="title_accuracy">[ 정확도 : <%=(RANK*1/100)%> ]</span>
 									</div>

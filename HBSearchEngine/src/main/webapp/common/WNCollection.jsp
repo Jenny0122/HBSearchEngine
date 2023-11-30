@@ -95,8 +95,8 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"CREATOR_DEPT,CREATOR_NAME",// set search field
-			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
+			 			"DEPT_NAME,USER_NAME",// set search field
+			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,DEPT_NAME,USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -106,11 +106,11 @@
 			 			"", // set groupby field(field, count)
 			 			"", // set sort field group(field/order,field/order,...)
 			 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
+			 			"", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
-			 			"CREATOR_NAME,ALIAS", // set use check fast access field
+			 			"PREFIX_DEPT_NAME,PREFIX_USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+			 			"USER_NAME,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
@@ -185,8 +185,8 @@
 			 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-			 			"CREATOR_DEPT,CREATOR_NAME",// set search field
-			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
+			 			"DEPT_NAME,USER_NAME",// set search field
+			 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,DEPT_NAME,USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -196,11 +196,11 @@
 			 			"", // set groupby field(field, count)
 			 			"", // set sort field group(field/order,field/order,...)
 			 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
+			 			"", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
-			 			"CREATOR_NAME,ALIAS", // set use check fast access field
+			 			"PREFIX_DEPT_NAME,PREFIX_USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+			 			"USER_NAME,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
@@ -307,8 +307,8 @@
 		 			"1,1,0,0,0", // set query analyzer (useKMA,isCase,useOriginal,useSynonym, duplcated detection)
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) ./multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
-		 			"CREATOR_DEPT,CREATOR_NAME",// set search field
-		 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,CREATOR_DEPT,CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
+		 			"DEPT_NAME,USER_NAME",// set search field
+		 			"DOCID,DATE,USER_CODE,COMPANY_CODE,DEPT_CODE,COMPANY_NAME,DEPT_NAME,USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,CHARGE_BUSINESS,LINK_URL,MAIL_ADDRESS,PHONE_NUMBER_INTER,MOBILE,USE_YN,PHOTO_PATH,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -318,11 +318,11 @@
 		 			"", // set groupby field(field, count)
 		 			"", // set sort field group(field/order,field/order,...)
 		 			"", // set categoryBoost(fieldname,matchType,boostID,boostKeyword)
-		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
+		 			"", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
-		 			"PREFIX_CREATOR_DEPT,PREFIX_CREATOR_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
-		 			"CREATOR_NAME,ALIAS", // set use check fast access field
+		 			"PREFIX_DEPT_NAME,PREFIX_USER_NAME,JOB_POSITION_NAME,JOB_TITLE_NAME,JOB_LEVEL_NAME,ALIAS", // use check prefix query filed
+		 			"USER_NAME,ALIAS", // set use check fast access field
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 		 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
