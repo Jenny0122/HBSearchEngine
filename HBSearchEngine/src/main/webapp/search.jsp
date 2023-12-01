@@ -67,60 +67,57 @@
 		query = java.net.URLDecoder.decode(query, "UTF-8"); 
 		
 	// 도메인 
-	String doMain = "https://searchdev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
-	//String doMain = "https://search.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
+	String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
+	// String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
 
-	/*InetAddress local;
-	local = InetAddress.getLocalHost();
-	String ip = local.getHostAddress();
-
-	//개발
-	if(ip.equals("172.17.208.26")){
-		doMain = "http://searchdev.e-hoban.co.kr";
-	// 로컬
-	}else if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1")){
-		doMain = "http://searchdev.e-hoban.co.kr";
-	// 운영
-	}else {
-		doMain = "https://search.ihoban.co.kr";
-	}*/
 	   
     int totalCount = 0;
-    String userId = "";
+	
+    String userId = UR_Code;
+   // String userId = (String)session.getAttribute("UR_Code");
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
     Map<String, String> prefixMap = new HashMap<String,String>();
-
-    
+ 	
     // jwt 토큰 복호화
-	// warr : 임시확인용 주석처리
- /*	if ( UR_Code.equals("") ) { 
-			//임시확인용 토큰
-		token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODI0ODg5NTYwOTgsImV4cCI6MTY4MjQ4OTU1NjA5OCwiZW1wIjoic3VwZXJhZG1pbiJ9.m_HRrWUFHZxeKLdmgOCPjbGwDPjubitRW5L5zp-KrSg";
+    
+    /* String userId = "";
+    if ( UR_Code.equals("") ) {
 		Map<String,Object> retMap = new HashMap<>();
 		try  {	
-			retMap = Encrypt.getTokenFromJwtString("ghqksrmfnq01!@#$", token);
+			retMap = Encrypt.getTokenFromJwtString("ghqksrmfnq",token);
 		} catch ( Exception e ) {
-		} finally { }
+
+		}
 		if ( retMap == null  || retMap.size() == 0 || retMap.containsKey("result")) { 
 			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."); 
 			return ;
-		}
+		} 
 		
 		long exp = (long) retMap.get("exp");
-		userId = (String) retMap.get("emp"); 
-    
+		userId = (String) retMap.get("emp");
+
 		long nowTime = System.currentTimeMillis ();
 		
-    }  */
+		if ( nowTime > exp ) {
+			out.println("Timeout. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + exp + " :: " + nowTime); 
+			return ;
+		}
+		if ( userId == null || "".equals(userId)  ) {
+			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + retMap.get("emp")); 
+			return ;
+		} 
+	} else {
+		userId = UR_Code;
+	}*/
     
 	// 권한처리
     if (userId.length() > 0) {
-    	prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
-    	prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+    	//prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+    	//prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
 		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
     }else{
-		prefixMap.put("appr", "");
-		prefixMap.put("apprMig", "");
+		//prefixMap.put("appr", "");
+		//prefixMap.put("apprMig", "");
 		prefixMap.put("board", "");
 	}
     
@@ -643,11 +640,9 @@ function pressCheck() {
                       </div>
 					<div class="search_list02">
 					<%
-						System.out.println(apprType);
 						for(int i = 0; i < THIS_COLLECTIONS.length; i++) {
 							String systemName = wnsearch.getCollectionKorName(THIS_COLLECTIONS[i]);
 							int thisTotalCount = wnsearch.getResultTotalCount(THIS_COLLECTIONS[i]);
-							System.out.println(THIS_COLLECTIONS[i] + "\t\t" + systemName);
 							if(thisTotalCount < 0) thisTotalCount = 0; 
 					%>
 						<a href="#" onclick="javascript:doCollection('<%=THIS_COLLECTIONS[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
