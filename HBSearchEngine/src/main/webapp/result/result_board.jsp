@@ -69,6 +69,14 @@
 				Double RANK					=	Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));				
 							
 				SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
+				SUBJECT 					=	SUBJECT	.replaceAll("&nbsp;", " ")
+														.replaceAll("&amp;", "&")
+														.replaceAll("&lt;", "<")
+														.replaceAll("&gt;", ">")
+														.replaceAll("&quot;", "\"")
+														.replaceAll("&#035;", "#")
+														.replaceAll("&#039;", "\'");
+				
 				SUMMERYBODYCONTENTS 		= 	wnsearch.getKeywordHl(SUMMERYBODYCONTENTS,"<strong class='hl'>","</strong>");
 				FILE_NAME 					= 	wnsearch.getKeywordHl(FILE_NAME,"<strong class='hl'>","</strong>");
 				CREATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
