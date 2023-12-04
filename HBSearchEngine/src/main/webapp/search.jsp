@@ -76,39 +76,7 @@
     String userId = UR_Code;
    // String userId = (String)session.getAttribute("UR_Code");
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
-    Map<String, String> prefixMap = new HashMap<String,String>();
- 	
-    // jwt 토큰 복호화
-    
-    /* String userId = "";
-    if ( UR_Code.equals("") ) {
-		Map<String,Object> retMap = new HashMap<>();
-		try  {	
-			retMap = Encrypt.getTokenFromJwtString("ghqksrmfnq",token);
-		} catch ( Exception e ) {
-
-		}
-		if ( retMap == null  || retMap.size() == 0 || retMap.containsKey("result")) { 
-			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요."); 
-			return ;
-		} 
-		
-		long exp = (long) retMap.get("exp");
-		userId = (String) retMap.get("emp");
-
-		long nowTime = System.currentTimeMillis ();
-		
-		if ( nowTime > exp ) {
-			out.println("Timeout. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + exp + " :: " + nowTime); 
-			return ;
-		}
-		if ( userId == null || "".equals(userId)  ) {
-			out.println("잘못된 접근입니다. 그룹웨어에 로그인 후 다시 검색을 시도하세요." + retMap.get("emp")); 
-			return ;
-		} 
-	} else {
-		userId = UR_Code;
-	}*/
+    Map<String, String> prefixMap = new HashMap<String,String>();	
     
 	// 권한처리
     if (userId.length() > 0) {

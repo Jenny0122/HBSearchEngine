@@ -88,7 +88,7 @@
 				CREATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
 				
 				DOC_URL						= 	doMain + DOC_URL;
-				if ("MIG".equals(ALIAS)) {DOC_URL = DOC_URL + "&forminstanceID=" + PROCESS_ID + "&formPrefix=WF_MIGRATION";}
+				if (apprType.equals("mig")) {DOC_URL = DOC_URL + "&forminstanceID=" + PROCESS_ID + "&formPrefix=WF_MIGRATION";}
 				DOC_URL						=	"javascript:openLink('" + DOC_URL + "',1080,600);";
 				
 				INITIATED_DATE = INITIATED_DATE.substring(0, 10).replaceFirst("(\\d{4})(\\d{2})(\\d{2}).*", "$1-$2-$3");
