@@ -39,7 +39,7 @@
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 			 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,ACL_TYPE,AUTHORITY,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -52,7 +52,7 @@
 			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
+			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE,AUTHORITY,FILE_EXTENTION,ALIAS", // use check prefix query filed
 			 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -129,7 +129,7 @@
 			 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 			 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 			 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+			 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,ACL_TYPE,AUTHORITY,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 			 			"", // set date range
 			 			"", // set rank range
 			 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -142,7 +142,7 @@
 			 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
-			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
+			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE,AUTHORITY,FILE_EXTENTION,ALIAS", // use check prefix query filed
 			 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -223,7 +223,7 @@
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 		 			"FORM_NAME,SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,ACL_TYPE,AUTHORITY,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -236,7 +236,7 @@
 		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
-		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
+		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE,AUTHORITY,FILE_EXTENTION,ALIAS", // use check prefix query filed
 		 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
@@ -251,7 +251,7 @@
 		 			"RANK/DESC,DATE/DESC",  // set sort field (field,order) multi sort '/'
 		 			"basic,rpfmo,100",  // set sort field (field,order) multi sort '/'
 		 			"SUBJECT,SUBJECT_DOC,CREATOR_NAME,CREATOR_DEPT,SRCH_NAME,FILE_NAME,FILE_CONTENTS",// set search field
-		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
+		 			"DOCID,DATE,PROCESS_ID,FORM_INST_ID,FORM_PREFIX,FORM_NAME,SUBJECT,DOC_NUMBER,ENT_CODE,CREATOR_ID,CREATOR_NAME,CREATOR_DEPT_ID,CREATOR_DEPT,SRCH_NAME,SRCH_ID,INITIATED_DATE,COMPLETED_DATE,BODYCONTENTS,ATTACH_FILE_INFO,END_DATE,DOC_URL,ACL_TYPE,AUTHORITY,FILE_NAME,FILE_EXTENTION,FILE_MESSAGE_ID,FILE_CONTENTS,ALIAS", // set document field
 		 			"", // set date range
 		 			"", // set rank range
 		 			"", // set prefix query, example: <fieldname:contains:value1>|<fieldname:contains:value2>/1,  (fieldname:contains:value) and ' ', or '|', not '!' / operator (AND:1, OR:0)
@@ -264,7 +264,7 @@
 		 			"CREATOR_NAME:1|CREATOR_DEPT:1", // set categoryGroupBy (fieldname:value)
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
-		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,FILE_EXTENTION,ALIAS", // use check prefix query filed
+		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE,AUTHORITY,FILE_EXTENTION,ALIAS", // use check prefix query filed
 		 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)

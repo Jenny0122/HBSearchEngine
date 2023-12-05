@@ -72,7 +72,9 @@
 				String COMPLETED_DATE 		=	wnsearch.getField(thisCollection,"COMPLETED_DATE",				idx,false); 	
 				String BODYCONTENTS 		=	wnsearch.getField(thisCollection,"BODYCONTENTS",				idx,false); 		
 				String END_DATE 			=	wnsearch.getField(thisCollection,"END_DATE",				idx,false); 		
-				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 			
+				String DOC_URL 				=	wnsearch.getField(thisCollection,"DOC_URL",				idx,false); 
+				String ACL_TYPE 			=	wnsearch.getField(thisCollection,"ACL_TYPE",				idx,false); 			
+				String AUTHORITY 			=	wnsearch.getField(thisCollection,"AUTHORITY",				idx,false); 			
 				String ATTACH_FILE_INFO 	=	wnsearch.getField(thisCollection,"ATTACH_FILE_INFO",				idx,false); 			
 				String FILE_NAME 			=	wnsearch.getField(thisCollection,"FILE_NAME",				idx,false); 			
 				String FILE_EXTENTION 		=	wnsearch.getField(thisCollection,"FILE_EXTENTION",				idx,false); 			

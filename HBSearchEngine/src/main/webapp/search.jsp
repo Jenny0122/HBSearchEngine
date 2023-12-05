@@ -80,12 +80,12 @@
     
 	// 권한처리
     if (userId.length() > 0) {
-    	//prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
-    	//prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+		prefixMap.put("appr", "<AUTHORITY:contains:" + userId + ">");
+		prefixMap.put("apprMig", "<AUTHORITY:contains:" + userId + "> ");
 		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
     }else{
-		//prefixMap.put("appr", "");
-		//prefixMap.put("apprMig", "");
+		prefixMap.put("appr", "");
+		prefixMap.put("apprMig", "");
 		prefixMap.put("board", "");
 	}
     
