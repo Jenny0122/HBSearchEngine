@@ -67,8 +67,8 @@
 		query = java.net.URLDecoder.decode(query, "UTF-8"); 
 		
 	// 도메인 
-	String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
-	//String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
+	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
+	String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
 
 	   
     int totalCount = 0;
@@ -312,7 +312,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>호반그룹 그룹웨어 통합검색</title>
 <link rel="stylesheet" type="text/css" href="css/search.css" >
 <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" >
@@ -401,10 +401,15 @@ $(document).ready(function() {
 
 	});
 	
+	// 영어입력되도록 수정(2023.12.06)
 	$("#query").keypress(function(event) {
 		return event.keyCode == 13 ? doSearch() : event.keyCode + 30 ;
 	});
 	console.log(document.search);
+	
+	/*$("#query").keypress(function(event) {
+		return event.keyCode == 13 ? doSearch() : false;
+	});*/
 });
 
 // 토큰 유효 체크

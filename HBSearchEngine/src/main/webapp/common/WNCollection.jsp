@@ -6,8 +6,8 @@
 	//static String SEARCH_IP="10.20.20.126";
 	//static String MANAGER_IP="10.20.20.126";
 	//개발
-	static String SEARCH_IP="172.17.208.26";
-	static String MANAGER_IP="172.17.208.26";
+	 static String SEARCH_IP="172.17.208.26";
+	 static String MANAGER_IP="172.17.208.26";
 	
 	//반영
 	//static public String SEARCH_IP="127.0.0.1";
