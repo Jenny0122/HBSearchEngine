@@ -228,6 +228,7 @@
         wnsearch.setCollectionInfoValue(collections[i], DATE_RANGE, "1970/01/01,2030/12/31,-");
 		}
 		
+		// collectionquery(카테고리 위해 사용; 필드에 ;로 이어진 값들이 존재)
 		if(collectionQueryW.length() > 0 || collectionQueryD.length() > 0){
 			String[] collectionQueryWList = collectionQueryW.split("\\|");
 			String[] collectionQueryDList = collectionQueryD.split("\\|");
