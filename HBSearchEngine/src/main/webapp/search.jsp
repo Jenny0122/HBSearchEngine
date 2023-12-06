@@ -401,15 +401,8 @@ $(document).ready(function() {
 
 	});
 	
-	// 영어입력되도록 수정(2023.12.06)
-	$("#query").keypress(function(event) {
-		return event.keyCode == 13 ? doSearch() : event.keyCode + 30 ;
-	});
-	console.log(document.search);
-	
-	/*$("#query").keypress(function(event) {
-		return event.keyCode == 13 ? doSearch() : false;
-	});*/
+	// 디버그 용
+	// console.log(document.search);
 });
 
 // 토큰 유효 체크
@@ -472,47 +465,6 @@ function saveKeywordClose(){
 	//document.getElementById("saveKeywordBtn").setAttribute("src", "images/ico_add.png");
 }
 
-function doCollection(coll) {
-	
-	var searchForm = document.search;
-	
-	searchForm.apprType.value = "appr";
-	searchForm.collection.value = coll;
-	searchForm.reQuery.value = "2";
-	searchForm.categoryQueryW.value = "";
-	searchForm.categoryQueryD.value = "";
-	searchForm.submit();
-}
-
-//페이징
-function doPaging(count) {
-	var searchForm = document.search;
-	searchForm.startCount.value = count;
-	searchForm.reQuery.value = "2";
-	searchForm.submit();
-}
-
-//페이징
-function goPaging() {
-	var searchForm = document.search;
-	var inputPageNo = searchForm.input_gopage.value;
-	searchForm.startCount.value = (inputPageNo-1) * 10;
-	searchForm.reQuery.value = "2";
-	searchForm.submit();
-}
-
-//Replace All
-function replaceAll(str, orgStr, repStr) {
-	return str.split(orgStr).join(repStr);
-}
-
-function pressCheck() {
-	if (event.keyCode == 13)
-		return doSearch();
-	//else
-		//return false;
-	// return event.keyCode == 13 ? doSearch() : true;
-}
 </script>
 </head>
 <body>
