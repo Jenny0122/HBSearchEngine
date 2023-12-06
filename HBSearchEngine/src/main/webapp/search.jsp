@@ -402,7 +402,7 @@ $(document).ready(function() {
 	});
 	
 	$("#query").keypress(function(event) {
-		return event.keyCode == 13 ? doSearch() : false ;
+		return event.keyCode == 13 ? doSearch() : event.keyCode + 30 ;
 	});
 	console.log(document.search);
 });
