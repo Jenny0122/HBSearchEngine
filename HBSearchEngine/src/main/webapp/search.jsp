@@ -63,8 +63,9 @@
 	
 	// 차후 %검색 오류걸릴 경우 referer참고해서 예외처리하는 부분
 	String referer = request.getHeader("referer");
-	if (referer != null && referer.indexOf("search") == -1)
-		query = java.net.URLDecoder.decode(query, "UTF-8"); 
+	if (referer != null/* && referer.indexOf("search") == -1*/) {
+		query = java.net.URLDecoder.decode(query, "UTF-8");
+	}
 		
 	// 도메인 
 	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
@@ -83,7 +84,7 @@
 		prefixMap.put("appr", "<AUTHORITY:contains:" + userId + ">");
 		prefixMap.put("apprMig", "<AUTHORITY:contains:" + userId + "> ");
 		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
-    }else{
+    } else {
 		prefixMap.put("appr", "");
 		prefixMap.put("apprMig", "");
 		prefixMap.put("board", "");
@@ -97,11 +98,11 @@
  	
 	// 문서 종류 prefix 설정
  	// 1(전체), ..., 17(기타)
- 	String[] docTypeListIdx = docType.split(","); 
- 	String[] docTypeList = {"전체","pdf","xls|xlsx","doc|docx","ppt|pptx","jpg|jpeg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
+ 	final String[] docTypeListIdx = docType.split(","); 
+ 	final String[] docTypeList = {"전체","pdf","xls|xlsx","doc|docx","ppt|pptx","jpg|jpeg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
  	String etc = "<FILE_EXTENTION:contains:!pdf> <FILE_EXTENTION:contains:!xls> <FILE_EXTENTION:contains:!xlsx> <FILE_EXTENTION:contains:!doc> <FILE_EXTENTION:contains:!docx> <FILE_EXTENTION:contains:!ppt> <FILE_EXTENTION:contains:!pptx> <FILE_EXTENTION:contains:!jpg> <FILE_EXTENTION:contains:!jpeg> <FILE_EXTENTION:contains:!hwp> <FILE_EXTENTION:contains:!gif> <FILE_EXTENTION:contains:!zip> <FILE_EXTENTION:contains:!txt> <FILE_EXTENTION:contains:!msg> <FILE_EXTENTION:contains:!html> <FILE_EXTENTION:contains:!dwg> <FILE_EXTENTION:contains:!png> <FILE_EXTENTION:contains:!tif> <FILE_EXTENTION:contains:!bmp>";
 
- 	String[] docImg = {"file_all","file_pdf","file_xls","file_doc","file_ppt","file_jpg","file_hwp","file_gif","file_zip","file_txt","file_msg","file_html","file_dwg","file_png","file_tif","file_bmp","file_etc"};
+ 	//String[] docImg = {"file_all","file_pdf","file_xls","file_doc","file_ppt","file_jpg","file_hwp","file_gif","file_zip","file_txt","file_msg","file_html","file_dwg","file_png","file_tif","file_bmp","file_etc"};
  	
  	String filePrefix = "";
  	
@@ -143,23 +144,11 @@
  		prefixMap.put("board", prefixMap.get("board") + " (" + filePrefix + ")");
  	}
 
-   
+ 	
     String[] searchFields = null;
 
     String[] collections = null;
     String[] THIS_COLLECTIONS = null;
-    
-    //if (apprType.equals("mig")){
-    //	THIS_COLLECTIONS = COLLECTIONS_MIG;
-	//} else {
-	//	THIS_COLLECTIONS = COLLECTIONS;
-	//}
-    
-    //if(collection.equals("ALL")) { //통합검색인 경우
-    //	collections = THIS_COLLECTIONS;
-    //} else {                        //개별검색인 경우
-    //    collections = new String[] { collection };
-    //}
     
     THIS_COLLECTIONS = apprType.equals("mig") ? COLLECTIONS_MIG : COLLECTIONS;      
     collections = collection.equals("ALL") ? THIS_COLLECTIONS : new String[] { collection };
@@ -179,7 +168,7 @@
 
     String prefixForLog = "";
     String filterForLog = "";
-    for (int i = 0; i < collections.length; i++) { //공영빈
+    for (int i = 0; i < collections.length; i++) {
     	try{
     		
 	        //출력건수
@@ -307,6 +296,11 @@
 	Map<String, Integer> depMap = getCategoryResult("CREATOR_DEPT", collections, collection, wnsearch);
 	
 	// String[] portalCollections = {"appr","apprMig", "board", "user"};
+ 	//if("3".contentEquals("3")){
+	//	System.out.println("3"); 		
+ 	//	return;
+ 	//}
+ 	//System.out.println("111111111111111111");
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -402,7 +396,7 @@ $(document).ready(function() {
 	});
 	
 	// 디버그 용
-	// console.log(document.search);
+	console.log(document.search);
 });
 
 // 토큰 유효 체크
@@ -597,9 +591,9 @@ function saveKeywordClose(){
 								String key = o[0].toString();
 								%>
 						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
-								<%				if(categoryQueryW.length() > 0){	
-													String[] categoryQueryWs = categoryQueryW.split("\\|");
-													if(categoryQueryWs[1].equals(key)){ %>
+								<%				if(collectionQueryW.length() > 0){	
+													String[] collectionQueryWs = collectionQueryW.split("\\|");
+													if(collectionQueryWs[1].equals(key)){ %>
 									<span class="list_text_on">
 								<%					} else { %>
 									<span>
@@ -616,9 +610,9 @@ function saveKeywordClose(){
 							for( String key : writerMap.keySet() ) {
 %>
 						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
-<%												if(categoryQueryW.length() > 0){	
-													String[] categoryQueryWs = categoryQueryW.split("\\|");
-													if(categoryQueryWs[1].equals(key)){ %>
+<%												if(collectionQueryW.length() > 0){	
+													String[] collectionQueryWs = collectionQueryW.split("\\|");
+													if(collectionQueryWs[1].equals(key)){ %>
 									<span class="list_text_on">
 <%													} else { %>
 									<span>
@@ -656,9 +650,9 @@ function saveKeywordClose(){
 								String key = o[0].toString();
 								%>
 						<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
-								<%				if(categoryQueryD.length() > 0){	
-													String[] categoryQueryDs = categoryQueryD.split("\\|");
-													if(categoryQueryDs[1].equals(key)){ %>
+								<%				if(collectionQueryD.length() > 0){	
+													String[] collectionQueryDs = collectionQueryD.split("\\|");
+													if(collectionQueryDs[1].equals(key)){ %>
 									<span class="list_text_on">
 								<%					} else { %>
 									<span>
@@ -674,9 +668,9 @@ function saveKeywordClose(){
 						else {
 								for( String key : depMap.keySet() ){ %>
 							<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
-<%												if(categoryQueryD.length() > 0){	
-													String[] categoryQueryDs = categoryQueryD.split("\\|");
-													if(categoryQueryDs[1].equals(key)){ %>
+<%												if(collectionQueryD.length() > 0){	
+													String[] collectionQueryDs = collectionQueryD.split("\\|");
+													if(collectionQueryDs[1].equals(key)){ %>
 										<span class="list_text_on">
 <%													}else{ %>
 										<span>
