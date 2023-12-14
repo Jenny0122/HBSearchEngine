@@ -584,13 +584,13 @@ function saveKeywordClose(){
 							
 							if(systemCategoryValues.isEmpty())
 								systemList.add(new Object[] {THIS_COLLECTIONS[i], thisTotalCount});
-							else 
+							else
 								systemList.add(new Object[] {THIS_COLLECTIONS[i], systemCategoryValues.get(THIS_COLLECTIONS[i])});
 						}
 						
 						for(Object[] element: systemList) {
 							String systemName = wnsearch.getCollectionKorName(element[0].toString());
-							int thisTotalCount = Integer.valueOf(element[1].toString().trim());
+							int thisTotalCount = Integer.valueOf(Optional.ofNullable(element[1]).orElse("0").toString().trim());
 							systemCategoryValues.put(element[0].toString(), thisTotalCount);
 					%>
 						<a href="#" onclick="javascript:doCollection('<%=element[0] %>')"><span class=<%=collection.equals(element[0].toString()) ? "list_text_on" : "" %>><img src="images/ico_bbar.gif"><%=systemName%> (<%=thisTotalCount %>)</span></a>
@@ -608,7 +608,6 @@ function saveKeywordClose(){
 					</div>
 					<div class="search_list02">
 <%						
-                        
 						//만약 requery라면, categoryValues로 리스트 실행
 						List<Object[]> creatorList = new ArrayList<>();
 						if(creatorCategoryValues.isEmpty()) {

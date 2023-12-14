@@ -459,12 +459,14 @@ function apprTypeChange() {
 			searchForm.apprType.value = "appr";
 			coll = replaceAll(coll,"apprMig","appr");
 			searchForm.collection.value = coll;
+			searchForm.reQuery.value = "2";
 			searchForm.submit();
 		} else if ($("#apprType_mig").is(":checked")) {
 			//$("#apprType_appr").attr("checked", false);
 			searchForm.apprType.value = "mig";
 			coll = replaceAll(coll,"appr","apprMig");
 			searchForm.collection.value = coll;
+			searchForm.reQuery.value = "2";
 			searchForm.submit();
 		}
 	});  
