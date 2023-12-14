@@ -490,7 +490,9 @@ function doCategoryQueryD(categoryQueryD) {
 // 컬렉션검색
 function doCollectionQueryW(collectionQueryW) {
 	var searchForm = document.search;
+	searchForm.collection.value = "ALL";
 	searchForm.collectionQueryW.value = collectionQueryW;
+	searchForm.collectionQueryD.value = '';
 	searchForm.reQuery.value = "2";
 	searchForm.submit();
 }
@@ -498,7 +500,9 @@ function doCollectionQueryW(collectionQueryW) {
 // 컬렉션검색
 function doCollectionQueryD(collectionQueryD) {
 	var searchForm = document.search;
+	searchForm.collection.value = "ALL";
 	searchForm.collectionQueryD.value = collectionQueryD;
+	searchForm.collectionQueryW.value = '';
 	searchForm.reQuery.value = "2";
 	searchForm.submit();
 }
@@ -553,6 +557,7 @@ function doSearch() {
 	searchForm.startCount.value = 0;
 	searchForm.categoryQueryW.value = "";
 	searchForm.categoryQueryD.value = "";
+	searchForm.reQuery.value = null;
 	searchForm.collectionQueryW.value = "";
 	searchForm.collectionQueryD.value = "";
 	
@@ -638,6 +643,8 @@ function doCollection(coll) {
 	searchForm.reQuery.value = "2";
 	searchForm.categoryQueryW.value = "";
 	searchForm.categoryQueryD.value = "";
+	searchForm.collectionQueryW.value = "";
+	searchForm.collectionQueryD.value = "";
 	searchForm.submit();
 }
 

@@ -4,7 +4,6 @@
 <% request.setCharacterEncoding("UTF-8");%>
 <%@ page import ="java.net.InetAddress"%>
 <%
-    
     //실시간 검색어 화면 출력 여부 체크
     boolean isRealTimeKeyword = false;
     //오타 후 추천 검색어 화면 출력 여부 체크
@@ -21,8 +20,20 @@
         }
     };
     int COLLECTIONVIEWCOUNT = 10;    //더보기시 출력건수
+    // 좌측 메뉴(작성자/부서명) 최대 값 5개씩만 보여주기
+	final int MAX_CATEGORY_VIEW = 5;
 
 	String START_DATE = "2000-01-01";	// 기본 시작일
+	
+	Map<String, Integer> systemCategoryValues = (HashMap<String, Integer>) session.getAttribute("systemCategoryValues");
+    Map<String, Integer> creatorCategoryValues = (HashMap<String, Integer>) session.getAttribute("creatorCategoryValues");
+    Map<String, Integer> departmentCategoryValues = (HashMap<String, Integer>) session.getAttribute("departmentCategoryValues");
+    
+	if(request.getParameter("reQuery") == null || request.getParameter("reQuery").contentEquals("")) {
+		systemCategoryValues = new HashMap<String, Integer>();
+    	creatorCategoryValues = new HashMap<String, Integer>();
+    	departmentCategoryValues = new HashMap<String, Integer>();
+	}
 
 	// 결과 시작 넘버
     int startCount = 		parseInt(getCheckReqXSS(request, "startCount", "0"), 0);	//시작 번호
@@ -42,7 +53,6 @@
 	String categoryQueryD = getCheckReqXSS(request, "categoryQueryD", "");		//카테고리쿼리
 	String collectionQueryW = getCheckReqXSS(request, "collectionQueryW", "");		//컬렉션쿼리
 	String collectionQueryD = getCheckReqXSS(request, "collectionQueryD", "");		//컬렉션쿼리
-
 	
 	String prefix 		= getCheckReqXSS2(request, "prefix", "");					//prefix 쿼리
 	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
@@ -60,7 +70,18 @@
     
     String tokenCheck = 	getCheckReqXSS(request, "tokenCheck", "1");
     String jsonError = "";
-	
+    
+    
+    
+    //boolean isMapNull = systemCategoryValues == null && creatorCategoryValues == null && departmentCategoryValues == null;
+    //boolean isBlankCollectionsQueryWD = "".contentEquals(collectionQueryW) && "".contentEquals(collectionQueryD);
+    //if(isMapNull || isBlankCollectionsQueryWD) {
+    //	systemCategoryValues = new HashMap<String, Integer>();
+    //	creatorCategoryValues = new HashMap<String, Integer>();
+    //	departmentCategoryValues = new HashMap<String, Integer>();
+    //}
+    
+    
 	// 차후 %검색 오류걸릴 경우 referer참고해서 예외처리하는 부분
 	String referer = request.getHeader("referer");
 	if (referer != null/* && referer.indexOf("search") == -1*/) {
@@ -296,11 +317,6 @@
 	Map<String, Integer> depMap = getCategoryResult("CREATOR_DEPT", collections, collection, wnsearch);
 	
 	// String[] portalCollections = {"appr","apprMig", "board", "user"};
- 	//if("3".contentEquals("3")){
-	//	System.out.println("3"); 		
- 	//	return;
- 	//}
- 	//System.out.println("111111111111111111");
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -560,13 +576,27 @@ function saveKeywordClose(){
                       </div>
 					<div class="search_list02">
 					<%
+						List<Object[]> systemList = new ArrayList<>();
 						for(int i = 0; i < THIS_COLLECTIONS.length; i++) {
-							String systemName = wnsearch.getCollectionKorName(THIS_COLLECTIONS[i]);
+							//String systemName = wnsearch.getCollectionKorName(THIS_COLLECTIONS[i]);
 							int thisTotalCount = wnsearch.getResultTotalCount(THIS_COLLECTIONS[i]);
-							if(thisTotalCount < 0) thisTotalCount = 0; 
+							if(thisTotalCount < 0) thisTotalCount = 0;
+							
+							if(systemCategoryValues.isEmpty())
+								systemList.add(new Object[] {THIS_COLLECTIONS[i], thisTotalCount});
+							else 
+								systemList.add(new Object[] {THIS_COLLECTIONS[i], systemCategoryValues.get(THIS_COLLECTIONS[i])});
+						}
+						
+						for(Object[] element: systemList) {
+							String systemName = wnsearch.getCollectionKorName(element[0].toString());
+							int thisTotalCount = Integer.valueOf(element[1].toString().trim());
+							systemCategoryValues.put(element[0].toString(), thisTotalCount);
 					%>
-						<a href="#" onclick="javascript:doCollection('<%=THIS_COLLECTIONS[i] %>')"><span><img src="images/ico_bbar.gif"> <%=systemName%> (<%=thisTotalCount %>)</span></a>
-					<%	} %>
+						<a href="#" onclick="javascript:doCollection('<%=element[0] %>')"><span class=<%=collection.equals(element[0].toString()) ? "list_text_on" : "" %>><img src="images/ico_bbar.gif"><%=systemName%> (<%=thisTotalCount %>)</span></a>
+					<%	}
+						session.setAttribute("systemCategoryValues", systemCategoryValues);
+					%>
 					</div>
 					
 					<!-- 작성자명 -->					
@@ -578,38 +608,45 @@ function saveKeywordClose(){
 					</div>
 					<div class="search_list02">
 <%						
-                         // 좌측 메뉴(작성자명) 최대 값 5개씩만 보여주기
-						final int MAX_CATEGORY_VIEW = 5;
-
-						if(writerMap.size() > MAX_CATEGORY_VIEW) {
-							PriorityQueue<Object[]> list = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
-							for( String key : writerMap.keySet() )
-								list.add(new Object[] {key, writerMap.get(key)});
-							
-							for(int i = 0 ; i < MAX_CATEGORY_VIEW; i++){
-								Object[] o = list.poll();
-								String key = o[0].toString();
-								%>
-						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
-								<%				if(collectionQueryW.length() > 0){	
-													String[] collectionQueryWs = collectionQueryW.split("\\|");
-													if(collectionQueryWs[1].equals(key)){ %>
-									<span class="list_text_on">
-								<%					} else { %>
-									<span>
-								<%					}
-												} else { %>
-									<span>
-								<%				}%>
-									<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(writerMap.get(key))%>)</span>
-						</a>
-								<%
+                        
+						//만약 requery라면, categoryValues로 리스트 실행
+						List<Object[]> creatorList = new ArrayList<>();
+						if(creatorCategoryValues.isEmpty()) {
+							for(String key : writerMap.keySet()) {
+								String keyKor = key.split(";")[0];
+								int count = Optional.ofNullable(writerMap.get(keyKor)).orElse(0);
+								if(creatorList.isEmpty()) {
+									creatorList.add(new Object[] {keyKor, count});
+								} else {
+									boolean isMatched = false;
+									
+									for(int i = 0 ; i < creatorList.size(); i++){
+										Object[] element = creatorList.get(i);
+										
+										if(keyKor.contentEquals(element[0].toString())) {
+											creatorList.set(i, new Object[] {keyKor, Integer.valueOf(element[1].toString().trim()) + count});
+											isMatched = true;
+											break;
+										}
+									}
+									
+									if(!isMatched) 
+										creatorList.add(new Object[] {keyKor, count});
+								}
 							}
+						} else {
+							for(String key : creatorCategoryValues.keySet())
+								creatorList.add(new Object[] {key, creatorCategoryValues.get(key)});
 						}
-						else {
-							for( String key : writerMap.keySet() ) {
+						creatorList.sort((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
+						
+						for(int i = 0 ; i < MAX_CATEGORY_VIEW && !creatorList.isEmpty(); i++) {
+							Object[] element = creatorList.get(i);
+							String key = element[0].toString();
+							String keyKor = key.toString().split(";")[0];
+							int countValue = Integer.valueOf(element[1].toString().trim());
 %>
-						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=key.toString().split(";")[0]%>');">
+						<a href="#" onClick="javascript:doCollectionQueryW('CREATOR_NAME|<%=keyKor%>');">
 <%												if(collectionQueryW.length() > 0){	
 													String[] collectionQueryWs = collectionQueryW.split("\\|");
 													if(collectionQueryWs[1].equals(key)){ %>
@@ -620,10 +657,13 @@ function saveKeywordClose(){
 												}else{ %>
 									<span>
 <%												}%>
-								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(writerMap.get(key))%>)</span>
+								<img src="images/ico_bbar.gif" /><%=keyKor%> (<%=numberFormat(countValue)%>)</span>
 						</a>
-<%							}
+							
+<%
+							creatorCategoryValues.put(keyKor, countValue);
 						}
+						session.setAttribute("creatorCategoryValues", creatorCategoryValues);
 						%>												
 					</div>
 <%					} %>
@@ -637,36 +677,42 @@ function saveKeywordClose(){
 					</div>
 						<div class="search_list02">
 						
-<%						// 좌측 메뉴(부서명) 최대 값 5개씩만 보여주기		
-						final int MAX_CATEGORY_VIEW = 5;
-
-						if(depMap.size() > MAX_CATEGORY_VIEW) {
-							PriorityQueue<Object[]> list = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
-							for( String key : depMap.keySet() )
-								list.add(new Object[] {key, depMap.get(key)});
-							
-							for(int i = 0 ; i < MAX_CATEGORY_VIEW; i++){
-								Object[] o = list.poll();
-								String key = o[0].toString();
-								%>
-						<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
-								<%				if(collectionQueryD.length() > 0){	
-													String[] collectionQueryDs = collectionQueryD.split("\\|");
-													if(collectionQueryDs[1].equals(key)){ %>
-									<span class="list_text_on">
-								<%					} else { %>
-									<span>
-								<%					}
-												} else { %>
-									<span>
-								<%				}%>
-									<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(depMap.get(key))%>)</span>
-						</a>
-								<%
+<%						
+						List<Object[]> depList = new ArrayList<>();
+						if(departmentCategoryValues.isEmpty()) {
+							for(String key : depMap.keySet()) {
+								String keyKor = key.split(";")[0];
+								int count = Optional.ofNullable(depMap.get(keyKor)).orElse(0);
+								if(depList.isEmpty()) {
+									depList.add(new Object[] {keyKor, count});
+								} else {
+									boolean isMatched = false;
+									
+									for(int i = 0 ; i < depList.size(); i++){
+										Object[] element = depList.get(i);
+										
+										if(keyKor.contentEquals(element[0].toString())) {
+											depList.set(i, new Object[] {keyKor, Integer.valueOf(element[1].toString().trim()) + count});
+											isMatched = true;
+											break;
+										}
+									}
+									
+									if(!isMatched) 
+										depList.add(new Object[] {keyKor, count});
+								}
 							}
+						} else {
+							for(String key : departmentCategoryValues.keySet())
+								depList.add(new Object[] {key, departmentCategoryValues.get(key)});
 						}
-						else {
-								for( String key : depMap.keySet() ){ %>
+						depList.sort((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
+						
+						for(int i = 0 ; i < MAX_CATEGORY_VIEW && !depList.isEmpty(); i++) {
+							Object[] element = depList.get(i);
+							String key = element[0].toString();
+							int countValue = Integer.valueOf(element[1].toString().trim()); 
+%>
 							<a href="#" onClick="javascript:doCollectionQueryD('CREATOR_DEPT|<%=key.toString().split(";")[0]%>');">
 <%												if(collectionQueryD.length() > 0){	
 													String[] collectionQueryDs = collectionQueryD.split("\\|");
@@ -678,10 +724,13 @@ function saveKeywordClose(){
 												} else { %>
 									<span>
 <%												}%>
-								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(depMap.get(key))%>)</span>
+								<img src="images/ico_bbar.gif" /><%=key.toString().split(";")[0]%> (<%=numberFormat(countValue)%>)</span>
 							</a>
-<%										}
-						}%>	
+<%							
+							departmentCategoryValues.put(key, countValue);
+						}
+						session.setAttribute("departmentCategoryValues", departmentCategoryValues);
+						%>	
 						</div>
 <%					} %>
 				</div>
