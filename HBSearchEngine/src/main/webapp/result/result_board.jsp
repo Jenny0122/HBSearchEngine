@@ -80,6 +80,7 @@
 				SUMMERYBODYCONTENTS 		= 	wnsearch.getKeywordHl(SUMMERYBODYCONTENTS,"<strong class='hl'>","</strong>");
 				FILE_NAME 					= 	wnsearch.getKeywordHl(FILE_NAME,"<strong class='hl'>","</strong>");
 				CREATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
+				CREATOR_DEPT   				=	wnsearch.getKeywordHl(CREATOR_DEPT,"<strong class='hl'>","</strong>");
 				
 				MSG_OPEN_URL				= 	doMain + MSG_OPEN_URL;
 				MSG_OPEN_URL				=	"javascript:openLink('" + MSG_OPEN_URL + "',1080,600);";

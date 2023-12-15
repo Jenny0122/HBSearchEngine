@@ -612,6 +612,7 @@ function saveKeywordClose(){
 						List<Object[]> creatorList = new ArrayList<>();
 						if(creatorCategoryValues.isEmpty()) {
 							for(String key : writerMap.keySet()) {
+								if(key.split(";").length == 0) continue;
 								String keyKor = key.split(";")[0];
 								int count = Optional.ofNullable(writerMap.get(keyKor)).orElse(0);
 								if(creatorList.isEmpty()) {
@@ -639,7 +640,7 @@ function saveKeywordClose(){
 						}
 						creatorList.sort((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
 						
-						for(int i = 0 ; i < MAX_CATEGORY_VIEW && !creatorList.isEmpty(); i++) {
+						for(int i = 0 ; i < creatorList.size() && i < MAX_CATEGORY_VIEW && !creatorList.isEmpty(); i++) {
 							Object[] element = creatorList.get(i);
 							String key = element[0].toString();
 							String keyKor = key.toString().split(";")[0];
@@ -680,6 +681,7 @@ function saveKeywordClose(){
 						List<Object[]> depList = new ArrayList<>();
 						if(departmentCategoryValues.isEmpty()) {
 							for(String key : depMap.keySet()) {
+								if(key.split(";").length == 0) continue;
 								String keyKor = key.split(";")[0];
 								int count = Optional.ofNullable(depMap.get(keyKor)).orElse(0);
 								if(depList.isEmpty()) {
@@ -707,7 +709,7 @@ function saveKeywordClose(){
 						}
 						depList.sort((o1, o2) -> -1 * Integer.compare(Integer.valueOf(o1[1].toString()), Integer.valueOf(o2[1].toString())));
 						
-						for(int i = 0 ; i < MAX_CATEGORY_VIEW && !depList.isEmpty(); i++) {
+						for(int i = 0 ; i < depList.size() && i < MAX_CATEGORY_VIEW && !depList.isEmpty(); i++) {
 							Object[] element = depList.get(i);
 							String key = element[0].toString();
 							int countValue = Integer.valueOf(element[1].toString().trim()); 

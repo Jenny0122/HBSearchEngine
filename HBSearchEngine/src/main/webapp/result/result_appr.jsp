@@ -88,6 +88,7 @@
 				BODYCONTENTS 				= 	wnsearch.getKeywordHl(BODYCONTENTS,"<strong class='hl'>","</strong>");
 				FILE_NAME 					= 	wnsearch.getKeywordHl(FILE_NAME,"<strong class='hl'>","</strong>");
 				CREATOR_NAME				= 	wnsearch.getKeywordHl(CREATOR_NAME,"<strong class='hl'>","</strong>");
+				CREATOR_DEPT  				= 	wnsearch.getKeywordHl(CREATOR_DEPT,"<strong class='hl'>","</strong>");
 				
 				DOC_URL						= 	doMain + DOC_URL;
 				if (apprType.equals("mig")) {DOC_URL = DOC_URL + "&forminstanceID=" + PROCESS_ID + "&formPrefix=WF_MIGRATION";}
