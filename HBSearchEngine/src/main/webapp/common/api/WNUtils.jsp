@@ -193,7 +193,6 @@
      */
     public static String numberFormat(int num) {
 		return NumberFormat.getNumberInstance().format(num);
-
     }
 
     /**

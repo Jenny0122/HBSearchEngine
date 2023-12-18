@@ -265,6 +265,7 @@
     	filterForLog = "[filter] " + filter;
     }
 
+    if(!query.contentEquals(""))
     wnsearch.search(realQuery, isRealTimeKeyword, CONNECTION_CLOSE, useSuggestedQuery, new String[] {prefixForLog, filterForLog, ""}, apprType);
 
      // 디버그 메시지 출력
@@ -289,6 +290,7 @@
       //개별건수 구하기
         totalCount = wnsearch.getResultTotalCount(collection);
     }
+    if(totalCount < 0) totalCount = 0;
 
     String thisCollection = "";
     if(useSuggestedQuery) {
@@ -668,7 +670,7 @@ function saveKeywordClose(){
                         </div>
                       </div>
                       
-					<% if (totalCount >= 0) { %>
+					<% if (totalCount > 0) { %>
 						<%@ include file="./result/result_appr.jsp" %>
 						<%@ include file="./result/result_board.jsp" %>					
 						<%@ include file="./result/result_user.jsp" %>
