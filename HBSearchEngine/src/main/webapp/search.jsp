@@ -58,12 +58,12 @@
 	String filter 		= getCheckReqXSS2(request, "filter", "");					//filter 쿼리
 	String apprType 	= getCheckReqXSS(request, "apprType", "appr");			//전자결재 문서구분
 	
-	String UR_Code 		= getCheckReqXSS(request, "UR_Code", "");					//유저코드
+	String UR_CODE 		= getCheckReqXSS(request, "UR_CODE", "");					//유저코드
 	String DN_ID 		= getCheckReqXSS(request, "DN_ID", "");						//도메인아이디
-	String DN_Code 		= getCheckReqXSS(request, "DN_Code", "");					//도메인코드
-	String GR_Code 		= getCheckReqXSS(request, "GR_Code", "");					//그룹코드
-	String DEPTID 		= getCheckReqXSS(request, "DEPTID", "");					//부서코드
-	String docType 		= getCheckReqXSS(request, "docType", "1");
+	String DN_CODE 		= getCheckReqXSS(request, "DN_CODE", "");					//도메인코드
+	String GR_CODE 		= getCheckReqXSS(request, "GR_CODE", "");					//그룹코드
+	String DEPT_ID 		= getCheckReqXSS(request, "DEPT_ID", "");					//부서코드
+	String doctype 		= getCheckReqXSS(request, "doctype", "1");
  
     String token = 			getCheckReqXSS(request, "token", "");                       //유저코드 암호화 파라미터
     String tokenExcept = 	getCheckReqXSS(request, "tokenExcept", "");;
@@ -95,19 +95,19 @@
 	// 도메인 
 	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
 	String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
-
 	   
     int totalCount = 0;
 	
-    String userId = UR_Code;
-   // String userId = (String)session.getAttribute("UR_Code");
+    String userId = UR_CODE;
+    String DEPTID = DEPT_ID;
+   // String userId = (String)session.getAttribute("UR_CODE");
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
     Map<String, String> prefixMap = new HashMap<String,String>();	
     
 	// 권한처리
-    if (userId.length() > 0) {
-		prefixMap.put("appr", "<AUTHORITY:contains:" + userId + ">");
-		prefixMap.put("apprMig", "<AUTHORITY:contains:" + userId + "> ");
+    if (userId.length() > 0 || DN_CODE.length() >0 ) {
+		prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+		prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
 		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
     } else {
 		prefixMap.put("appr", "");
@@ -123,34 +123,33 @@
  	
 	// 문서 종류 prefix 설정
  	// 1(전체), ..., 17(기타)
- 	final String[] docTypeListIdx = docType.split(","); 
- 	final String[] docTypeList = {"전체","pdf","xls|xlsx","doc|docx","ppt|pptx","jpg|jpeg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
+ 	final String[] doctypeListIdx = doctype.split(","); 
+ 	final String[] doctypeList = {"전체","pdf","xls|xlsx","doc|docx","ppt|pptx","jpg|jpeg","hwp","gif","zip","txt","msg","html","dwg","png","tif","bmp","기타"};
  	String etc = "<FILE_EXTENTION:contains:!pdf> <FILE_EXTENTION:contains:!xls> <FILE_EXTENTION:contains:!xlsx> <FILE_EXTENTION:contains:!doc> <FILE_EXTENTION:contains:!docx> <FILE_EXTENTION:contains:!ppt> <FILE_EXTENTION:contains:!pptx> <FILE_EXTENTION:contains:!jpg> <FILE_EXTENTION:contains:!jpeg> <FILE_EXTENTION:contains:!hwp> <FILE_EXTENTION:contains:!gif> <FILE_EXTENTION:contains:!zip> <FILE_EXTENTION:contains:!txt> <FILE_EXTENTION:contains:!msg> <FILE_EXTENTION:contains:!html> <FILE_EXTENTION:contains:!dwg> <FILE_EXTENTION:contains:!png> <FILE_EXTENTION:contains:!tif> <FILE_EXTENTION:contains:!bmp>";
 
  	//String[] docImg = {"file_all","file_pdf","file_xls","file_doc","file_ppt","file_jpg","file_hwp","file_gif","file_zip","file_txt","file_msg","file_html","file_dwg","file_png","file_tif","file_bmp","file_etc"};
  	
  	String filePrefix = "";
  	
- 	if (!docType.equals("") && !docType.equals("1")) {
- 		for (int i=0; i < docTypeListIdx.length; i++) {
- 			if (docTypeListIdx[i].equals("17")){
+ 	if (!doctype.equals("") && !doctype.equals("1")) {
+ 		for (int i=0; i < doctypeListIdx.length; i++) {
+ 			if (doctypeListIdx[i].equals("17")){
  				break;
  			}
  			
  			if (i != 0) {
  				filePrefix += "|";
  			}
- 			
- 			filePrefix += "<FILE_EXTENTION:contains:" + docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1] +">";
+ 			filePrefix += "<FILE_EXTENTION:contains:" + doctypeList[Integer.parseInt(doctypeListIdx[i]) - 1] +">";
  		}
- 		if (docType.contains("17")){ // 기타 문서 처리
+ 		if (doctype.contains("17")){ // 기타 문서 처리
  			String etc_tmp = etc;
  			
- 			for (int i=0; i < docTypeListIdx.length - 1; i++) {
- 				String[] docTypeTemp = docTypeList[Integer.parseInt(docTypeListIdx[i]) - 1].split("\\|");
+ 			for (int i=0; i < doctypeListIdx.length - 1; i++) {
+ 				String[] doctypeTemp = doctypeList[Integer.parseInt(doctypeListIdx[i]) - 1].split("\\|");
  				
- 				for (int j = 0; j < docTypeTemp.length; j++) {
- 					etc_tmp = etc_tmp.replaceAll("<FILE_EXTENTION:contains:!" + docTypeTemp[j] +">", "");
+ 				for (int j = 0; j < doctypeTemp.length; j++) {
+ 					etc_tmp = etc_tmp.replaceAll("<FILE_EXTENTION:contains:!" + doctypeTemp[j] +">", "");
  				}
  			}
  			
@@ -159,7 +158,7 @@
  				filter += "<FILE_EXTENTION:gte: >";
  			}
  		} 
- 	} else if (docType.equals("1")) {
+ 	} else if (doctype.equals("1")) {
  		filter = filter.replaceAll("<FILE_EXTENTION:gte: >", "");
  	}
  	
@@ -326,7 +325,7 @@
 	// String[] portalCollections = {"appr","apprMig", "board", "user"};
 
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -370,9 +369,9 @@ $(document).ready(function() {
 	apprTypeChange();
 
 	// 체크한 문서
-	var docTypeArr = $("#docType").val().split(",");
-	for(var i = 0; i < docTypeArr.length; i++){
-		$("#check" + docTypeArr[i]).attr("checked", true);
+	var doctypeArr = $("#doctype").val().split(",");
+	for(var i = 0; i < doctypeArr.length; i++){
+		$("#check" + doctypeArr[i]).attr("checked", true);
 	}
 	
 	$("#startDate").datepicker({
@@ -504,15 +503,15 @@ function saveKeywordClose(){
 		<input type="hidden" name="reQuery" />
 		<input type="hidden" name="realQuery" value="<%=realQuery%>" />
 		
-		<input type="hidden" name="UR_Code" value="<%=userId%>" />
-		<input type="hidden" name="DN_Code" value="<%=DN_Code%>" />
-		<input type="hidden" name="DEPTID" value="<%=DEPTID%>" />
+		<input type="hidden" name="UR_CODE" value="<%=userId%>" />
+		<input type="hidden" name="DN_CODE" value="<%=DN_CODE%>" />
+		<input type="hidden" name="DEPT_ID" value="<%=DEPTID%>" />
 		
 		<input type="hidden" name="apprType" value="<%=apprType%>" />
 		
 		<input type="hidden" name="startDate" value="<%=startDate%>"/>
 		<input type="hidden" name="endDate" value="<%=endDate%>"/>
-		<input type="hidden" id="docType" name="docType" value="<%=docType%>"/>
+		<input type="hidden" id="doctype" name="doctype" value="<%=doctype%>"/>
       <div class="fix_wrap">
         <div class="fix_conts">
           <!-- Header 시작 -->
