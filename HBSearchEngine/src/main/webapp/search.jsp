@@ -86,15 +86,15 @@
 	String referer = request.getHeader("referer");
 	if (referer != null/* && referer.indexOf("search") == -1*/)
 		query = java.net.URLDecoder.decode(query, "UTF-8");
-	else
-		return;
+	//else
+	//	return;
 
 	
 	
 	
 	// 도메인 
-	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
-	String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
+	String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
+	// String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
 	   
     int totalCount = 0;
 	
