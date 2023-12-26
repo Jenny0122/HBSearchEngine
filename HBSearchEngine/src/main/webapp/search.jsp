@@ -84,10 +84,14 @@
     
 	// 차후 %검색 오류걸릴 경우 referer참고해서 예외처리하는 부분
 	String referer = request.getHeader("referer");
-	if (referer != null/* && referer.indexOf("search") == -1*/) {
+	if (referer != null/* && referer.indexOf("search") == -1*/)
 		query = java.net.URLDecoder.decode(query, "UTF-8");
-	}
-		
+	else
+		return;
+
+	
+	
+	
 	// 도메인 
 	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
 	String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
@@ -266,7 +270,8 @@
     }
 
     if(!query.contentEquals(""))
-    wnsearch.search(realQuery, isRealTimeKeyword, CONNECTION_CLOSE, useSuggestedQuery, new String[] {prefixForLog, filterForLog, ""}, apprType);
+    	wnsearch.search(realQuery, isRealTimeKeyword, CONNECTION_CLOSE, useSuggestedQuery, new String[] {prefixForLog, filterForLog, ""}, apprType);
+    
 
      // 디버그 메시지 출력
     String debugMsg = wnsearch.printDebug() != null ? wnsearch.printDebug().trim() : "";
