@@ -391,10 +391,6 @@ function setDate(range) {
 		startDate = getAddDay(currentDate, -6);
 	} else if (range == "M") {
 		startDate = getAddDay(currentDate, -29);
-	} else if (range == "6M") {
-		startDate = getAddDay(currentDate, -181);
-	} else if (range == "12M") {
-		startDate = getAddDay(currentDate, -364);
 	} else {
 		startDate = "2000-01-01";
 		endDate = toDate;
@@ -417,9 +413,13 @@ function setDate(range) {
 		endDate = toDate;
 	}
 
-	$("#range").val(range);
-	$("#startDate").val(startDate);
-	$("#endDate").val(endDate);
+	//$("#range").val(range);
+	//$("#startDate").val(startDate);
+	//$("#endDate").val(endDate);
+	
+	$("input[name=range]").val(range);
+	$("input[name=startDate]").val(startDate);
+	$("input[name=endDate]").val(endDate);
 	
 	//changeDatepickerValue('disable')
 }
@@ -427,6 +427,7 @@ function setDate(range) {
 function changeDatepickerValue(value) {
 	$("#startDate").datepicker(value)
 	$("#endDate").datepicker(value)
+	$("input[name=range]").val('undefined');
 }
 
 function datePick() {
@@ -552,6 +553,9 @@ function doSearch() {
 		searchForm.query.focus();
 		return;
 	}
+	
+	if(searchForm.range.value == 'undefined')
+		doRange();
 	
 	searchForm.collection.value = "ALL";
 	//searchForm.startDate.value = "";
@@ -716,11 +720,14 @@ function doRange() {
 		}
 	}
 
-	searchForm.startDate.value = $("#startDate").val();
-	searchForm.endDate.value = $("#endDate").val();
+	//searchForm.startDate.value = $("#startDate").val();
+	//searchForm.endDate.value = $("#endDate").val();
+	
+	$("input[name=startDate]").val($("#startDate").val());
+	$("input[name=endDate]").val($("#endDate").val());
 	searchForm.range.value = $("#range").val();
 	searchForm.reQuery.value = "2";
-	searchForm.submit();
+	// searchForm.submit();
 }
 
 // 영역
