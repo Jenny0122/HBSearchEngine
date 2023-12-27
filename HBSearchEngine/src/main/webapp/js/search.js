@@ -361,6 +361,10 @@ calutil.compareDate = function(inputName, val, isKeyIn) {
 
 // 기간 설정
 function setDate(range) {
+	
+	//var searchForm = document.search;
+
+
 	var startDate = "";
 	var endDate = "";
 
@@ -390,17 +394,13 @@ function setDate(range) {
 	} else if (range == "W") {
 		startDate = getAddDay(currentDate, -6);
 	} else if (range == "M") {
-		startDate = getAddDay(currentDate, -29);
-	} else if (range == "6M") {
-		startDate = getAddDay(currentDate, -181);
-	} else if (range == "12M") {
-		startDate = getAddDay(currentDate, -364);
+		startDate = getAddDay(currentDate, -31);
 	} else {
 		startDate = "2000-01-01";
 		endDate = toDate;
 	}
 
-	if (range != "A" && startDate != "") {
+	if (range != "A" && startDate != "" ) {
 		year = startDate.getFullYear();
 		month = startDate.getMonth() + 1;
 		day = startDate.getDate();
@@ -417,16 +417,23 @@ function setDate(range) {
 		endDate = toDate;
 	}
 
-	$("#range").val(range);
-	$("#startDate").val(startDate);
-	$("#endDate").val(endDate);
+	//$("#range").val(range);
+	//searchForm.range.value = range;
+	//searchForm.startDate[0].value = startDate;
+	//searchForm.endDate[0].value = endDate;
+	//$("#startDate").val(startDate);
+	//$("#endDate").val(endDate);
 	
+	$("input[name=range]").val(range);
+	$("input[name=startDate]").val(startDate);
+	$("input[name=endDate]").val(endDate);
+		
 	//changeDatepickerValue('disable')
 }
 
 function changeDatepickerValue(value) {
-	$("#startDate").datepicker(value)
-	$("#endDate").datepicker(value)
+	$("input[name=startDate]").datepicker(value)
+	$("input[name=endDate]").datepicker(value)
 }
 
 function datePick() {

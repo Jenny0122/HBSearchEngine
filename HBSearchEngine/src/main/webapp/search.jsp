@@ -634,15 +634,15 @@ function saveKeywordClose(){
                               <span>검색기간</span>
                             </div>
                             <div class="search_date_select">
-                              <span class="date_radio"><input type="radio" <%=range.equals("A") ? "checked" : ""%> onClick="javascript:setDate('A');" name="date_radio01" />전체 </span>
-                              <span class="date_radio"><input type="radio" <%=range.equals("D") ? "checked" : ""%> onClick="javascript:setDate('D');" name="date_radio01" />1일 </span>
-							  <span class="date_radio"><input type="radio" <%=range.equals("W") ? "checked" : ""%> onClick="javascript:setDate('W');" name="date_radio01" />1주 </span>
-							  <span class="date_radio"><input type="radio" <%=range.equals("M") ? "checked" : ""%> onClick="javascript:setDate('M');" name="date_radio01" />1개월 </span>
+                              <span class="date_radio"><input type="radio" value="A" <%=range.equals("A") ? "checked" : ""%> onclick="javascript:setDate(this.value);" name="date_radio01" />전체 </span>
+                              <span class="date_radio"><input type="radio" value="D" <%=range.equals("D") ? "checked" : ""%> onclick="javascript:setDate(this.value);" name="date_radio01" />1일 </span>
+							  <span class="date_radio"><input type="radio" value="W" <%=range.equals("W") ? "checked" : ""%> onclick="javascript:setDate(this.value);" name="date_radio01" />1주 </span>
+							  <span class="date_radio"><input type="radio" value="M" <%=range.equals("M") ? "checked" : ""%> onclick="javascript:setDate(this.value);" name="date_radio01" />1개월 </span>
 				              <span class="date_radio">
-								<input type="radio" <%=range.equals("undefined") ? "checked" : ""%> onClick="javascript:changeDatepickerValue('enable');" name="date_radio01" /> 사용자정의 
+								<input type="radio" <%=range.equals("undefined") ? "checked" : ""%> onclick="javascript:changeDatepickerValue('enable');" name="date_radio01" /> 사용자정의 
 									<span class="calendar_box">
 										<input type="text" name="startDate" id="startDate" value="<%=startDate%>" readonly="true" class="search_date_input"/>
-									</span> ~ 
+									</span>
 									<span class="calendar_box">
 										<input type="text" name="endDate" id="endDate" value="<%=endDate%>" readonly="true" class="search_date_input" />
 									</span>
