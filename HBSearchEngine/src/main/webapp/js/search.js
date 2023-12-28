@@ -361,10 +361,6 @@ calutil.compareDate = function(inputName, val, isKeyIn) {
 
 // 기간 설정
 function setDate(range) {
-	
-	//var searchForm = document.search;
-
-
 	var startDate = "";
 	var endDate = "";
 
@@ -394,13 +390,13 @@ function setDate(range) {
 	} else if (range == "W") {
 		startDate = getAddDay(currentDate, -6);
 	} else if (range == "M") {
-		startDate = getAddDay(currentDate, -31);
+		startDate = getAddDay(currentDate, -29);
 	} else {
 		startDate = "2000-01-01";
 		endDate = toDate;
 	}
 
-	if (range != "A" && startDate != "" ) {
+	if (range != "A" && startDate != "") {
 		year = startDate.getFullYear();
 		month = startDate.getMonth() + 1;
 		day = startDate.getDate();
@@ -418,22 +414,20 @@ function setDate(range) {
 	}
 
 	//$("#range").val(range);
-	//searchForm.range.value = range;
-	//searchForm.startDate[0].value = startDate;
-	//searchForm.endDate[0].value = endDate;
 	//$("#startDate").val(startDate);
 	//$("#endDate").val(endDate);
 	
 	$("input[name=range]").val(range);
 	$("input[name=startDate]").val(startDate);
 	$("input[name=endDate]").val(endDate);
-		
-	//changeDatepickerValue('disable')
+	
+	changeDatepickerValue('disable')
 }
 
 function changeDatepickerValue(value) {
-	$("input[name=startDate]").datepicker(value)
-	$("input[name=endDate]").datepicker(value)
+	$("#startDate").datepicker(value)
+	$("#endDate").datepicker(value)
+	$("input[name=range]").val('undefined');
 }
 
 function datePick() {
@@ -559,6 +553,9 @@ function doSearch() {
 		searchForm.query.focus();
 		return;
 	}
+	
+	if(searchForm.range.value == 'undefined')
+		doRange();
 	
 	searchForm.collection.value = "ALL";
 	//searchForm.startDate.value = "";
@@ -723,11 +720,14 @@ function doRange() {
 		}
 	}
 
-	searchForm.startDate.value = $("#startDate").val();
-	searchForm.endDate.value = $("#endDate").val();
+	//searchForm.startDate.value = $("#startDate").val();
+	//searchForm.endDate.value = $("#endDate").val();
+	
+	$("input[name=startDate]").val($("#startDate").val());
+	$("input[name=endDate]").val($("#endDate").val());
 	searchForm.range.value = $("#range").val();
 	searchForm.reQuery.value = "2";
-	searchForm.submit();
+	// searchForm.submit();
 }
 
 // 영역

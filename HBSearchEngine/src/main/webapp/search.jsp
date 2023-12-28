@@ -86,8 +86,8 @@
 	String referer = request.getHeader("referer");
 	if (referer != null/* && referer.indexOf("search") == -1*/)
 		query = java.net.URLDecoder.decode(query, "UTF-8");
-	//else
-	//	return;
+	else
+		return;
 
 	
 	

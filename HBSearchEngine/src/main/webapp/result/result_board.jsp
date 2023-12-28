@@ -59,7 +59,7 @@
 				String COMPANY_NAME			=	wnsearch.getField(thisCollection,"COMPANY_NAME",		idx,false);
 				String COMPANY_CODE			=	wnsearch.getField(thisCollection,"COMPANY_CODE",		idx,false);
 				String FILE_ID				=	wnsearch.getField(thisCollection,"FILE_ID",				idx,false);
-				String SAVE_TYPE			=	wnsearch.getField(thisCollection,"SAVE_TYPE",				idx,false);
+				String SAVE_TYPE			=	wnsearch.getField(thisCollection,"SAVE_TYPE",			idx,false);
 				String FILE_NAME			=	wnsearch.getField(thisCollection,"FILE_NAME",			idx,false);
 				String FILE_WEB_PATH		=	wnsearch.getField(thisCollection,"FILE_WEB_PATH",		idx,false);
 				String FILE_PHYSICAL_PATH	=	wnsearch.getField(thisCollection,"FILE_PHYSICAL_PATH",	idx,false);
@@ -69,6 +69,7 @@
 				Double RANK					=	Double.parseDouble(wnsearch.getField(thisCollection,"RANK",idx,false));				
 							
 				SUBJECT 					= 	wnsearch.getKeywordHl(SUBJECT,"<strong class='hl'>","</strong>");
+				//HTML 태그 처리
 				SUBJECT 					=	SUBJECT	.replaceAll("&nbsp;", " ")
 														.replaceAll("&amp;", "&")
 														.replaceAll("&lt;", "<")
