@@ -86,27 +86,54 @@
 	String referer = request.getHeader("referer");
 	if (referer != null/* && referer.indexOf("search") == -1*/)
 		query = java.net.URLDecoder.decode(query, "UTF-8");
-	else
-		return;
+	//else
+		//return;
 
 	
 	
 	
 	// 도메인 
-	String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
+	// String doMain = "https://dev.e-hoban.co.kr"; //호반그룹 통합 그룹웨어(개발) domain
 	// String doMain = "https://hep.ihoban.co.kr"; //호반그룹 통합 그룹웨어(운영) domain
-	   
-    int totalCount = 0;
+	String doMain = "";
 	
+    int totalCount = 0;
+    
+	String DNCODE = DN_CODE;
     String userId = UR_CODE;
     String DEPTID = DEPT_ID;
    // String userId = (String)session.getAttribute("UR_CODE");
+   
     String [] deptidArray = null; //참고-deptid가 여러개로 넘어올 때 담을 배열
     Map<String, String> prefixMap = new HashMap<String,String>();	
     
+    //DN_CODE에 따라 doMain 주소 변경
+    if (DNCODE.contentEquals("ORGROOT") || DNCODE.contentEquals("A")) {
+    	doMain = "https://hep.ihoban.co.kr";
+    }else if (DNCODE.contentEquals("B")) {
+    	doMain = "https://hep.hobangolf.co.kr";
+    }else if (DNCODE.contentEquals("C")) {
+    	doMain = "https://hep.hobanpro.co.kr";
+    }else if (DNCODE.contentEquals("F")) {
+    	doMain = "https://hep.cornerstonepartners.co.kr";
+    }else if (DNCODE.contentEquals("G")) {
+    	doMain = "https://hep.resom.co.kr";
+    }else if (DNCODE.contentEquals("L")) {
+    	doMain = "https://hep.dagreen.co.kr";
+    }else if (DNCODE.contentEquals("S")) {
+    	doMain = "https://hep.samsunggold.co.kr";
+    }else if(DNCODE.contentEquals("P")) {
+    	doMain = "https://hep.planhventures.co.kr";
+    }else if (DNCODE.contentEquals("N")) {
+    	doMain = "https://hep.taihan.com";
+    }else {
+    	doMain = "https://hep.ihoban.co.kr";
+    }
+    
 	// 권한처리
-    if (userId.length() > 0 || DN_CODE.length() >0 ) {
-		prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+    if (!userId.equals("")) {
+    //if (userId.length() > 0 || DNCODE.length() >0 || DEPTID.length() > 0 ) {
+    	prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
 		prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
 		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
     } else {
@@ -114,6 +141,17 @@
 		prefixMap.put("apprMig", "");
 		prefixMap.put("board", "");
 	}
+    
+    if (!DEPTID.equals("")) {
+    //if (userId.length() > 0 || DNCODE.length() >0 || DEPTID.length() > 0 ) {
+    	prefixMap.put("appr", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+		prefixMap.put("apprMig", "<AUTHORITY_C:contains:" + userId + " | " + DEPTID + ">|<AUTHORITY_W:contains:" + userId + " | " + DEPTID + ">");
+		prefixMap.put("board", "<AUTH_USER_CODE:contains:" + userId + ">");
+    } else {
+		prefixMap.put("appr", "");
+		prefixMap.put("apprMig", "");
+		prefixMap.put("board", "");
+	}		
     
  	// CCINFO prefix 처리
  	if (prefix.length() > 0) {
@@ -479,7 +517,7 @@ function saveKeywordClose(){
 	document.getElementById("kw_add_popup").style.display = 'none';
 	document.getElementById("saveKeywordBtn").setAttribute("onClick", "saveKeyword();");
 	//document.getElementById("saveKeywordBtn").setAttribute("src", "images/ico_add.png");
-}
+}0 
 
 </script>
 </head>
@@ -504,7 +542,7 @@ function saveKeywordClose(){
 		<input type="hidden" name="realQuery" value="<%=realQuery%>" />
 		
 		<input type="hidden" name="UR_CODE" value="<%=userId%>" />
-		<input type="hidden" name="DN_CODE" value="<%=DN_CODE%>" />
+		<input type="hidden" name="DN_CODE" value="<%=DNCODE%>" />
 		<input type="hidden" name="DEPT_ID" value="<%=DEPTID%>" />
 		
 		<input type="hidden" name="apprType" value="<%=apprType%>" />
