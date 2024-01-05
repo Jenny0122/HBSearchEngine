@@ -29,7 +29,7 @@
 
 				<div class="search_n_result_wrap" id="result_<%=thisCollection%>">
 		        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
-					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>					
+					<strong class="tx_keyword">'<%=query%>'</strong>에 대한 임직원정보 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>					
 		      	</div>
 			
 <%			}else{ %>

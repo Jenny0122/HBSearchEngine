@@ -712,23 +712,17 @@ function saveKeywordClose(){
                         </div>
                       </div>
                       
-					<% if (totalCount > 0) { %>
 						<%@ include file="./result/result_appr.jsp" %>
 						<%@ include file="./result/result_board.jsp" %>					
 						<%@ include file="./result/result_user.jsp" %>
+					<% if (totalCount > 0) { %>
 				
 				<!-- paginate -->
 						<% if (!collection.equals("ALL") && totalCount > TOTALVIEWCOUNT) { %>
 						<div class="paginate"> <%=wnsearch.getPageLinks(startCount , totalCount, 10, 10)%> </div>
 						<% } %>
 				<!-- //paginate -->
-
-					<% } else { %>
-						<div class="search_n_result_wrap">
-				        	<p class="search_n_result_txt"><span class="search_n_result_img"></span>
-							<strong class="tx_keyword">'<%=query%>'</strong>에 대한 검색 결과가 없습니다.<br /><span class="search_n_result_txt2">다른 검색어로 검색해 보시기 바랍니다.</span></p>
-				         </div>
-		         	<% }%>
+					<% } %>
                     </div>
                   </div>
                 </div>
