@@ -53,7 +53,7 @@
 			 			"", // set categoryQuery (fieldname:value)
 			 			"", // set property group (fieldname,min,max, groupcount)
 			 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE_C,AUTHORITY_C,ACL_TYPE_W,AUTHORITY_W,FILE_EXTENTION,ALIAS", // use check prefix query filed
-			 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
+			 			"DATE,PROCESS_ID,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 			 			"", // set multigroupby field
 			 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 			 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
@@ -237,7 +237,7 @@
 		 			"", // set categoryQuery (fieldname:value)
 		 			"", // set property group (fieldname,min,max, groupcount)
 		 			"FORM_PREFIX,FORM_NAME,DOC_NUMBER,INITIATED_DATE,COMPLETED_DATE,ATTACH_FILE_INFO,END_DATE,ACL_TYPE_C,AUTHORITY_C,ACL_TYPE_W,AUTHORITY_W,FILE_EXTENTION,ALIAS", // use check prefix query filed
-		 			"DATE,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
+		 			"DATE,PROCESS_ID,SUBJECT,FILE_EXTENTION,ALIAS", // set use check fast access field
 		 			"", // set multigroupby field
 		 			"", // set auth query (Auth Target Field, Auth Collection, Auth Reference Field, Authority Query)
 		 			"", // set Duplicate Detection Criterion Field, RANK/DESC,DATE/DESC
